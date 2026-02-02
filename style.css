@@ -1515,6 +1515,31 @@ select,
         max-width: 100% !important;
     }
 
+    /* Grocery Table Mobile */
+    .grocery-items-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        margin: 1rem 0 !important;
+    }
+
+    .grocery-table {
+        width: 100% !important;
+        min-width: 100% !important;
+        font-size: 0.85rem !important;
+    }
+
+    .grocery-table th,
+    .grocery-table td {
+        padding: 0.5rem 0.3rem !important;
+        font-size: 0.8rem !important;
+    }
+
+    .grocery-table th:first-child,
+    .grocery-table td:first-child {
+        min-width: 100px !important;
+    }
+
     .btn-text,
     .btn-submit {
         width: 100%;
