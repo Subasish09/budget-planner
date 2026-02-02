@@ -1,0 +1,1800 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #0f0f12;
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --bg-card-hover: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --primary: #8b5cf6;
+    --primary-glow: rgba(139, 92, 246, 0.4);
+    --success: #10b981;
+    --success-glow: rgba(16, 185, 129, 0.4);
+    --danger: #f43f5e;
+    --danger-glow: rgba(244, 63, 94, 0.4);
+    --font-main: 'Outfit', sans-serif;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--glass-border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-main);
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem;
+    overflow-x: hidden;
+    background-image:
+        radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.08), transparent 25%);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+header {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    background: var(--bg-card-hover);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    z-index: -1;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.stat-card.balance .stat-value {
+    text-shadow: 0 0 20px var(--primary-glow);
+}
+
+.stat-card.income .stat-value {
+    color: var(--success);
+    text-shadow: 0 0 20px var(--success-glow);
+}
+
+.stat-card.expense .stat-value {
+    color: var(--danger);
+    text-shadow: 0 0 20px var(--danger-glow);
+}
+
+/* Recent Transactions */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Segmented Control */
+.segmented-control {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    position: relative;
+    user-select: none;
+}
+
+.segmented-control input {
+    display: none;
+}
+
+.segment-label {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    /* Override default label margin */
+}
+
+.segment-label:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Selected States */
+#type-expense:checked+label {
+    background: rgba(244, 63, 94, 0.15);
+    color: #f43f5e;
+    box-shadow: 0 0 0 1px rgba(244, 63, 94, 0.2);
+}
+
+#type-income:checked+label {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.2);
+}
+
+
+/* Transaction Item Enhancements */
+.transaction-item {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+}
+
+.transaction-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--text-secondary);
+    opacity: 0.3;
+}
+
+.transaction-item.plus::before {
+    background: var(--success);
+    opacity: 1;
+    box-shadow: 0 0 10px var(--success-glow);
+}
+
+.transaction-item.minus::before {
+    background: var(--danger);
+    opacity: 1;
+    box-shadow: 0 0 10px var(--danger-glow);
+}
+
+.transaction-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.t-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.t-desc {
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: var(--text-primary);
+}
+
+.t-date {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.t-amount {
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: -0.5px;
+}
+
+.transaction-item.plus .t-amount {
+    color: var(--success);
+}
+
+.transaction-item.minus .t-amount {
+    color: var(--danger);
+}
+
+.delete-btn {
+    background: rgba(255, 255, 255, 0.05);
+    /* Visible by default now */
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: var(--transition);
+    margin-left: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.transaction-item:hover .delete-btn {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.delete-btn:hover {
+    background: rgba(244, 63, 94, 0.2);
+    color: var(--danger);
+    border-color: rgba(244, 63, 94, 0.3);
+}
+
+/* FAB */
+.fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    box-shadow: 0 0 20px var(--primary-glow);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.fab:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 0 30px var(--primary-glow);
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal {
+    background: #18181b;
+    border: 1px solid var(--glass-border);
+    padding: 2.5rem;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 450px;
+    /* Comfortable width */
+    transform: translateY(20px);
+    transition: var(--transition);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-overlay.active .modal {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.modal-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close-modal {
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#cc-form,
+#settings-form,
+#repayment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    /* Perfect even spacing */
+}
+
+.form-group {
+    margin-bottom: 0;
+    /* Let gap handle it */
+}
+
+label {
+    display: block;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+}
+
+input,
+select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    padding: 1.25rem 1.2rem;
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: var(--transition);
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+.modal-footer {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.btn-submit {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    padding: 1.2rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    border-radius: 12px;
+    margin-top: 0;
+    /* Reset margin, handled by footer */
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(139, 92, 246, 0.4);
+}
+
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.transaction-item {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+
+/* Grocery Section - Global Styles */
+.grocery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.grocery-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.grocery-card:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.grocery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.g-period {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.g-count {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.g-total {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--success);
+    text-align: right;
+    letter-spacing: -0.5px;
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+.g-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.item-tag {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 0.35rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.grocery-card:hover .item-tag {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.more-tag {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Form Styles */
+.g-input {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    color: var(--text-primary);
+    width: 100%;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.g-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+.g-del-btn {
+    color: var(--danger);
+    background: rgba(244, 63, 94, 0.1);
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 0.9rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    opacity: 0.7;
+}
+
+.g-del-btn:hover {
+    opacity: 1;
+    background: rgba(244, 63, 94, 0.2);
+    border-color: rgba(244, 63, 94, 0.3);
+}
+
+.empty-state-small {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 4rem 2rem;
+    background: var(--bg-card);
+    border-radius: 24px;
+    border: 1px dashed var(--glass-border);
+    font-size: 1.1rem;
+}
+
+/* Mobile Tweaks */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .grocery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .grocery-modal {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        border-radius: 0;
+        padding: 1rem;
+        overflow-y: auto;
+    }
+}
+
+
+/* Modal Improvements */
+.grocery-modal {
+    max-width: 900px;
+    /* Much wider as requested */
+    width: 90%;
+}
+
+.grocery-items-container {
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-bottom: 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid var(--glass-border);
+}
+
+/* Global input styles now handled above, ensuring precedence */
+
+
+
+/* Larger New List Button */
+.fab-small {
+    padding: 1rem 2rem;
+    /* Larger padding */
+    font-size: 1.1rem;
+    /* Larger font */
+    border-radius: 12px;
+    /* Less rounded, more button-like */
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+}
+
+.btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-icon:hover {
+    background: var(--bg-card-hover);
+    transform: translateX(-3px);
+}
+
+.fab-small {
+    padding: 0.8rem 1.5rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px var(--primary-glow);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.fab-small:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--primary-glow);
+}
+
+/* Modal Table - Ensure Full Width */
+.grocery-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.grocery-table th {
+    text-align: left;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.8rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.grocery-table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: var(--text-primary);
+}
+
+/* Grocery Detail Table */
+.grocery-detail-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.grocery-detail-table th {
+    text-align: left;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.grocery-detail-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.grocery-detail-table tr:last-child td {
+    border-bottom: none;
+}
+
+.grocery-detail-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Modal Form Layout Updates */
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-end;
+    /* Align inputs and labels properly */
+}
+
+.form-group {
+    margin-bottom: 0;
+    /* Let row handle it */
+    flex: 1;
+}
+
+/* Standardized Inputs */
+input,
+select,
+.g-input {
+    height: 48px;
+    /* Fixed height for perfect alignment */
+    padding: 0 1rem;
+    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    transition: var(--transition);
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Remove default appearance for selects to custom style if needed, 
+   but for now just height fixing handles most alignment issues */
+
+.g-input {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    height: 40px;
+    /* Slightly smaller for table rows */
+}
+
+.g-input:focus,
+.g-input:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--glass-border);
+}
+
+.g-input:focus {
+    border-color: var(--primary);
+}
+
+/* Action Buttons Alignment */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.btn-text {
+    height: 48px;
+    padding: 0 1.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.btn-text:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+/* Submit Button */
+.btn-submit {
+    margin-top: 0;
+    /* Remove margin as it's handled by flex container */
+    width: auto;
+    padding: 0 2rem;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Fab Small Fix */
+.fab-small {
+    height: 42px;
+    /* Set specific height */
+    padding: 0 1.25rem;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    /* Pill shape */
+    white-space: nowrap;
+}
+
+/* Header Layout */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.header-title-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Period Select Fix for Header */
+.period-dropdown {
+    height: 42px;
+}
+
+/* Modern Floating Search Bar */
+.search-container {
+    perspective: 1000px;
+}
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 2px;
+    /* Inner padding for border effect */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.search-wrapper:focus-within {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15), 0 8px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    pointer-events: none;
+    transition: color 0.3s ease;
+}
+
+.search-wrapper:focus-within .search-icon {
+    color: var(--primary);
+}
+
+.g-search-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 16px 20px 16px 50px;
+    /* Space for icon */
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    border-radius: 50px;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.g-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 300;
+}
+
+/* Custom Search Suggestions Adjustment */
+.suggestions-dropdown {
+    position: absolute;
+    top: 110%;
+    /* Slightly lower */
+    left: 10px;
+    /* Offset for aesthetic */
+    width: calc(100% - 20px);
+    background: rgba(24, 24, 27, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    display: none;
+    padding: 8px 0;
+    /* Internal padding */
+}
+
+/* Scrollbar for suggestions */
+.suggestions-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.suggestions-dropdown::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.suggestions-dropdown.active {
+    display: block;
+    animation: slideDownFade 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.suggestion-item {
+    padding: 14px 24px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.selected {
+    background: rgba(255, 255, 255, 0.05);
+    /* Lighter hover */
+    color: var(--text-primary);
+    padding-left: 28px;
+    /* Enhanced Slide effect */
+}
+
+.suggestion-highlight {
+    color: var(--primary);
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+}
+
+@keyframes slideDownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Search Reset Button */
+.search-reset {
+    position: absolute;
+    right: 20px;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    /* Click through when hidden */
+    transition: all 0.2s ease;
+}
+
+.search-reset.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.search-reset:hover {
+    color: var(--danger);
+    transform: scale(1.1);
+}
+
+/* Mobile Responsiveness Improvements */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        width: 100%;
+    }
+
+    /* Stack Header */
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        /* Align left */
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .header-title-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .app-header h1 {
+        font-size: 1.8rem;
+        /* Smaller on mobile */
+    }
+
+    .header-controls {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        /* Spread controls */
+        gap: 1rem;
+    }
+
+    .period-dropdown {
+        flex: 1;
+        /* Dropdown takes available space */
+    }
+
+    .fab-small {
+        white-space: nowrap;
+        /* Don't wrap button text */
+    }
+
+    /* Dashboard Stack */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* Stats Adjustments */
+    .stat-card {
+        padding: 1.25rem;
+    }
+
+    .stat-value {
+        font-size: 1.75rem;
+        /* Prevent overflow */
+    }
+
+    /* Grocery List Cards */
+    .grocery-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .text-right {
+        text-align: left;
+        margin-top: 0.5rem;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .g-total {
+        font-size: 1.5rem;
+    }
+
+    /* Search Bar Mobile */
+    .search-container {
+        width: 100% !important;
+        /* Override inline styles */
+        max-width: none !important;
+        margin: 0;
+    }
+
+    .g-search-input {
+        font-size: 1rem;
+        padding: 14px 16px 14px 44px;
+    }
+
+    .search-icon {
+        left: 16px;
+        font-size: 1rem;
+    }
+
+    /* Modal Mobile Fixes */
+    .grocery-modal {
+        width: 95%;
+        height: auto;
+        max-height: 90vh;
+        border-radius: 16px;
+        /* Keep rounded but smaller */
+        padding: 1.25rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-text,
+    .btn-submit {
+        width: 100%;
+        justify-content: center;
+        height: 44px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+        /* Save button top */
+        gap: 1rem;
+    }
+
+    /* Reduce table padding on mobile to fit all columns */
+    .grocery-detail-table th,
+    .grocery-detail-table td {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    /* Detail View Mobile Stack */
+    .detail-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1.5rem;
+    }
+
+    .detail-cost-group {
+        text-align: left !important;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .detail-cost-value {
+        font-size: 2.5rem;
+    }
+
+    .detail-actions {
+        margin-top: 1rem !important;
+        justify-content: space-between !important;
+        width: 100%;
+    }
+
+    .detail-actions .btn-text {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+/* Detail View Properties */
+.detail-container {
+    background: var(--bg-card);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    padding: 2rem;
+    width: 100%;
+}
+
+.detail-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+/* Card Selection Radio */
+.card-select-radio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    /* Let the card click handle it */
+}
+
+.card-select-radio input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+.card-select-radio input[type="radio"]:checked {
+    border-color: #fff;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.card-select-radio input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: var(--primary);
+    border-radius: 50%;
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 1.5rem;
+}
+
+.detail-title-group h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.detail-cost-group {
+    text-align: right;
+}
+
+.detail-cost-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--success);
+    line-height: 1;
+}
+
+.detail-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Spending Bar Chart (Sparkline) */
+.chart-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 60px;
+    width: 100%;
+    /* Ensure it fills the card */
+    gap: 4px;
+    margin-top: 0.5rem;
+    padding-top: 10px;
+    /* Space for tooltip */
+    position: relative;
+}
+
+.bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+    height: 100%;
+    /* Full height of container */
+    justify-content: flex-end;
+    /* Align bar to bottom */
+}
+
+.chart-bar {
+    width: 8px;
+    /* Slim bars */
+    background: rgba(255, 255, 255, 0.3);
+    /* Brighter for visibility */
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    min-height: 4px;
+    /* Ensure even 0 value has a spec */
+}
+
+.chart-bar:hover {
+    background: var(--primary);
+    transform: scaleX(1.5) scaleY(1.05);
+    /* Proper scaling */
+    box-shadow: 0 0 10px var(--primary-glow);
+    z-index: 2;
+    /* Bring to front */
+}
+
+/* Tooltip on Hover */
+.bar-group:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    margin-bottom: 4px;
+    z-index: 10;
+    pointer-events: none;
+    border: 1px solid var(--glass-border);
+}
+
+/* SVG Line Chart */
+.chart-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.chart-point {
+    fill: #18181b;
+    /* Card bg color */
+    stroke: var(--primary);
+    stroke-width: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chart-point:hover {
+    fill: var(--primary);
+    stroke: #fff;
+    r: 8;
+    /* Grow radius */
+    filter: drop-shadow(0 0 5px var(--primary-glow));
+}
+
+.bar-label {
+    display: none;
+    /* Hide labels for mini-chart, show only on interaction or major redesign */
+}
+
+/* =========================================
+   Credit Card Tracker Styles
+   ========================================= */
+
+/* Wallet Carousel */
+.wallet-section {
+    margin-bottom: 2rem;
+    overflow: hidden;
+    padding: 0 0.5rem;
+}
+
+.cards-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.cards-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+/* Detailed Credit Card UI */
+.credit-card {
+    flex: 0 0 320px;
+    /* Fixed width for cards */
+    height: 200px;
+    border-radius: 24px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    scroll-snap-align: center;
+    position: relative;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-size: cover;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.7;
+    transform: scale(0.95);
+    color: #fff;
+}
+
+.credit-card.active {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.7);
+    border-color: rgba(255, 255, 255, 0.3);
+    z-index: 2;
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.bank-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+}
+
+.card-mid {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.chip {
+    width: 40px;
+    height: 30px;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.chip::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.15), 0 -8px 0 rgba(0, 0, 0, 0.15);
+}
+
+.card-number {
+    font-family: 'Courier New', monospace;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    font-weight: 600;
+}
+
+.card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.card-name {
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    opacity: 0.9;
+}
+
+.expiry {
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+/* Quick Actions Grid */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.action-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.action-btn:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.icon-box {
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.icon-box.spend {
+    background: rgba(236, 72, 153, 0.15);
+    color: #ec4899;
+}
+
+.icon-box.lend {
+    background: rgba(244, 63, 94, 0.15);
+    color: #f43f5e;
+}
+
+.icon-box.pay {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.action-btn span {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Filter Tabs */
+.tabs-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.5rem;
+}
+
+.tab {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    transition: var(--transition);
+    font-size: 0.95rem;
+}
+
+.tab.active {
+    color: var(--text-primary);
+    background: var(--bg-card-hover);
+    font-weight: 600;
+}
+
+/* CC Transaction Item */
+.cc-transaction {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition);
+}
+
+.cc-transaction:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.cc-transaction:last-child {
+    border-bottom: none;
+}
+
+.cc-transaction.lent-item {
+    background: rgba(244, 63, 94, 0.05);
+    /* Subtle reddish tint */
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+    border: 1px dashed rgba(244, 63, 94, 0.2);
+}
+
+.cc-transaction.repaid .t-amount,
+.cc-transaction.repaid .t-desc {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.t-icon.lent {
+    color: #f43f5e;
+}
+
+.btn-xs {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 480px) {
+    .credit-card {
+        flex: 0 0 280px;
+        height: 180px;
+    }
+
+    .cards-carousel {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Sort Dropdown Styles */
+.sort-select {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+    transition: var(--transition);
+}
+
+.sort-select:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.sort-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+/* Card Selection Radio */
+.card-select-radio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    /* Let the card click handle it */
+}
+
+.card-select-radio input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+.card-select-radio input[type="radio"]:checked {
+    border-color: #fff;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.card-select-radio input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: var(--primary);
+    border-radius: 50%;
+}

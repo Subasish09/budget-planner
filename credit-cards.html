@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Cards - Budget Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-title-group">
+                <a href="index.html" class="btn-icon"><i class="fas fa-arrow-left"></i></a>
+                <div>
+                    <h1>My Wallet</h1>
+                    <p class="subtitle">Track Spends & Lending</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button class="btn-text" onclick="openSettings()"><i class="fas fa-cog"></i> Settings</button>
+                <button class="btn-text" id="add-card-btn" style="display: none;"><i class="fas fa-plus"></i> Add
+                    Card</button>
+            </div>
+        </header>
+
+        <!-- Wallet Carousel -->
+        <div class="wallet-section">
+            <div class="cards-carousel" id="cards-carousel">
+                <!-- Cards injected via JS -->
+            </div>
+        </div>
+
+        <!-- Active Card Dashboard -->
+        <div class="card-dashboard" id="card-dashboard" style="display: none;">
+
+            <!-- Key Stats -->
+            <div class="dashboard-grid"
+                style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 2rem;">
+                <div class="stat-card">
+                    <div class="stat-label">Total Outstanding</div>
+                    <div class="stat-value" id="card-outstanding">₹0.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Available Limit</div>
+                    <div class="stat-value" id="card-limit">₹-</div>
+                </div>
+                <div class="stat-card" id="lounge-card" style="display: none;">
+                    <div class="stat-label">Lounge Access <i class="fas fa-plane"></i></div>
+                    <div class="stat-value" id="lounge-count">0/8</div>
+                    <div class="stat-sub">Visits Left</div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="quick-actions">
+                <button class="action-btn" onclick="openTransactionModal('spend')">
+                    <div class="icon-box spend"><i class="fas fa-credit-card"></i></div>
+                    <span>Add Spend</span>
+                </button>
+                <button class="action-btn" onclick="openTransactionModal('lend')">
+                    <div class="icon-box lend"><i class="fas fa-hand-holding-usd"></i></div>
+                    <span>Lend Money</span>
+                </button>
+                <button class="action-btn" onclick="markBillPaid()">
+                    <div class="icon-box pay"><i class="fas fa-check-circle"></i></div>
+                    <span>Mark Paid</span>
+                </button>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="tabs-container">
+                <div class="tab active" data-tab="all">All Spends</div>
+                <div class="tab" data-tab="lent">Lent to Friends</div>
+            </div>
+
+            <!-- Transactions List -->
+            <div class="transactions-list" id="card-transactions">
+                <!-- Items injected here -->
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-wallet-state" style="text-align: center; margin-top: 4rem; display: none;">
+            <i class="fas fa-wallet" style="font-size: 3rem; color: var(--glass-border); margin-bottom: 1rem;"></i>
+            <p class="subtitle">No cards found. Initialize to load your cards.</p>
+        </div>
+
+    </div>
+
+    <!-- Transaction Modal -->
+    <div class="modal-overlay" id="cc-modal-overlay">
+        <div class="modal grocery-modal">
+            <div class="modal-header">
+                <h2 id="cc-modal-title">Add Card Spend</h2>
+                <button class="close-modal" id="close-cc-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="cc-form">
+                <input type="hidden" id="cc-type" value="spend"> <!-- spend or lend -->
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="cc-desc" placeholder="e.g. Dinner, Flight" required>
+                </div>
+
+                <div class="form-group" id="friend-input-group" style="display: none;">
+                    <label>Friend's Name</label>
+                    <input type="text" id="cc-friend" placeholder="Who owes you?">
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; gap: 1.5rem;">
+                        <div style="flex: 1;">
+                            <label>Amount (₹)</label>
+                            <input type="number" id="cc-amount" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div style="flex: 1;">
+                            <label>Date</label>
+                            <input type="date" id="cc-date" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="cc-category">
+                        <option value="General">General</option>
+                        <option value="Food">Food & Dining</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills">Bills & Utilities</option>
+                        <option value="Lent">Lent / Debt</option>
+                    </select>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn-submit">Add to Card</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings/Sync Modal -->
+    <div class="modal-overlay" id="settings-modal-overlay">
+        <div class="modal grocery-modal">
+            <div class="modal-header">
+                <h2>GitHub Sync Settings</h2>
+                <button class="close-modal" id="close-settings-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="settings-form">
+                <div class="form-group">
+                    <label>GitHub Username</label>
+                    <input type="text" id="gh-username" placeholder="e.g. johndoe" required>
+                </div>
+                <div class="form-group">
+                    <label>Repository Name</label>
+                    <input type="text" id="gh-repo" placeholder="e.g. budget-planner" required>
+                </div>
+                <div class="form-group">
+                    <label>Personal Access Token (PAT) <span style="font-size:0.7em; opacity:0.7;">Stored
+                            Locally</span></label>
+                    <input type="password" id="gh-pat" placeholder="ghp_xxxxxxxxxxxx" required>
+                </div>
+                <div class="form-group">
+                    <div style="display: flex; gap: 1rem;">
+                        <div style="flex: 1;">
+                            <label>Branch</label>
+                            <input type="text" id="gh-branch" value="main" required>
+                        </div>
+                        <div style="flex: 2;">
+                            <label>File Path</label>
+                            <input type="text" id="gh-path" value="credit_card_data.js" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button type="button" class="btn-submit" onclick="saveSettings()"
+                        style="flex: 1; background: #3f3f46;">Save Config</button>
+                    <button type="button" class="btn-submit" onclick="syncToGitHub()" style="flex: 1;">Sync Now <i
+                            class="fas fa-cloud-upload-alt"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Repayment Modal -->
+    <div class="modal-overlay" id="repayment-modal-overlay">
+        <div class="modal grocery-modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Track Repayment</h2>
+                <button class="close-modal" id="close-repayment-modal"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div
+                style="margin-bottom: 2rem; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--glass-border);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-secondary);">Lent To</span>
+                    <span style="font-weight: 600;" id="rep-lent-to">Name</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: var(--text-secondary);">Total Amount</span>
+                    <span style="font-weight: 600;" id="rep-total">₹0.00</span>
+                </div>
+                <div
+                    style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Remaining Balance</span>
+                    <span style="font-weight: 700; font-size: 1.4rem; color: #f43f5e;" id="rep-remaining">₹0.00</span>
+                </div>
+            </div>
+
+            <form id="repayment-form">
+                <input type="hidden" id="rep-id">
+                <div class="form-group">
+                    <div style="display: flex; gap: 1.5rem;">
+                        <div style="flex: 1;">
+                            <label>Repayment Amount (₹)</label>
+                            <input type="number" id="rep-amount" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div style="flex: 1;">
+                            <label>Date</label>
+                            <input type="date" id="rep-date" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn-submit"
+                        style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Add Repayment</button>
+                </div>
+            </form>
+
+            <!-- Repayment History -->
+            <div style="margin-top: 2rem;">
+                <h4
+                    style="color: var(--text-secondary); margin-bottom: 1rem; font-weight: 500; font-size: 0.9rem; text-transform: uppercase;">
+                    History</h4>
+                <div id="repayment-history" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                    <!-- Injected JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="credit_card_data.js"></script>
+    <script src="credit-cards.js"></script>
+</body>
+
+</html>
