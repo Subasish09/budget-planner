@@ -91,6 +91,16 @@ window.creditCardDataRaw = [
                 "isLent": false,
                 "lentTo": null,
                 "repaid": false
+            },
+            {
+                "id": "1770059836518",
+                "desc": "Lending",
+                "amount": 70000,
+                "date": "2026-01-10",
+                "category": "Lent",
+                "isLent": true,
+                "lentTo": "Pradeep Kumar Dash",
+                "repaid": false
             }
         ]
     },
