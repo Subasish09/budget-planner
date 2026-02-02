@@ -1423,6 +1423,22 @@ select,
     /* Modal Mobile Fixes - FULL SCREEN */
     .modal-overlay {
         padding: 0 !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+    }
+
+    /* Override base .modal class */
+    .modal {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        padding: 1rem !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        transform: none !important;
     }
 
     .grocery-modal {
