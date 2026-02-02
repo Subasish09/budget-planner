@@ -1465,6 +1465,10 @@ select,
         max-width: 100% !important;
         overflow-x: auto;
         padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: transparent !important;
     }
 
     .form-row {
