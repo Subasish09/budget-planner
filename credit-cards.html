@@ -72,6 +72,40 @@
                 </button>
             </div>
 
+            <!-- Consolidated Lending Overview -->
+            <div id="lending-overview"
+                style="display: none; margin-bottom: 2rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 1.5rem;">
+                <h3
+                    style="font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-users"></i> Lending Overview (All Cards)
+                </h3>
+
+                <!-- Summary Stats -->
+                <div class="dashboard-grid"
+                    style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 1.5rem;">
+                    <div class="stat-card"
+                        style="background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.2);">
+                        <div class="stat-label">Total Lent</div>
+                        <div class="stat-value" id="overview-total-lent" style="color: var(--danger);">₹0</div>
+                    </div>
+                    <div class="stat-card"
+                        style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2);">
+                        <div class="stat-label">Total Repaid</div>
+                        <div class="stat-value" id="overview-total-repaid" style="color: var(--success);">₹0</div>
+                    </div>
+                    <div class="stat-card"
+                        style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2);">
+                        <div class="stat-label">Outstanding</div>
+                        <div class="stat-value" id="overview-outstanding" style="color: var(--warning);">₹0</div>
+                    </div>
+                </div>
+
+                <!-- Friends List -->
+                <div id="friends-breakdown" style="display: grid; gap: 1rem;">
+                    <!-- Friends injected via JS -->
+                </div>
+            </div>
+
             <!-- Filter Tabs -->
             <div class="tabs-container">
                 <div class="tab active" data-tab="all">All Spends</div>

@@ -390,6 +390,137 @@ function renderDashboard() {
     }
 
     renderTransactions();
+    renderLendingOverview();
+}
+
+// Render Consolidated Lending Overview
+function renderLendingOverview() {
+    const overviewSection = document.getElementById('lending-overview');
+    if (!overviewSection) return;
+
+    // Aggregate all lending across all cards
+    const friendsMap = {};
+    let totalLent = 0;
+    let totalRepaid = 0;
+
+    myCards.forEach(card => {
+        card.transactions.forEach(t => {
+            if (t.isLent && t.lentTo) {
+                const friendName = t.lentTo.trim();
+
+                if (!friendsMap[friendName]) {
+                    friendsMap[friendName] = {
+                        name: friendName,
+                        totalLent: 0,
+                        totalRepaid: 0,
+                        transactions: []
+                    };
+                }
+
+                friendsMap[friendName].totalLent += t.amount;
+                totalLent += t.amount;
+
+                // Calculate repaid for this transaction
+                const repaid = (t.repayments || []).reduce((sum, r) => sum + r.amount, 0);
+                friendsMap[friendName].totalRepaid += repaid;
+                totalRepaid += repaid;
+
+                // Store transaction details
+                friendsMap[friendName].transactions.push({
+                    cardName: card.name,
+                    cardBank: card.bank,
+                    amount: t.amount,
+                    repaid: repaid,
+                    date: t.date,
+                    desc: t.desc,
+                    isSettled: t.repaid
+                });
+            }
+        });
+    });
+
+    const totalOutstanding = totalLent - totalRepaid;
+
+    // Update summary stats
+    document.getElementById('overview-total-lent').innerText = `₹${totalLent.toLocaleString('en-IN')}`;
+    document.getElementById('overview-total-repaid').innerText = `₹${totalRepaid.toLocaleString('en-IN')}`;
+    document.getElementById('overview-outstanding').innerText = `₹${totalOutstanding.toLocaleString('en-IN')}`;
+
+    // Render friends breakdown
+    const friendsBreakdown = document.getElementById('friends-breakdown');
+    const friends = Object.values(friendsMap);
+
+    if (friends.length === 0) {
+        overviewSection.style.display = 'none';
+        return;
+    }
+
+    overviewSection.style.display = 'block';
+
+    friendsBreakdown.innerHTML = friends.map(friend => {
+        const outstanding = friend.totalLent - friend.totalRepaid;
+        const isSettled = outstanding === 0;
+
+        return `
+            <div style="background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div>
+                        <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">
+                            <i class="fas fa-user-circle" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                            ${friend.name}
+                            ${isSettled ? '<span style="color: var(--success); font-size: 0.85rem; margin-left: 0.5rem;"><i class="fas fa-check-circle"></i> Settled</span>' : ''}
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                            ${friend.transactions.length} transaction${friend.transactions.length > 1 ? 's' : ''} across ${new Set(friend.transactions.map(t => t.cardName)).size} card${new Set(friend.transactions.map(t => t.cardName)).size > 1 ? 's' : ''}
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: ${isSettled ? 'var(--success)' : 'var(--warning)'};">
+                            ₹${outstanding.toLocaleString('en-IN')}
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--text-tertiary);">Outstanding</div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: var(--radius-sm);">
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Total Lent</div>
+                        <div style="font-size: 1rem; font-weight: 600; color: var(--danger);">₹${friend.totalLent.toLocaleString('en-IN')}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Repaid</div>
+                        <div style="font-size: 1rem; font-weight: 600; color: var(--success);">₹${friend.totalRepaid.toLocaleString('en-IN')}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Progress</div>
+                        <div style="font-size: 1rem; font-weight: 600; color: var(--info);">${friend.totalLent > 0 ? Math.round((friend.totalRepaid / friend.totalLent) * 100) : 0}%</div>
+                    </div>
+                </div>
+                
+                <details style="margin-top: 1rem;">
+                    <summary style="cursor: pointer; color: var(--primary); font-size: 0.9rem; user-select: none;">
+                        <i class="fas fa-chevron-down" style="margin-right: 0.5rem; font-size: 0.75rem;"></i>
+                        View Transaction Details
+                    </summary>
+                    <div style="margin-top: 1rem; display: grid; gap: 0.75rem;">
+                        ${friend.transactions.map(t => `
+                            <div style="padding: 0.75rem; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-sm); border-left: 3px solid ${t.isSettled ? 'var(--success)' : 'var(--warning)'};">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <div style="font-size: 0.9rem; color: var(--text-primary);">${t.desc || 'Lending'}</div>
+                                    <div style="font-size: 0.9rem; font-weight: 600; color: var(--danger);">₹${t.amount.toLocaleString('en-IN')}</div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary);">
+                                    <div><i class="fas fa-credit-card"></i> ${t.cardBank} ${t.cardName}</div>
+                                    <div>${new Date(t.date).toLocaleDateString()}</div>
+                                </div>
+                                ${t.repaid > 0 ? `<div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--success);"><i class="fas fa-check"></i> Repaid: ₹${t.repaid.toLocaleString('en-IN')}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </details>
+            </div>
+        `;
+    }).join('');
 }
 
 // Inject Total Limit into Header
