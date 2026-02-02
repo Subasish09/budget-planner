@@ -636,6 +636,7 @@ ccForm.addEventListener('submit', (e) => {
     const desc = document.getElementById('cc-desc').value;
     const amount = parseFloat(document.getElementById('cc-amount').value);
     const date = document.getElementById('cc-date').value;
+    const dueDate = document.getElementById('cc-due-date').value;
     const category = document.getElementById('cc-category').value;
     const friend = document.getElementById('cc-friend').value;
 
@@ -644,10 +645,13 @@ ccForm.addEventListener('submit', (e) => {
         desc,
         amount,
         date,
+        dueDate,
         category,
         isLent: type === 'lend',
         lentTo: type === 'lend' ? friend : null,
-        repaid: false
+        repaid: false,
+        isPaid: false,
+        paidDate: null
     };
 
     myCards[activeCardIndex].transactions.push(newTransaction);

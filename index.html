@@ -77,6 +77,40 @@
             </div>
         </div>
 
+        <!-- Credit Card Analytics -->
+        <div class="grocery-section" style="margin-bottom: 3rem;">
+            <div class="section-header">
+                <h2>Credit Card Analytics</h2>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="dashboard-grid" style="margin-bottom: 1.5rem;">
+                <div class="stat-card" style="border-color: rgba(236, 72, 153, 0.2);">
+                    <div class="stat-label">Total Card Spend</div>
+                    <div class="stat-value" id="cc-total-spend">₹0.00</div>
+                    <small style="color: var(--text-secondary); font-size: 0.85rem;">All cards combined</small>
+                </div>
+                <div class="stat-card" style="border-color: rgba(251, 191, 36, 0.2);">
+                    <div class="stat-label">Total Lent</div>
+                    <div class="stat-value" id="cc-total-lent">₹0.00</div>
+                    <small style="color: var(--text-secondary); font-size: 0.85rem;">Money lent to friends</small>
+                </div>
+                <div class="stat-card" style="border-color: rgba(34, 197, 94, 0.2);">
+                    <div class="stat-label">Unpaid Amount</div>
+                    <div class="stat-value" id="cc-unpaid">₹0.00</div>
+                    <small style="color: var(--text-secondary); font-size: 0.85rem;">Pending card payments</small>
+                </div>
+            </div>
+
+            <!-- Category Breakdown -->
+            <div class="grocery-card" style="margin-bottom: 1.5rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Spending by Category</h3>
+                <div id="category-breakdown">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+        </div>
+
         <!-- Transactions List -->
         <div class="transactions-section">
             <div class="section-header">
