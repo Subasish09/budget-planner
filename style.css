@@ -1,20 +1,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --bg-main: #0f0f12;
-    --bg-card: rgba(255, 255, 255, 0.05);
+    /* Background Colors */
+    --bg-main: #0a0a0f;
+    --bg-card: rgba(255, 255, 255, 0.04);
     --bg-card-hover: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.08);
+
+    /* Glassmorphism */
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(16px);
+
+    /* Text Colors */
     --text-primary: #ffffff;
     --text-secondary: #a1a1aa;
+    --text-tertiary: #71717a;
+
+    /* Brand Colors */
     --primary: #8b5cf6;
-    --primary-glow: rgba(139, 92, 246, 0.4);
+    --primary-light: #a78bfa;
+    --primary-dark: #7c3aed;
+    --primary-glow: rgba(139, 92, 246, 0.5);
+
     --success: #10b981;
-    --success-glow: rgba(16, 185, 129, 0.4);
+    --success-light: #34d399;
+    --success-glow: rgba(16, 185, 129, 0.5);
+
     --danger: #f43f5e;
-    --danger-glow: rgba(244, 63, 94, 0.4);
+    --danger-light: #fb7185;
+    --danger-glow: rgba(244, 63, 94, 0.5);
+
+    --warning: #f59e0b;
+    --warning-glow: rgba(245, 158, 11, 0.5);
+
+    --info: #3b82f6;
+    --info-glow: rgba(59, 130, 246, 0.5);
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.4);
+
+    /* Typography */
     --font-main: 'Outfit', sans-serif;
+
+    /* Transitions */
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Border Radius */
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
 }
 
 /* Scrollbar */
@@ -42,15 +81,47 @@
     font-family: var(--font-main);
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: var(--bg-main);
     color: var(--text-primary);
     min-height: 100vh;
     padding: 2rem;
     overflow-x: hidden;
+    position: relative;
+}
+
+/* Animated Gradient Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
     background-image:
-        radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.08), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.08), transparent 25%);
+        radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.12), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(16, 185, 129, 0.1), transparent 30%),
+        radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.08), transparent 25%);
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
 }
 
 .container {
@@ -74,6 +145,19 @@ h1 {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -1px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .subtitle {
@@ -81,6 +165,7 @@ h1 {
     font-size: 1rem;
     font-weight: 400;
 }
+
 
 /* Dashboard Grid */
 .dashboard-grid {
@@ -93,19 +178,14 @@ h1 {
 .stat-card {
     background: var(--bg-card);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: var(--radius-lg);
     padding: 1.5rem;
     transition: var(--transition);
     position: relative;
     overflow: hidden;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    background: var(--bg-card-hover);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
 }
 
 .stat-card::before {
@@ -113,18 +193,31 @@ h1 {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: inherit;
-    z-index: -1;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg), 0 0 40px rgba(139, 92, 246, 0.15);
+}
+
+.stat-card:hover::before {
+    opacity: 1;
 }
 
 .stat-label {
     color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
 }
 
 .stat-value {
@@ -536,7 +629,9 @@ select:focus {
 .grocery-card {
     background: var(--bg-card);
     border: 1px solid var(--glass-border);
-    border-radius: 20px;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: var(--radius-lg);
     padding: 1.5rem;
     transition: var(--transition);
     position: relative;
@@ -545,13 +640,54 @@ select:focus {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.grocery-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.grocery-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.grocery-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.grocery-card:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.grocery-card:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.grocery-card:nth-child(6) {
+    animation-delay: 0.3s;
+}
+
+.grocery-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--success), var(--info));
+    opacity: 0;
+    transition: var(--transition);
 }
 
 .grocery-card:hover {
     background: var(--bg-card-hover);
-    transform: translateY(-5px);
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transform: translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(16, 185, 129, 0.15);
+}
+
+.grocery-card:hover::before {
+    opacity: 1;
 }
 
 .grocery-header {
@@ -581,7 +717,7 @@ select:focus {
     color: var(--success);
     text-align: right;
     letter-spacing: -0.5px;
-    text-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    text-shadow: 0 0 20px var(--success-glow);
 }
 
 .g-preview {
@@ -598,12 +734,13 @@ select:focus {
     border-radius: 50px;
     font-size: 0.8rem;
     color: var(--text-secondary);
-    transition: var(--transition);
+    transition: var(--transition-fast);
 }
 
 .grocery-card:hover .item-tag {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text-primary);
+    transform: translateY(-2px);
 }
 
 .more-tag {
@@ -879,20 +1016,43 @@ select,
 .btn-text {
     height: 48px;
     padding: 0 1.5rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
     color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-weight: 500;
     transition: var(--transition);
-    border: 1px solid transparent;
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-text::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-text:hover::before {
+    width: 300px;
+    height: 300px;
 }
 
 .btn-text:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-card-hover);
+    border-color: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
     text-decoration: none;
 }
 
@@ -1205,14 +1365,15 @@ select,
         font-size: 1rem;
     }
 
-    /* Modal Mobile Fixes */
+    /* Modal Mobile Fixes - Maximize width */
     .grocery-modal {
-        width: 95%;
+        width: 100%;
+        max-width: 100%;
         height: auto;
-        max-height: 90vh;
-        border-radius: 16px;
-        /* Keep rounded but smaller */
-        padding: 1.25rem;
+        max-height: 98vh;
+        border-radius: 12px;
+        padding: 0.75rem;
+        margin: 0;
     }
 
     .form-row {
@@ -1234,11 +1395,30 @@ select,
         gap: 1rem;
     }
 
-    /* Reduce table padding on mobile to fit all columns */
+    /* Detail Container - Maximize width */
+    .detail-container {
+        padding: 1rem 0.5rem;
+    }
+
+    /* Reduce table font size significantly on mobile */
+    .grocery-detail-table {
+        font-size: 0.65rem;
+    }
+
     .grocery-detail-table th,
     .grocery-detail-table td {
-        padding: 0.5rem;
-        font-size: 0.85rem;
+        padding: 0.4rem 0.2rem;
+        font-size: 0.65rem;
+    }
+
+    .grocery-detail-table th:first-child,
+    .grocery-detail-table td:first-child {
+        padding-left: 0.3rem;
+    }
+
+    .grocery-detail-table th:last-child,
+    .grocery-detail-table td:last-child {
+        padding-right: 0.3rem;
     }
 
     /* Detail View Mobile Stack */
@@ -1493,9 +1673,8 @@ select,
 /* Detailed Credit Card UI */
 .credit-card {
     flex: 0 0 320px;
-    /* Fixed width for cards */
     height: 200px;
-    border-radius: 24px;
+    border-radius: var(--radius-xl);
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -1503,20 +1682,36 @@ select,
     scroll-snap-align: center;
     position: relative;
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     border: 1px solid rgba(255, 255, 255, 0.1);
     background-size: cover;
     overflow: hidden;
     cursor: pointer;
-    opacity: 0.7;
-    transform: scale(0.95);
+    opacity: 0.6;
+    transform: scale(0.92) perspective(1000px) rotateY(5deg);
     color: #fff;
+}
+
+.credit-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.credit-card:hover::before {
+    opacity: 1;
 }
 
 .credit-card.active {
     opacity: 1;
-    transform: scale(1);
-    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.7);
+    transform: scale(1) perspective(1000px) rotateY(0deg);
+    box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(139, 92, 246, 0.2);
     border-color: rgba(255, 255, 255, 0.3);
     z-index: 2;
 }
