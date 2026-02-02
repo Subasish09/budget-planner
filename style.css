@@ -1471,6 +1471,19 @@ select,
         background: transparent !important;
     }
 
+    .detail-controls {
+        padding: 1rem !important;
+        gap: 0.75rem !important;
+    }
+
+    .detail-controls .btn-icon {
+        min-width: 60px !important;
+        width: auto !important;
+        padding: 0 1rem !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+    }
+
     .form-row {
         flex-direction: column;
         gap: 1rem;
