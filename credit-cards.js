@@ -153,32 +153,37 @@ async function loadFromGitHub() {
             const fileData = await response.json();
             const content = atob(fileData.content);
 
-            // Extract data from the JS file
-            const match = content.match(/window\.creditCardDataRaw\s*=\s*(\[[\s\S]*?\]);/);
-            if (match) {
-                myCards = JSON.parse(match[1]);
-
-                // Sync visual updates from defaultCards
-                myCards = myCards.map(savedCard => {
-                    const freshDef = defaultCards.find(d => d.id === savedCard.id);
-                    if (freshDef) {
-                        return {
-                            ...savedCard,
-                            name: freshDef.name,
-                            color: freshDef.color,
-                            textColor: freshDef.textColor,
-                            type: freshDef.type,
-                            bank: freshDef.bank,
-                            last4: freshDef.last4
-                        };
-                    }
-                    return savedCard;
-                });
-
-                updateSyncStatus('synced');
-            } else {
-                throw new Error('Invalid data format');
+            // Parse as pure JSON (no longer wrapped in window.creditCardDataRaw)
+            try {
+                myCards = JSON.parse(content);
+            } catch (parseError) {
+                // Fallback: try old format with window.creditCardDataRaw
+                const match = content.match(/window\.creditCardDataRaw\s*=\s*(\[[\s\S]*?\]);/);
+                if (match) {
+                    myCards = JSON.parse(match[1]);
+                } else {
+                    throw new Error('Invalid JSON format');
+                }
             }
+
+            // Sync visual updates from defaultCards
+            myCards = myCards.map(savedCard => {
+                const freshDef = defaultCards.find(d => d.id === savedCard.id);
+                if (freshDef) {
+                    return {
+                        ...savedCard,
+                        name: freshDef.name,
+                        color: freshDef.color,
+                        textColor: freshDef.textColor,
+                        type: freshDef.type,
+                        bank: freshDef.bank,
+                        last4: freshDef.last4
+                    };
+                }
+                return savedCard;
+            });
+
+            updateSyncStatus('synced');
         } else if (response.status === 404) {
             // File doesn't exist yet, use defaults
             console.log('GitHub file not found, using default cards');
