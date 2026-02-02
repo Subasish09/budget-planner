@@ -115,6 +115,16 @@ window.creditCardDataRaw = [
                 "isLent": true,
                 "lentTo": "Dilip Kumar Patra",
                 "repaid": false
+            },
+            {
+                "id": "1770059797617",
+                "desc": "Lending",
+                "amount": 30000,
+                "date": "2026-01-17",
+                "category": "Lent",
+                "isLent": true,
+                "lentTo": "Dilip Kumar Patra",
+                "repaid": false
             }
         ]
     }
