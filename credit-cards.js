@@ -596,9 +596,19 @@ function openTransactionModal(type) {
     document.getElementById('cc-type').value = type;
     document.getElementById('cc-modal-title').innerText = type === 'spend' ? 'Add Card Spend' : 'Lend Money from Card';
 
-    // Toggle Friend Input
+    // Toggle Friend Input and Description
     document.getElementById('friend-input-group').style.display = type === 'lend' ? 'block' : 'none';
-    document.getElementById('cc-desc').placeholder = type === 'lend' ? 'Reason for lending' : 'e.g. Dinner, Flight';
+    document.getElementById('desc-input-group').style.display = type === 'lend' ? 'none' : 'block';
+
+    const descInput = document.getElementById('cc-desc');
+    if (type === 'lend') {
+        descInput.value = 'Lending'; // Auto-fill for lending
+        descInput.removeAttribute('required');
+    } else {
+        descInput.value = '';
+        descInput.setAttribute('required', 'required');
+        descInput.placeholder = 'e.g. Dinner, Flight';
+    }
 
     if (type === 'lend') {
         document.getElementById('cc-category').value = 'Lent';
