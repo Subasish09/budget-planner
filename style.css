@@ -1309,7 +1309,7 @@ select,
 /* Mobile Responsiveness Improvements */
 @media (max-width: 768px) {
     .container {
-        padding: 1rem;
+        padding: 0;
         width: 100%;
     }
 
