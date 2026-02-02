@@ -1537,7 +1537,10 @@ select,
 
     .grocery-table th:first-child,
     .grocery-table td:first-child {
-        min-width: 100px !important;
+        min-width: 140px !important;
+        max-width: 200px !important;
+        word-wrap: break-word !important;
+        white-space: normal !important;
     }
 
     .btn-text,
