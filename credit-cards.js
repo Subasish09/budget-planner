@@ -5,7 +5,7 @@ const defaultCards = [
         bank: 'HDFC Bank',
         name: 'Regalia Gold',
         type: 'Visa',
-        last4: '4512',
+        last4: '4579',
         // Pure Black base with Sharp Gold diagonal tip
         color: 'linear-gradient(115deg, #000000 0%, #000000 70%, #d4af37 70%, #fcf6ba 85%, #aa8e28 100%)',
         textColor: '#fcf6ba', // Light Gold text
@@ -17,7 +17,7 @@ const defaultCards = [
         bank: 'HDFC Bank',
         name: 'Tata Neu Infinity',
         type: 'Rupay', // Usually Rupay for Neu
-        last4: '8841',
+        last4: '8850',
         // Deep fluorescent Purple to Dark Violet/Black
         color: 'linear-gradient(135deg, #5a189a 0%, #3c096c 40%, #10002b 100%)',
         textColor: '#fff',
@@ -41,7 +41,7 @@ const defaultCards = [
         bank: 'Axis Bank',
         name: 'Flipkart Axis',
         type: 'MasterCard', // Often MC
-        last4: '9012',
+        last4: '9058',
         // Black base with Blue-to-Pink ribbon streak
         color: 'linear-gradient(125deg, #000000 25%, #2563eb 45%, #db2777 65%, #000000 85%)',
         textColor: '#fff',
@@ -53,7 +53,7 @@ const defaultCards = [
         bank: 'ICICI Bank',
         name: 'MMT UPI',
         type: 'UPI',
-        last4: 'UPI',
+        last4: '1900',
         color: 'linear-gradient(180deg, #ea580c 0%, #facc15 35%, #290803 36%, #0f0502 100%)', // Same MMT Theme
         textColor: '#fff',
         lounge: { hasAccess: false },
@@ -64,7 +64,7 @@ const defaultCards = [
         bank: 'HDFC Bank',
         name: 'Digital UPI',
         type: 'UPI',
-        last4: 'UPI',
+        last4: '9032',
         color: 'linear-gradient(135deg, #0f172a 0%, #334155 100%)', // Slate
         textColor: '#fff',
         lounge: { hasAccess: false },
@@ -73,32 +73,11 @@ const defaultCards = [
 ];
 
 // State
-let myCards = JSON.parse(localStorage.getItem('myCreditCards')) || [];
-
-if (myCards.length === 0) {
-    myCards = defaultCards;
-} else {
-    // FORCE SYNC VISUALS from defaultCards (to apply design updates)
-    myCards = myCards.map(savedCard => {
-        const freshDef = defaultCards.find(d => d.id === savedCard.id);
-        if (freshDef) {
-            return {
-                ...savedCard,
-                name: freshDef.name,
-                color: freshDef.color,
-                textColor: freshDef.textColor,
-                type: freshDef.type,
-                bank: freshDef.bank,
-                last4: freshDef.last4 // Sync digits
-            };
-        }
-        return savedCard;
-    });
-}
-localStorage.setItem('myCreditCards', JSON.stringify(myCards));
-
+let myCards = [];
 let activeCardIndex = 0;
 let currentFilter = 'all'; // 'all' or 'lent'
+let autoSyncEnabled = true; // Auto-sync toggle
+let isSyncing = false;
 
 // Elements
 const carousel = document.getElementById('cards-carousel');
@@ -106,12 +85,205 @@ const cardDashboard = document.getElementById('card-dashboard');
 const transactionsListEl = document.getElementById('card-transactions');
 const loungeCard = document.getElementById('lounge-card');
 
-// Init
-function init() {
+// GitHub Config
+function getGitHubConfig() {
+    const config = JSON.parse(localStorage.getItem('ghConfig'));
+    if (!config || !config.username || !config.repo || !config.pat) {
+        return null;
+    }
+    return config;
+}
+
+// Sync Status Indicator
+function updateSyncStatus(status, message = '') {
+    const indicator = document.getElementById('sync-status');
+    if (!indicator) return;
+
+    indicator.className = 'sync-status';
+
+    switch (status) {
+        case 'syncing':
+            indicator.classList.add('syncing');
+            indicator.innerHTML = '<i class="fas fa-sync fa-spin"></i> Syncing...';
+            break;
+        case 'synced':
+            indicator.classList.add('synced');
+            const timestamp = new Date().toLocaleTimeString();
+            indicator.innerHTML = `<i class="fas fa-check-circle"></i> Synced at ${timestamp}`;
+            setTimeout(() => indicator.classList.remove('synced'), 3000);
+            break;
+        case 'failed':
+            indicator.classList.add('failed');
+            indicator.innerHTML = `<i class="fas fa-exclamation-circle"></i> Sync failed ${message}`;
+            break;
+        case 'offline':
+            indicator.classList.add('offline');
+            indicator.innerHTML = '<i class="fas fa-wifi-slash"></i> Offline';
+            break;
+    }
+}
+
+// Load data from GitHub
+async function loadFromGitHub() {
+    const config = getGitHubConfig();
+
+    if (!config) {
+        // No config, use default cards
+        console.log('No GitHub config found, using default cards');
+        myCards = defaultCards;
+        renderCarousel();
+        selectCard(0);
+        updateGlobalStats();
+        return;
+    }
+
+    updateSyncStatus('syncing');
+
+    const apiUrl = `https://api.github.com/repos/${config.username}/${config.repo}/contents/${config.path}`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Authorization': `token ${config.pat}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (response.ok) {
+            const fileData = await response.json();
+            const content = atob(fileData.content);
+
+            // Extract data from the JS file
+            const match = content.match(/window\.creditCardDataRaw\s*=\s*(\[[\s\S]*?\]);/);
+            if (match) {
+                myCards = JSON.parse(match[1]);
+
+                // Sync visual updates from defaultCards
+                myCards = myCards.map(savedCard => {
+                    const freshDef = defaultCards.find(d => d.id === savedCard.id);
+                    if (freshDef) {
+                        return {
+                            ...savedCard,
+                            name: freshDef.name,
+                            color: freshDef.color,
+                            textColor: freshDef.textColor,
+                            type: freshDef.type,
+                            bank: freshDef.bank,
+                            last4: freshDef.last4
+                        };
+                    }
+                    return savedCard;
+                });
+
+                updateSyncStatus('synced');
+            } else {
+                throw new Error('Invalid data format');
+            }
+        } else if (response.status === 404) {
+            // File doesn't exist yet, use defaults
+            console.log('GitHub file not found, using default cards');
+            myCards = defaultCards;
+            await saveToGitHub(); // Create initial file
+        } else {
+            throw new Error(`HTTP ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Failed to load from GitHub:', error);
+        updateSyncStatus('failed', `- ${error.message}`);
+
+        // Fallback to localStorage if available
+        const localData = localStorage.getItem('myCreditCards');
+        if (localData) {
+            myCards = JSON.parse(localData);
+            console.log('Using localStorage fallback');
+        } else {
+            myCards = defaultCards;
+        }
+    }
+
     renderCarousel();
     selectCard(0);
     updateGlobalStats();
+}
 
+// Save data to GitHub
+async function saveToGitHub() {
+    if (!autoSyncEnabled) {
+        console.log('Auto-sync disabled');
+        return;
+    }
+
+    const config = getGitHubConfig();
+    if (!config) {
+        alert('Please configure GitHub settings before saving data.');
+        openSettings();
+        return;
+    }
+
+    if (isSyncing) {
+        console.log('Sync already in progress');
+        return;
+    }
+
+    isSyncing = true;
+    updateSyncStatus('syncing');
+
+    const apiUrl = `https://api.github.com/repos/${config.username}/${config.repo}/contents/${config.path}`;
+    const content = `window.creditCardDataRaw = ${JSON.stringify(myCards, null, 4)};`;
+    const message = `Update credit card data - ${new Date().toLocaleString()}`;
+
+    try {
+        // Get current SHA
+        let sha = '';
+        const getRes = await fetch(apiUrl, {
+            headers: {
+                'Authorization': `token ${config.pat}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (getRes.ok) {
+            const fileData = await getRes.json();
+            sha = fileData.sha;
+        }
+
+        // Update file
+        const putRes = await fetch(apiUrl, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${config.pat}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: message,
+                content: btoa(unescape(encodeURIComponent(content))),
+                sha: sha || undefined,
+                branch: config.branch
+            })
+        });
+
+        if (putRes.ok) {
+            updateSyncStatus('synced');
+            // Also save to localStorage as backup
+            localStorage.setItem('myCreditCards', JSON.stringify(myCards));
+        } else {
+            const err = await putRes.json();
+            throw new Error(err.message || 'Sync failed');
+        }
+    } catch (error) {
+        console.error('Failed to save to GitHub:', error);
+        updateSyncStatus('failed', `- ${error.message}`);
+        // Save to localStorage as fallback
+        localStorage.setItem('myCreditCards', JSON.stringify(myCards));
+    } finally {
+        isSyncing = false;
+    }
+}
+
+// Init - Load from GitHub
+async function init() {
+    await loadFromGitHub();
     // Set default date
     document.getElementById('cc-date').valueAsDate = new Date();
 }
@@ -255,7 +427,7 @@ function renderTransactions() {
 
         // Data Integrity: If somehow fully repaid but flag not set (or vice versa due to old data)
         const isFullyRepaid = totalRepaid >= t.amount;
-        if (isFullyRepaid && !t.repaid) { t.repaid = true; saveData(); }
+        if (isFullyRepaid && !t.repaid) { t.repaid = true; saveToGitHub(); }
 
         const lentHtml = isLent
             ? `<div style="font-size:0.8rem; color: #f43f5e; margin-top:2px;">
@@ -333,7 +505,7 @@ ccForm.addEventListener('submit', (e) => {
     };
 
     myCards[activeCardIndex].transactions.push(newTransaction);
-    saveData();
+    saveToGitHub();
     modalOverlay.classList.remove('active');
     renderDashboard();
     ccForm.reset();
@@ -403,7 +575,7 @@ repForm.addEventListener('submit', (e) => {
             t.repaid = true;
         }
 
-        saveData();
+        saveToGitHub();
         renderDashboard();
         repModal.classList.remove('active');
         repForm.reset();
@@ -415,7 +587,7 @@ function markBillPaid() {
         // Simple logic: remove all non-lent transactions, or just reset. 
         // For now, let's just clear non-lent transactions as "Paid off"
         myCards[activeCardIndex].transactions = myCards[activeCardIndex].transactions.filter(t => t.isLent && !t.repaid);
-        saveData();
+        saveToGitHub();
         renderDashboard();
     }
 }
@@ -430,9 +602,7 @@ document.querySelectorAll('.tab').forEach(t => {
     });
 });
 
-function saveData() {
-    localStorage.setItem('myCreditCards', JSON.stringify(myCards));
-}
+
 
 
 // Settings Logic
