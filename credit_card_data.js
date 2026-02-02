@@ -81,7 +81,18 @@ window.creditCardDataRaw = [
         "lounge": {
             "hasAccess": false
         },
-        "transactions": []
+        "transactions": [
+            {
+                "id": "1770059709950",
+                "desc": "Shopping of gold chain",
+                "amount": 60000,
+                "date": "2026-01-17",
+                "category": "Shopping",
+                "isLent": false,
+                "lentTo": null,
+                "repaid": false
+            }
+        ]
     },
     {
         "id": "hdfc-upi",
