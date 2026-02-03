@@ -40,6 +40,41 @@
             </div>
         </header>
 
+        <!-- Smart Insights Section -->
+        <div class="grocery-section" style="margin-bottom: 2rem;">
+            <div class="section-header">
+                <h2 style="font-size: 1.1rem;"><i class="fas fa-lightbulb" style="color: var(--warning);"></i> Smart
+                    Insights</h2>
+            </div>
+
+            <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                <!-- Most Expensive -->
+                <div class="stat-card" style="border-color: rgba(244, 63, 94, 0.2);">
+                    <div class="stat-label">Most Expensive</div>
+                    <div class="stat-value" id="most-expensive-name" style="font-size: 1.2rem;">-</div>
+                    <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;"
+                        id="most-expensive-cost">₹0</div>
+                </div>
+
+                <!-- Top Category -->
+                <div class="stat-card" style="border-color: rgba(139, 92, 246, 0.2);">
+                    <div class="stat-label">Top Category</div>
+                    <div class="stat-value" id="top-category-name" style="font-size: 1.2rem;">-</div>
+                    <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;"
+                        id="top-category-count">0 subscriptions</div>
+                </div>
+
+                <!-- Average Cost -->
+                <div class="stat-card" style="border-color: rgba(59, 130, 246, 0.2);">
+                    <div class="stat-label">Avg. Monthly Cost</div>
+                    <div class="stat-value" id="avg-monthly-cost">₹0</div>
+                    <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">Per subscription
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Subscription List -->
         <div class="grocery-section">
             <div class="section-header">
@@ -92,10 +127,16 @@
 
                 <!-- Row -->
                 <div class="form-row">
+                    <!-- Dynamic Date Input -->
                     <div class="input-group">
-                        <label class="input-label">Due Date</label>
+                        <label class="input-label" id="date-label">Renewal Day</label>
+
+                        <!-- Monthly: Day only -->
                         <input type="number" id="sub-date" class="premium-input" min="1" max="31"
                             placeholder="Day (1-31)">
+
+                        <!-- Yearly: Full Date -->
+                        <input type="date" id="sub-full-date" class="premium-input" style="display: none;">
                     </div>
 
                     <!-- Custom Category Dropdown -->
