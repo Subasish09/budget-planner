@@ -1,4 +1,16 @@
 {
-  "subscriptions": [],
-  "lastSync": "2026-02-03T15:05:51.812Z"
+  "subscriptions": [
+    {
+      "id": 1770131169129,
+      "name": "Hotstar",
+      "cost": 1499,
+      "cycle": "yearly",
+      "date": "2026-03-05",
+      "category": "Entertainment",
+      "domain": "hotstar.com",
+      "lastPaid": null,
+      "paymentHistory": []
+    }
+  ],
+  "lastSync": "2026-02-03T15:06:09.129Z"
 }
