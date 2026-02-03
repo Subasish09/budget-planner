@@ -1860,6 +1860,7 @@ select,
     margin-bottom: 0.5rem;
     background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
