@@ -7,7 +7,6 @@ async function loadCreditCardData() {
         const response = await fetch(`credit_card_data.js?t=${new Date().getTime()}`);
         if (response.ok) {
             const text = await response.text();
-            // Handle both pure JSON and JS assignment formats
             try {
                 // Formatting is likely 'window.creditCardDataRaw = [...]'
                 // Remove the prefix 'window.creditCardDataRaw =' and potential trailing semicolon
@@ -16,7 +15,6 @@ async function loadCreditCardData() {
 
                 return JSON.parse(cleanText);
             } catch (e) {
-                // Formatting is likely 'window.creditCardDataRaw = [...]'
                 // Fallback: try finding the first [ and the last ]
                 const firstBracket = text.indexOf('[');
                 const lastBracket = text.lastIndexOf(']');
@@ -32,67 +30,86 @@ async function loadCreditCardData() {
     return [];
 }
 
-// Calculate total spend across all cards
-function calculateTotalSpend(cards) {
-    let total = 0;
+// Utility: Format Currency (No decimals for cleaner look)
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 0
+    }).format(amount);
+};
+
+// Utility: Format Date (06 Jan)
+const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString; // Return original if invalid
+
+    return new Intl.DateTimeFormat('en-IN', {
+        day: '2-digit',
+        month: 'short'
+    }).format(date);
+};
+
+// Process data in a single pass (Optimization)
+function processCardData(cards) {
+    let stats = {
+        totalSpend: 0,
+        totalLent: 0,
+        unpaidAmount: 0,
+        categories: {},
+        recentTransactions: []
+    };
+
     cards.forEach(card => {
+        if (!card.transactions) return;
+
         card.transactions.forEach(tx => {
-            if (!tx.isLent) {
-                total += tx.amount;
+            // 1. Stats Calculation
+            if (tx.isLent) {
+                // Lending counts towards "Total Lent" if not repaid
+                if (!tx.repaid) {
+                    stats.totalLent += tx.amount;
+                }
+            } else {
+                // Spending counts towards "Total Spend"
+                stats.totalSpend += tx.amount;
             }
-        });
-    });
-    return total;
-}
 
-// Calculate total lent
-function calculateTotalLent(cards) {
-    let total = 0;
-    cards.forEach(card => {
-        card.transactions.forEach(tx => {
-            if (tx.isLent && !tx.repaid) {
-                total += tx.amount;
-            }
-        });
-    });
-    return total;
-}
-
-// Calculate unpaid amount (transactions past due date)
-function calculateUnpaidAmount(cards) {
-    let total = 0;
-
-    cards.forEach(card => {
-        card.transactions.forEach(tx => {
+            // Unpaid calculation (pending payments with due dates)
             if (!tx.isPaid && tx.dueDate) {
-                total += tx.amount;
+                stats.unpaidAmount += tx.amount;
             }
-        });
-    });
-    return total;
-}
 
-// Get category breakdown
-function getCategoryBreakdown(cards) {
-    const categories = {};
-
-    cards.forEach(card => {
-        card.transactions.forEach(tx => {
+            // 2. Category Aggregation
+            // Lending is a distinct category
             const category = tx.isLent ? 'Lending' : (tx.category || 'General');
-            if (!categories[category]) {
-                categories[category] = 0;
-            }
-            categories[category] += tx.amount;
+            stats.categories[category] = (stats.categories[category] || 0) + tx.amount;
+
+            // 3. Collect Recent Transactions
+            stats.recentTransactions.push({
+                ...tx,
+                cardName: card.name,
+                bankName: card.bank,
+                // Add sorting value
+                timestamp: new Date(tx.date).getTime()
+            });
         });
     });
 
-    return categories;
+    // Sort recent transactions by date desc
+    stats.recentTransactions.sort((a, b) => b.timestamp - a.timestamp);
+
+    // Keep top 5
+    stats.recentTransactions = stats.recentTransactions.slice(0, 5);
+
+    return stats;
 }
 
 // Render category breakdown with Chart.js
 let infoChart = null;
 
-function renderCategoryBreakdown(categories) {
+function renderCategoryChart(categories) {
     const listContainer = document.getElementById('category-breakdown');
     const ctx = document.getElementById('category-chart');
 
@@ -109,7 +126,7 @@ function renderCategoryBreakdown(categories) {
     let html = '';
     const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
 
-    // Define colors
+    // Centralized Colors
     const colors = [
         '#ec4899', // Pink (Primary)
         '#8b5cf6', // Violet
@@ -144,7 +161,7 @@ function renderCategoryBreakdown(categories) {
                     <span style="font-weight: 500; font-size: 0.95rem;">${category}</span>
                 </div>
                 <div style="text-align: right;">
-                    <div style="font-weight: 600;">₹${amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
+                    <div style="font-weight: 600;">${formatCurrency(amount)}</div>
                     <div style="font-size: 0.75rem; color: var(--text-secondary);">${percentage}%</div>
                 </div>
             </div>
@@ -153,7 +170,7 @@ function renderCategoryBreakdown(categories) {
 
     listContainer.innerHTML = html;
 
-    // 2. Render Chart (only if context exists and Chart is loaded)
+    // 2. Render Chart
     if (ctx && typeof Chart !== 'undefined') {
         if (infoChart) {
             infoChart.destroy();
@@ -176,30 +193,19 @@ function renderCategoryBreakdown(categories) {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false // We use our custom legend
-                    },
+                    legend: { display: false },
                     tooltip: {
                         backgroundColor: 'rgba(23, 23, 23, 0.9)',
                         padding: 12,
                         cornerRadius: 8,
-                        titleFont: {
-                            family: "'Inter', sans-serif",
-                            size: 13
-                        },
-                        bodyFont: {
-                            family: "'Inter', sans-serif",
-                            size: 13,
-                            weight: 'bold'
-                        },
+                        titleFont: { family: "'Inter', sans-serif", size: 13 },
+                        bodyFont: { family: "'Inter', sans-serif", size: 13, weight: 'bold' },
                         callbacks: {
                             label: function (context) {
                                 let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
+                                if (label) label += ': ';
                                 if (context.parsed !== null) {
-                                    label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed);
+                                    label += formatCurrency(context.parsed);
                                 }
                                 return label;
                             }
@@ -207,49 +213,27 @@ function renderCategoryBreakdown(categories) {
                     }
                 },
                 cutout: '75%',
-                layout: {
-                    padding: 10
-                }
+                layout: { padding: 10 }
             }
         });
     }
 }
 
-// Render recent transactions
-function renderRecentTransactions(cards) {
+// Render recent transactions list
+function renderRecentTransactions(transactions) {
     const listContainer = document.getElementById('recent-cc-transactions');
     if (!listContainer) return;
 
-    // Flatten all transactions
-    let allTransactions = [];
-    cards.forEach(card => {
-        if (card.transactions) {
-            card.transactions.forEach(tx => {
-                allTransactions.push({
-                    ...tx,
-                    cardName: card.name,
-                    bankName: card.bank
-                });
-            });
-        }
-    });
-
-    // Sort by date descending
-    allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    // Take top 5
-    const recent = allTransactions.slice(0, 5);
-
-    if (recent.length === 0) {
+    if (transactions.length === 0) {
         listContainer.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 1rem;">No recent activity</div>`;
         return;
     }
 
     let html = '';
-    recent.forEach(tx => {
+    transactions.forEach(tx => {
         const isLent = tx.isLent;
         const icon = isLent ? 'fa-hand-holding-usd' : 'fa-shopping-bag';
-        const color = isLent ? '#f59e0b' : '#ec4899';
+        const color = isLent ? '#f59e0b' : '#ec4899'; // Warning color for Lend, Primary for Expense
         const bg = isLent ? 'rgba(245, 158, 11, 0.1)' : 'rgba(236, 72, 153, 0.1)';
 
         html += `
@@ -260,11 +244,13 @@ function renderRecentTransactions(cards) {
                     </div>
                     <div>
                         <div style="font-weight: 500; font-size: 0.95rem;">${tx.desc}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary);">${tx.bankName} ${tx.cardName} • ${tx.date}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                            ${tx.bankName} ${tx.cardName} • ${formatDate(tx.date)}
+                        </div>
                     </div>
                 </div>
                 <div style="text-align: right;">
-                    <div style="font-weight: 600; color: var(--text-primary);">₹${tx.amount.toLocaleString('en-IN')}</div>
+                    <div style="font-weight: 600; color: var(--text-primary);">${formatCurrency(tx.amount)}</div>
                 </div>
             </div>
         `;
@@ -273,26 +259,24 @@ function renderRecentTransactions(cards) {
     listContainer.innerHTML = html;
 }
 
-// Update dashboard stats
+// Main logic
 async function updateCreditCardStats() {
     const cards = await loadCreditCardData();
 
-    const totalSpend = calculateTotalSpend(cards);
-    const totalLent = calculateTotalLent(cards);
-    const unpaidAmount = calculateUnpaidAmount(cards);
-    const categories = getCategoryBreakdown(cards);
+    // Process all data in one pass
+    const stats = processCardData(cards);
 
-    // Update DOM
+    // Update DOM Elements
     const totalSpendEl = document.getElementById('cc-total-spend');
     const totalLentEl = document.getElementById('cc-total-lent');
     const unpaidEl = document.getElementById('cc-unpaid');
 
-    if (totalSpendEl) totalSpendEl.textContent = `₹${totalSpend.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
-    if (totalLentEl) totalLentEl.textContent = `₹${totalLent.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
-    if (unpaidEl) unpaidEl.textContent = `₹${unpaidAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+    if (totalSpendEl) totalSpendEl.textContent = formatCurrency(stats.totalSpend);
+    if (totalLentEl) totalLentEl.textContent = formatCurrency(stats.totalLent);
+    if (unpaidEl) unpaidEl.textContent = formatCurrency(stats.unpaidAmount);
 
-    renderCategoryBreakdown(categories);
-    renderRecentTransactions(cards);
+    renderCategoryChart(stats.categories);
+    renderRecentTransactions(stats.recentTransactions);
 }
 
 // Initialize on page load
