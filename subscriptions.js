@@ -1,34 +1,46 @@
-// Subscription Manager Logic with Advanced Branding
+// Subscription Manager Logic with Image Logo Support
 
 let subscriptions = [];
 
-// Defining Brand Colors & Icons map
-const BRAND_ASSETS = {
-    'netflix': { color: '#E50914', icon: 'fa-ticket-alt' }, // FontAwesome doesn't have N logo in free tier usually, sticking to generic
-    'spotify': { color: '#1DB954', icon: 'fa-spotify', isBrand: true },
-    'youtube': { color: '#FF0000', icon: 'fa-youtube', isBrand: true },
-    'prime': { color: '#00A8E1', icon: 'fa-amazon', isBrand: true },
-    'amazon': { color: '#FF9900', icon: 'fa-amazon', isBrand: true },
-    'hotstar': { color: '#05cbed', icon: 'fa-play-circle' }, // Teal/Greenish
-    'zee5': { color: '#8230c6', icon: 'fa-tv' }, // Purple
-    'sonyliv': { color: '#fba523', icon: 'fa-film' }, // Orange
-    'sony': { color: '#000000', icon: 'fa-film' },
-    'lionsgate': { color: '#ffffff', icon: 'fa-film' },
-    'firstcry': { color: '#be1e2d', icon: 'fa-baby' },
-    'zomato': { color: '#cb202d', icon: 'fa-utensils' },
-    'swiggy': { color: '#fc8019', icon: 'fa-hamburger' },
-    'apple': { color: '#A2AAAD', icon: 'fa-apple', isBrand: true },
-    'google': { color: '#4285F4', icon: 'fa-google', isBrand: true },
-    'chatgpt': { color: '#10a37f', icon: 'fa-robot' },
-    'jio': { color: '#0f3cc9', icon: 'fa-wifi' },
-    'airtel': { color: '#f50000', icon: 'fa-broadcast-tower' }
+// Domain Map for Manual Overrides (if auto-detection fails)
+const DOMAIN_MAP = {
+    'netflix': 'netflix.com',
+    'spotify': 'spotify.com',
+    'prime': 'amazon.in',
+    'amazon': 'amazon.in',
+    'hotstar': 'hotstar.com',
+    'disney': 'hotstar.com',
+    'zee5': 'zee5.com',
+    'sonyliv': 'sonyliv.com',
+    'sony': 'sonyliv.com',
+    'lionsgate': 'lionsgateplay.com',
+    'firstcry': 'firstcry.com',
+    'zomato': 'zomato.com',
+    'swiggy': 'swiggy.com',
+    'jio': 'jio.com',
+    'airtel': 'airtel.in',
+    'vi': 'myvi.in',
+    'bsnl': 'bsnl.co.in',
+    'act': 'actcorp.in',
+    'apple': 'apple.com',
+    'icloud': 'apple.com',
+    'google': 'google.com',
+    'youtube': 'youtube.com',
+    'chatgpt': 'openai.com',
+    'claude': 'anthropic.com',
+    'midjourney': 'midjourney.com',
+    'uber': 'uber.com',
+    'ola': 'olacabs.com',
+    'blinkit': 'blinkit.com',
+    'zepto': 'zeptonow.com',
+    'bigbasket': 'bigbasket.com'
 };
 
 const DEFAULT_SUBS = [
-    { id: 1, name: 'Netflix', cost: 649, cycle: 'monthly', date: 5, category: 'Entertainment', color: '#E50914', icon: 'fa-film' },
-    { id: 2, name: 'Spotify', cost: 119, cycle: 'monthly', date: 21, category: 'Entertainment', color: '#1DB954', icon: 'fa-spotify', isBrand: true },
-    { id: 3, name: 'Amazon Prime', cost: 1499, cycle: 'yearly', date: 15, category: 'Entertainment', color: '#00A8E1', icon: 'fa-amazon', isBrand: true },
-    { id: 4, name: 'Hotstar', cost: 149, cycle: 'monthly', date: 1, category: 'Entertainment', color: '#05cbed', icon: 'fa-play-circle' }
+    { id: 1, name: 'Netflix', cost: 649, cycle: 'monthly', date: 5, category: 'Entertainment', domain: 'netflix.com' },
+    { id: 2, name: 'Spotify', cost: 119, cycle: 'monthly', date: 21, category: 'Entertainment', domain: 'spotify.com' },
+    { id: 3, name: 'Amazon Prime', cost: 1499, cycle: 'yearly', date: 15, category: 'Entertainment', domain: 'amazon.in' },
+    { id: 4, name: 'Hotstar', cost: 149, cycle: 'monthly', date: 1, category: 'Entertainment', domain: 'hotstar.com' }
 ];
 
 // Load Data
@@ -78,15 +90,19 @@ function updateStats() {
     document.getElementById('total-yearly').textContent = formatMoney(yearlyTotal);
 }
 
-// Helper: Get Brand Style
-function getBrandStyle(name) {
-    const lowerName = name.toLowerCase();
-    for (const [key, asset] of Object.entries(BRAND_ASSETS)) {
+// Helper: Get Logo URL
+function getLogoUrl(name, savedDomain) {
+    if (savedDomain) return `https://logo.clearbit.com/${savedDomain}`;
+
+    // Attempt detection
+    const lowerName = name.toLowerCase().replace(/\s/g, '');
+    for (const [key, domain] of Object.entries(DOMAIN_MAP)) {
         if (lowerName.includes(key)) {
-            return asset;
+            return `https://logo.clearbit.com/${domain}`;
         }
     }
-    return { color: 'var(--text-secondary)', icon: 'fa-receipt', isBrand: false };
+
+    return null; // Fallback to icon
 }
 
 // Render List
@@ -101,27 +117,33 @@ function renderSubscriptions() {
         const item = document.createElement('div');
         item.className = 'transaction-item';
 
-        let style = getBrandStyle(sub.name);
+        const logoUrl = getLogoUrl(sub.name, sub.domain);
 
-        // Prefer saved icon if available, else derive
-        let iconClass = sub.icon || style.icon;
-        let color = sub.color || style.color;
-        let isBrand = sub.isBrand || style.isBrand;
-
-        // FontAwesome Brands prefix is 'fab', others 'fas'
-        const faPrefix = isBrand ? 'fab' : 'fas';
+        let iconHTML = '';
+        if (logoUrl) {
+            iconHTML = `
+                <div class="sub-logo-wrapper">
+                    <img src="${logoUrl}" class="sub-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <i class="fas fa-receipt sub-logo-placeholder" style="display:none;"></i>
+                </div>
+            `;
+        } else {
+            iconHTML = `
+                <div class="sub-logo-wrapper">
+                    <i class="fas fa-receipt sub-logo-placeholder"></i>
+                </div>
+            `;
+        }
 
         item.innerHTML = `
-            <div class="transaction-icon" style="background: rgba(255, 255, 255, 0.05); color: ${color}; width: 42px; height: 42px; font-size: 1.2rem;">
-                <i class="${faPrefix} ${iconClass}"></i>
-            </div>
+            ${iconHTML}
             <div class="transaction-info">
                 <div class="transaction-title">${sub.name}</div>
-                <div class="transaction-date" style="color: var(--text-secondary); font-size: 0.8rem;">
-                    ${sub.cycle === 'monthly' ? 'Monthly' : 'Yearly'} • Due on ${sub.date}
+                <div class="transaction-date">
+                    <i class="fas fa-clock" style="font-size: 0.7rem;"></i> ${sub.cycle === 'monthly' ? 'Monthly' : 'Yearly'} • Due ${sub.date}
                 </div>
             </div>
-            <div class="transaction-amount" style="font-weight: 600; font-size: 1rem;">
+            <div class="transaction-amount">
                 ${formatMoney(sub.cost)}
             </div>
             <button class="delete-btn" onclick="deleteSubscription(${sub.id})" style="margin-left: 1rem; background: none; border: none; color: var(--text-secondary); opacity: 0.5; transition: opacity 0.2s;"><i class="fas fa-times"></i></button>
@@ -136,7 +158,7 @@ function addSubscription() {
     const cost = parseFloat(document.getElementById('sub-cost').value);
     const date = parseInt(document.getElementById('sub-date').value);
     const category = document.getElementById('sub-category').value;
-    const cycleBtn = document.querySelector('.chip.active');
+    const cycleBtn = document.querySelector('.cycle-btn.active');
     const cycle = cycleBtn ? cycleBtn.dataset.value : 'monthly';
 
     if (!name || isNaN(cost) || isNaN(date)) {
@@ -144,8 +166,15 @@ function addSubscription() {
         return;
     }
 
-    // Auto-detect brand styling
-    const style = getBrandStyle(name);
+    // Try to guess domain for logo
+    let domain = null;
+    const lowerName = name.toLowerCase().replace(/\s/g, '');
+    for (const [key, d] of Object.entries(DOMAIN_MAP)) {
+        if (lowerName.includes(key)) {
+            domain = d;
+            break;
+        }
+    }
 
     const newSub = {
         id: Date.now(),
@@ -154,9 +183,7 @@ function addSubscription() {
         cycle,
         date,
         category,
-        icon: style.icon,
-        color: style.color,
-        isBrand: style.isBrand
+        domain
     };
 
     subscriptions.push(newSub);
@@ -188,25 +215,16 @@ closeBtn.onclick = closeModal;
 
 function closeModal() {
     modal.classList.remove('active');
-    // Clear inputs
     document.getElementById('sub-name').value = '';
     document.getElementById('sub-cost').value = '';
     document.getElementById('sub-date').value = '';
 }
 
-// Chip Toggle
-document.querySelectorAll('.chip').forEach(chip => {
+// Chip Toggle (Updated Class Name)
+document.querySelectorAll('.cycle-btn').forEach(chip => {
     chip.addEventListener('click', () => {
-        document.querySelectorAll('.chip').forEach(c => {
-            c.classList.remove('active');
-            c.style.background = 'transparent';
-            c.style.color = 'var(--text-secondary)';
-            c.style.border = '1px solid var(--glass-border)';
-        });
+        document.querySelectorAll('.cycle-btn').forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
-        chip.style.background = 'rgba(236, 72, 153, 0.2)';
-        chip.style.color = 'white';
-        chip.style.border = '1px solid var(--primary)';
     });
 });
 
