@@ -43,7 +43,18 @@
       "domain": null,
       "lastPaid": null,
       "paymentHistory": []
+    },
+    {
+      "id": 1770132278218,
+      "name": "Netflix",
+      "cost": 199,
+      "cycle": "monthly",
+      "date": 5,
+      "category": "Entertainment",
+      "domain": "netflix.com",
+      "lastPaid": null,
+      "paymentHistory": []
     }
   ],
-  "lastSync": "2026-02-03T15:17:34.249Z"
+  "lastSync": "2026-02-03T15:24:38.218Z"
 }
