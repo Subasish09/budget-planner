@@ -1,21 +1,10 @@
 // Credit Card Analytics for Main Dashboard
 
 // Load credit card data
-// Load credit card data
 async function loadCreditCardData() {
-    // Try localStorage first (fastest and most up-to-date locally)
-    const localData = localStorage.getItem('myCreditCards');
-    if (localData) {
-        try {
-            return JSON.parse(localData);
-        } catch (e) {
-            console.error('Error parsing local storage data:', e);
-        }
-    }
-
-    // Fallback: Try fetching the file
     try {
-        const response = await fetch('credit_card_data.js');
+        // Fetch with cache busting to ensure we get latest GitHub data
+        const response = await fetch(`credit_card_data.js?t=${new Date().getTime()}`);
         if (response.ok) {
             const text = await response.text();
             // Handle both pure JSON and JS assignment formats
@@ -65,7 +54,6 @@ function calculateTotalLent(cards) {
 // Calculate unpaid amount (transactions past due date)
 function calculateUnpaidAmount(cards) {
     let total = 0;
-    const today = new Date();
 
     cards.forEach(card => {
         card.transactions.forEach(tx => {
