@@ -10,7 +10,18 @@
       "domain": "hotstar.com",
       "lastPaid": null,
       "paymentHistory": []
+    },
+    {
+      "id": 1770131212412,
+      "name": "ChatGPT",
+      "cost": 399,
+      "cycle": "monthly",
+      "date": 12,
+      "category": "Software",
+      "domain": "openai.com",
+      "lastPaid": null,
+      "paymentHistory": []
     }
   ],
-  "lastSync": "2026-02-03T15:06:09.129Z"
+  "lastSync": "2026-02-03T15:06:52.412Z"
 }
