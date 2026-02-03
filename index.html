@@ -105,8 +105,17 @@
             <!-- Category Breakdown -->
             <div class="grocery-card" style="margin-bottom: 1.5rem;">
                 <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Spending by Category</h3>
-                <div id="category-breakdown">
-                    <!-- Will be populated by JS -->
+
+                <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; justify-content: center;">
+                    <!-- Chart Container -->
+                    <div style="width: 220px; height: 220px; position: relative;">
+                        <canvas id="category-chart"></canvas>
+                    </div>
+
+                    <!-- Legend/List -->
+                    <div id="category-breakdown" style="flex: 1; min-width: 200px;">
+                        <!-- Populated by JS -->
+                    </div>
                 </div>
             </div>
         </div>

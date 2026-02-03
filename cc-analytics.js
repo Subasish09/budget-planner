@@ -82,37 +82,130 @@ function getCategoryBreakdown(cards) {
     return categories;
 }
 
-// Render category breakdown
+// Render category breakdown with Chart.js
+let infoChart = null;
+
 function renderCategoryBreakdown(categories) {
-    const container = document.getElementById('category-breakdown');
-    if (!container) return;
+    const listContainer = document.getElementById('category-breakdown');
+    const ctx = document.getElementById('category-chart');
+
+    if (!listContainer) return;
 
     const total = Object.values(categories).reduce((sum, val) => sum + val, 0);
 
     if (total === 0) {
-        container.innerHTML = '<div style="color: var(--text-secondary); text-align: center; padding: 1rem;">No spending data yet</div>';
+        listContainer.innerHTML = '<div style="color: var(--text-secondary); text-align: center; padding: 1rem;">No spending data yet</div>';
         return;
     }
 
+    // 1. Render Legend/List
     let html = '';
     const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
 
-    sortedCategories.forEach(([category, amount]) => {
+    // Define colors
+    const colors = [
+        '#ec4899', // Pink (Primary)
+        '#8b5cf6', // Violet
+        '#f43f5e', // Rose
+        '#10b981', // Emerald
+        '#f59e0b', // Amber
+        '#3b82f6', // Blue
+        '#6366f1', // Indigo
+        '#84cc16'  // Lime
+    ];
+
+    const chartData = {
+        labels: [],
+        data: [],
+        backgroundColor: []
+    };
+
+    sortedCategories.forEach(([category, amount], index) => {
         const percentage = ((amount / total) * 100).toFixed(1);
+        const color = colors[index % colors.length];
+
+        // Prepare data for chart
+        chartData.labels.push(category);
+        chartData.data.push(amount);
+        chartData.backgroundColor.push(color);
+
+        // Render list item
         html += `
-            <div style="margin-bottom: 1rem;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <span style="font-weight: 500;">${category}</span>
-                    <span style="color: var(--text-secondary);">₹${amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })} (${percentage}%)</span>
+            <div style="margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="width: 12px; height: 12px; border-radius: 3px; background-color: ${color};"></div>
+                    <span style="font-weight: 500; font-size: 0.95rem;">${category}</span>
                 </div>
-                <div style="background: var(--glass-border); height: 8px; border-radius: 4px; overflow: hidden;">
-                    <div style="background: linear-gradient(90deg, #8b5cf6, #ec4899); height: 100%; width: ${percentage}%;"></div>
+                <div style="text-align: right;">
+                    <div style="font-weight: 600;">₹${amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${percentage}%</div>
                 </div>
             </div>
         `;
     });
 
-    container.innerHTML = html;
+    listContainer.innerHTML = html;
+
+    // 2. Render Chart (only if context exists and Chart is loaded)
+    if (ctx && typeof Chart !== 'undefined') {
+        if (infoChart) {
+            infoChart.destroy();
+        }
+
+        infoChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: chartData.labels,
+                datasets: [{
+                    data: chartData.data,
+                    backgroundColor: chartData.backgroundColor,
+                    borderWidth: 0,
+                    hoverOffset: 10,
+                    borderRadius: 4,
+                    spacing: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false // We use our custom legend
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(23, 23, 23, 0.9)',
+                        padding: 12,
+                        cornerRadius: 8,
+                        titleFont: {
+                            family: "'Inter', sans-serif",
+                            size: 13
+                        },
+                        bodyFont: {
+                            family: "'Inter', sans-serif",
+                            size: 13,
+                            weight: 'bold'
+                        },
+                        callbacks: {
+                            label: function (context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '75%',
+                layout: {
+                    padding: 10
+                }
+            }
+        });
+    }
 }
 
 // Update dashboard stats
