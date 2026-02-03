@@ -1,0 +1,49 @@
+{
+    "subscriptions": [
+        {
+            "id": 1,
+            "name": "Netflix",
+            "cost": 649,
+            "cycle": "monthly",
+            "date": 5,
+            "category": "Entertainment",
+            "domain": "netflix.com",
+            "lastPaid": null,
+            "paymentHistory": []
+        },
+        {
+            "id": 2,
+            "name": "Spotify",
+            "cost": 119,
+            "cycle": "monthly",
+            "date": 21,
+            "category": "Entertainment",
+            "domain": "spotify.com",
+            "lastPaid": null,
+            "paymentHistory": []
+        },
+        {
+            "id": 3,
+            "name": "Amazon Prime",
+            "cost": 1499,
+            "cycle": "yearly",
+            "date": "2026-08-15",
+            "category": "Entertainment",
+            "domain": "amazon.in",
+            "lastPaid": null,
+            "paymentHistory": []
+        },
+        {
+            "id": 4,
+            "name": "Hotstar",
+            "cost": 149,
+            "cycle": "monthly",
+            "date": 1,
+            "category": "Entertainment",
+            "domain": "hotstar.com",
+            "lastPaid": null,
+            "paymentHistory": []
+        }
+    ],
+    "lastSync": null
+}

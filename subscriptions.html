@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="manifest" href="manifest.json">
     <script src="auth.js"></script>
+    <script src="github-sync.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
@@ -24,7 +25,14 @@
             <div class="header-content">
                 <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
                 <h1>Subscriptions</h1>
-                <div class="user-greeting">Recurring</div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="user-greeting">Recurring</div>
+                    <!-- Sync Status Indicator -->
+                    <div id="sync-status" class="sync-indicator" onclick="handleSyncClick()" style="cursor: pointer;">
+                        <i class="fas fa-cog sync-icon"></i>
+                        <span class="sync-text">Setup Sync</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Stats -->
@@ -177,6 +185,65 @@
 
             <button class="btn-save" id="save-sub-btn">
                 Save Subscription
+            </button>
+        </div>
+    </div>
+
+    <!-- GitHub Sync Settings Modal -->
+    <div class="modal-overlay" id="sync-settings-modal">
+        <div class="subscription-modal">
+            <div class="modal-header">
+                <h3>GitHub Sync Settings</h3>
+                <button class="close-modal" id="close-sync-settings"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="modal-body form-grid">
+                <div
+                    style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 1rem; border-radius: 12px; margin-bottom: 1rem;">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+                        <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                        To enable auto-sync, you need a GitHub Personal Access Token with <strong>repo</strong>
+                        permissions.
+                    </p>
+                </div>
+
+                <!-- Repository Info -->
+                <div class="input-group">
+                    <label class="input-label">Repository</label>
+                    <input type="text" id="repo-info" class="premium-input" readonly style="opacity: 0.7;">
+                </div>
+
+                <!-- Token Input -->
+                <div class="input-group">
+                    <label class="input-label">GitHub Personal Access Token</label>
+                    <input type="password" id="github-token-input" class="premium-input" placeholder="ghp_xxxxxxxxxxxx">
+                    <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.5rem;">
+                        <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--primary);">
+                            Create token here
+                        </a> with <strong>repo</strong> scope
+                    </p>
+                </div>
+
+                <!-- Connection Status -->
+                <div id="connection-status"
+                    style="display: none; padding: 1rem; border-radius: 12px; margin-top: 1rem;">
+                    <p id="connection-message" style="margin: 0; font-size: 0.9rem;"></p>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button class="btn-save" id="test-connection-btn"
+                    style="flex: 1; background: rgba(59, 130, 246, 0.2); box-shadow: none;">
+                    Test Connection
+                </button>
+                <button class="btn-save" id="save-token-btn" style="flex: 1;">
+                    Save & Enable Sync
+                </button>
+            </div>
+
+            <button id="clear-token-btn"
+                style="width: 100%; margin-top: 1rem; padding: 0.75rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--danger); border-radius: 12px; cursor: pointer; font-size: 0.9rem;">
+                Clear Token & Disable Sync
             </button>
         </div>
     </div>

@@ -1,6 +1,8 @@
-// Subscription Manager Logic with Image Logo Support
+// Subscription Manager Logic with GitHub Sync Support
+// Now uses subscription_data.json instead of localStorage
 
 let subscriptions = [];
+let subscriptionData = null;
 
 // Domain Map for Manual Overrides (if auto-detection fails)
 const DOMAIN_MAP = {
@@ -35,13 +37,6 @@ const DOMAIN_MAP = {
     'zepto': 'zeptonow.com',
     'bigbasket': 'bigbasket.com'
 };
-
-const DEFAULT_SUBS = [
-    { id: 1, name: 'Netflix', cost: 649, cycle: 'monthly', date: 5, category: 'Entertainment', domain: 'netflix.com' },
-    { id: 2, name: 'Spotify', cost: 119, cycle: 'monthly', date: 21, category: 'Entertainment', domain: 'spotify.com' },
-    { id: 3, name: 'Amazon Prime', cost: 1499, cycle: 'yearly', date: '2026-08-15', category: 'Entertainment', domain: 'amazon.in' },
-    { id: 4, name: 'Hotstar', cost: 149, cycle: 'monthly', date: 1, category: 'Entertainment', domain: 'hotstar.com' }
-];
 
 // Helper: Calculate Next Renewal Date
 function calculateNextRenewal(sub) {
@@ -86,23 +81,200 @@ function getDaysUntilRenewal(sub) {
     return Math.ceil((nextRenewal - today) / (1000 * 60 * 60 * 24));
 }
 
-// Load Data
-function loadSubscriptions() {
-    const saved = localStorage.getItem('mySubscriptions');
-    if (saved) {
-        subscriptions = JSON.parse(saved);
+// Helper: Get payment status
+function getPaymentStatus(sub) {
+    if (!sub.lastPaid) return 'DUE';
+
+    const lastPaid = new Date(sub.lastPaid);
+    const today = new Date();
+
+    // Check if paid this billing cycle
+    if (sub.cycle === 'monthly') {
+        // Paid this month?
+        return lastPaid.getMonth() === today.getMonth() &&
+            lastPaid.getFullYear() === today.getFullYear() ? 'PAID' : 'DUE';
     } else {
-        subscriptions = DEFAULT_SUBS;
-        saveSubscriptions();
+        // Paid this year?
+        return lastPaid.getFullYear() === today.getFullYear() ? 'PAID' : 'DUE';
     }
+}
+
+// Load Data from GitHub JSON
+async function loadSubscriptions() {
+    updateSyncStatus('syncing', 'Loading data...');
+
+    try {
+        // Try to fetch from GitHub first
+        if (githubSync.hasToken()) {
+            const file = await githubSync.fetchFile('subscription_data.json');
+            if (file) {
+                subscriptionData = JSON.parse(file.content);
+                subscriptions = subscriptionData.subscriptions || [];
+                updateSyncStatus('success', subscriptionData.lastSync);
+            }
+        } else {
+            // Fallback: fetch from local file
+            const response = await fetch('subscription_data.json');
+            if (response.ok) {
+                subscriptionData = await response.json();
+                subscriptions = subscriptionData.subscriptions || [];
+                updateSyncStatus('setup');
+            }
+        }
+
+        // Migration: Check localStorage for old data
+        await migrateFromLocalStorage();
+
+    } catch (error) {
+        console.error('Failed to load subscriptions:', error);
+
+        // Final fallback: use localStorage if available
+        const localData = localStorage.getItem('mySubscriptions');
+        if (localData) {
+            subscriptions = JSON.parse(localData);
+            subscriptionData = { subscriptions, lastSync: null };
+            updateSyncStatus('error', 'Using offline data');
+        } else {
+            subscriptions = [];
+            subscriptionData = { subscriptions: [], lastSync: null };
+            updateSyncStatus('setup');
+        }
+    }
+
     renderSubscriptions();
     updateStats();
 }
 
-// Save Data
-function saveSubscriptions() {
-    localStorage.setItem('mySubscriptions', JSON.stringify(subscriptions));
-    updateStats();
+// Migrate data from localStorage to GitHub
+async function migrateFromLocalStorage() {
+    const localData = localStorage.getItem('mySubscriptions');
+    const migrated = localStorage.getItem('migrated_to_github');
+
+    if (localData && !migrated && githubSync.hasToken()) {
+        try {
+            const subs = JSON.parse(localData);
+
+            // Only migrate if GitHub has no data or less data
+            if (!subscriptions.length || subs.length > subscriptions.length) {
+                subscriptions = subs;
+                subscriptionData.subscriptions = subs;
+
+                await syncToGitHub('Migrated from localStorage');
+                localStorage.setItem('migrated_to_github', Date.now());
+
+                console.log('Successfully migrated data from localStorage to GitHub');
+            }
+        } catch (error) {
+            console.error('Migration failed:', error);
+        }
+    }
+}
+
+// Save Data to GitHub
+async function syncToGitHub(message = 'Update subscriptions') {
+    if (!githubSync.hasToken()) {
+        console.warn('GitHub sync not configured');
+        return false;
+    }
+
+    updateSyncStatus('syncing', 'Syncing...');
+
+    try {
+        subscriptionData.subscriptions = subscriptions;
+        subscriptionData.lastSync = new Date().toISOString();
+
+        const content = JSON.stringify(subscriptionData, null, 2);
+
+        await githubSync.commitFile(
+            'subscription_data.json',
+            content,
+            message
+        );
+
+        updateSyncStatus('success', subscriptionData.lastSync);
+
+        // Also save to localStorage as backup
+        localStorage.setItem('mySubscriptions', JSON.stringify(subscriptions));
+
+        return true;
+    } catch (error) {
+        console.error('Sync failed:', error);
+        updateSyncStatus('error', error.message);
+
+        // Save to localStorage as fallback
+        localStorage.setItem('mySubscriptions', JSON.stringify(subscriptions));
+
+        return false;
+    }
+}
+
+// Update Sync Status Indicator
+function updateSyncStatus(state, message = '') {
+    const indicator = document.getElementById('sync-status');
+    const icon = indicator.querySelector('.sync-icon');
+    const text = indicator.querySelector('.sync-text');
+
+    // Remove all state classes
+    indicator.className = 'sync-indicator';
+    icon.className = 'sync-icon';
+
+    switch (state) {
+        case 'setup':
+            indicator.classList.add('setup');
+            icon.classList.add('fa-cog');
+            text.textContent = 'Setup Sync';
+            break;
+
+        case 'syncing':
+            indicator.classList.add('syncing');
+            icon.classList.add('fa-sync-alt', 'rotating');
+            text.textContent = message || 'Syncing...';
+            break;
+
+        case 'success':
+            indicator.classList.add('success');
+            icon.classList.add('fa-check-circle');
+            const time = message ? new Date(message).toLocaleTimeString('en-IN', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            }) : 'Just now';
+            text.textContent = `Synced at ${time}`;
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                if (indicator.classList.contains('success')) {
+                    icon.classList.remove('fa-check-circle');
+                    icon.classList.add('fa-cloud');
+                    text.textContent = 'Synced';
+                }
+            }, 5000);
+            break;
+
+        case 'error':
+            indicator.classList.add('error');
+            icon.classList.add('fa-exclamation-triangle');
+            text.textContent = message || 'Sync failed - Retry';
+            break;
+    }
+}
+
+// Handle Sync Indicator Click
+function handleSyncClick() {
+    const indicator = document.getElementById('sync-status');
+
+    if (indicator.classList.contains('setup') || indicator.classList.contains('error')) {
+        // Open settings modal
+        document.getElementById('sync-settings-modal').classList.add('active');
+
+        // Populate repository info
+        if (githubSync.owner && githubSync.repo) {
+            document.getElementById('repo-info').value = `${githubSync.owner}/${githubSync.repo}`;
+        }
+    } else if (indicator.classList.contains('error')) {
+        // Retry sync
+        syncToGitHub('Manual retry');
+    }
 }
 
 // Format Currency
@@ -278,10 +450,18 @@ function renderSubscriptions() {
             dateDisplay += ` <span style="color: ${urgencyColor}; font-weight: 600;">(${daysUntil} day${daysUntil !== 1 ? 's' : ''})</span>`;
         }
 
+        // Payment status badge
+        const paymentStatus = getPaymentStatus(sub);
+        const badgeColor = paymentStatus === 'PAID' ? 'var(--success)' : 'var(--warning)';
+        const badgeBg = paymentStatus === 'PAID' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(251, 191, 36, 0.1)';
+
         item.innerHTML = `
             ${iconHTML}
             <div class="transaction-info">
-                <div class="transaction-title">${sub.name}</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div class="transaction-title">${sub.name}</div>
+                    <span style="font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 4px; background: ${badgeBg}; color: ${badgeColor}; font-weight: 600;">${paymentStatus}</span>
+                </div>
                 <div class="transaction-date">
                     <i class="fas fa-clock" style="font-size: 0.7rem;"></i> ${dateDisplay}
                 </div>
@@ -336,7 +516,7 @@ function getActionSuffix(d) {
 }
 
 // Add Subscription
-function addSubscription() {
+async function addSubscription() {
     const name = document.getElementById('sub-name').value;
     const cost = parseFloat(document.getElementById('sub-cost').value);
     const category = document.getElementById('sub-category').value || 'Other';
@@ -373,27 +553,32 @@ function addSubscription() {
         name,
         cost,
         cycle,
-        date, // Now acts as either Int (Day) or String (ISO Date)
+        date,
         category,
-        domain
+        domain,
+        lastPaid: null,
+        paymentHistory: []
     };
 
     subscriptions.push(newSub);
-    saveSubscriptions();
+    await syncToGitHub(`Added subscription: ${name}`);
     renderSubscriptions();
+    updateStats();
     closeModal();
 }
 
 function deleteSubscription(id) {
     if (confirm('Stop tracking this subscription?')) {
+        const sub = subscriptions.find(s => s.id === id);
         subscriptions = subscriptions.filter(s => s.id !== id);
-        saveSubscriptions();
+        syncToGitHub(`Deleted subscription: ${sub?.name || id}`);
         renderSubscriptions();
+        updateStats();
     }
 }
 
 // Mark subscription as paid
-function markAsPaid(id) {
+async function markAsPaid(id) {
     const sub = subscriptions.find(s => s.id === id);
     if (!sub) return;
 
@@ -414,7 +599,7 @@ function markAsPaid(id) {
     // Update lastPaid
     sub.lastPaid = today;
 
-    saveSubscriptions();
+    await syncToGitHub(`Marked ${sub.name} as paid`);
     renderSubscriptions();
 
     // Show confirmation
@@ -450,7 +635,6 @@ function closeModal() {
     document.getElementById('sub-full-date').value = '';
 }
 
-// Chip Toggle (Updated Class Name)
 // Chip Toggle Logic with Input Switch
 const monthlyInput = document.getElementById('sub-date');
 const yearlyInput = document.getElementById('sub-full-date');
@@ -482,7 +666,7 @@ const catHidden = document.getElementById('sub-category');
 
 if (catSelect) {
     catSelect.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent modal close or other bubbles
+        e.stopPropagation();
         const isVisible = catOptions.style.display === 'block';
         catOptions.style.display = isVisible ? 'none' : 'block';
     });
@@ -497,7 +681,6 @@ if (catSelect) {
         });
     });
 
-    // Close on outside click
     document.addEventListener('click', (e) => {
         if (!catSelect.contains(e.target)) {
             catOptions.style.display = 'none';
@@ -505,9 +688,114 @@ if (catSelect) {
     });
 }
 
+// GitHub Sync Settings Modal Logic
+const syncSettingsModal = document.getElementById('sync-settings-modal');
+const closeSyncSettings = document.getElementById('close-sync-settings');
+const testConnectionBtn = document.getElementById('test-connection-btn');
+const saveTokenBtn = document.getElementById('save-token-btn');
+const clearTokenBtn = document.getElementById('clear-token-btn');
+const tokenInput = document.getElementById('github-token-input');
+const connectionStatus = document.getElementById('connection-status');
+const connectionMessage = document.getElementById('connection-message');
+
+closeSyncSettings.onclick = () => {
+    syncSettingsModal.classList.remove('active');
+};
+
+testConnectionBtn.onclick = async () => {
+    const token = tokenInput.value.trim();
+
+    if (!token) {
+        showConnectionStatus('error', 'Please enter a token');
+        return;
+    }
+
+    // Temporarily set token for testing
+    const oldToken = githubSync.token;
+    githubSync.token = token;
+
+    try {
+        showConnectionStatus('syncing', 'Testing connection...');
+        const result = await githubSync.testConnection();
+
+        if (result.success) {
+            showConnectionStatus('success', `✓ Connected to ${result.repo}`);
+        }
+    } catch (error) {
+        showConnectionStatus('error', `✗ ${error.message}`);
+        githubSync.token = oldToken; // Restore old token
+    }
+};
+
+saveTokenBtn.onclick = async () => {
+    const token = tokenInput.value.trim();
+
+    if (!token) {
+        showConnectionStatus('error', 'Please enter a token');
+        return;
+    }
+
+    try {
+        showConnectionStatus('syncing', 'Saving token...');
+
+        githubSync.saveToken(token);
+
+        // Test connection
+        const result = await githubSync.testConnection();
+
+        if (result.success) {
+            showConnectionStatus('success', `✓ Sync enabled for ${result.repo}`);
+
+            // Reload data from GitHub
+            await loadSubscriptions();
+
+            // Close modal after 2 seconds
+            setTimeout(() => {
+                syncSettingsModal.classList.remove('active');
+                tokenInput.value = '';
+            }, 2000);
+        }
+    } catch (error) {
+        showConnectionStatus('error', `✗ ${error.message}`);
+    }
+};
+
+clearTokenBtn.onclick = () => {
+    if (confirm('This will disable GitHub sync. Are you sure?')) {
+        githubSync.clearToken();
+        tokenInput.value = '';
+        showConnectionStatus('success', '✓ Token cleared. Sync disabled.');
+        updateSyncStatus('setup');
+
+        setTimeout(() => {
+            syncSettingsModal.classList.remove('active');
+        }, 1500);
+    }
+};
+
+function showConnectionStatus(type, message) {
+    connectionStatus.style.display = 'block';
+    connectionMessage.textContent = message;
+
+    if (type === 'success') {
+        connectionStatus.style.background = 'rgba(16, 185, 129, 0.1)';
+        connectionStatus.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        connectionStatus.style.color = 'var(--success)';
+    } else if (type === 'error') {
+        connectionStatus.style.background = 'rgba(239, 68, 68, 0.1)';
+        connectionStatus.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+        connectionStatus.style.color = 'var(--danger)';
+    } else {
+        connectionStatus.style.background = 'rgba(59, 130, 246, 0.1)';
+        connectionStatus.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+        connectionStatus.style.color = '#3b82f6';
+    }
+}
+
 saveBtn.onclick = addSubscription;
 
 // Initialize
 window.deleteSubscription = deleteSubscription;
 window.markAsPaid = markAsPaid;
+window.handleSyncClick = handleSyncClick;
 document.addEventListener('DOMContentLoaded', loadSubscriptions);
