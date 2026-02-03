@@ -1094,11 +1094,6 @@ function switchTab(tabName) {
 // Shopping Lists Functions (Placeholder)
 // ========================================
 
-function renderShoppingLists() {
-    const container = document.getElementById('shopping-lists-container');
-    // TODO: Implement shopping list rendering
-    console.log('Rendering shopping lists...');
-}
 
 function createShoppingList() {
     alert('Shopping list creation coming in Phase 2!');
@@ -1173,3 +1168,273 @@ function renderInventory() {
 // Make functions globally accessible
 window.switchTab = switchTab;
 window.createShoppingList = createShoppingList;
+
+// ========================================
+// Shopping List Creation Logic (Phase 2)
+// ========================================
+
+let selectedShoppingItems = [];
+
+// Open shopping list creation modal
+function createShoppingList() {
+    const modal = document.getElementById('shopping-list-modal');
+    modal.classList.add('active');
+    
+    // Reset state
+    selectedShoppingItems = [];
+    updateSelectedItemsDisplay();
+    
+    // Load available items
+    loadAvailableItems();
+}
+
+// Load available items from inventory
+function loadAvailableItems() {
+    const container = document.getElementById('available-items-container');
+    
+    if (!window.groceryData || !window.groceryData.inventory) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 1rem;">No inventory data available</p>';
+        return;
+    }
+    
+    const inventory = window.groceryData.inventory;
+    
+    container.innerHTML = inventory.map(item => `
+        <div class="available-item" data-item='${JSON.stringify(item)}' style="padding: 0.75rem; margin: 0.25rem 0; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 8px; cursor: pointer; transition: var(--transition-fast); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div style="font-weight: 500; color: var(--text-primary);">${item.name}</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">${item.unit} • ₹${item.current_price}</div>
+            </div>
+            <button class="btn-icon" onclick="addItemToShoppingList(event, this)" style="background: var(--primary); color: white; padding: 0.5rem; border-radius: 6px;">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    `).join('');
+    
+    // Add search functionality
+    const searchInput = document.getElementById('shopping-item-search');
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const items = container.querySelectorAll('.available-item');
+        
+        items.forEach(itemEl => {
+            const itemData = JSON.parse(itemEl.dataset.item);
+            const matches = itemData.name.toLowerCase().includes(query) || 
+                          (itemData.category && itemData.category.toLowerCase().includes(query));
+            itemEl.style.display = matches ? 'flex' : 'none';
+        });
+    });
+}
+
+// Add item to shopping list
+function addItemToShoppingList(event, button) {
+    event.stopPropagation();
+    
+    const itemEl = button.closest('.available-item');
+    const itemData = JSON.parse(itemEl.dataset.item);
+    
+    // Check if already added
+    if (selectedShoppingItems.some(i => i.name === itemData.name)) {
+        alert('Item already added to shopping list');
+        return;
+    }
+    
+    // Add to selected items with default quantity
+    selectedShoppingItems.push({
+        name: itemData.name,
+        unit: itemData.unit,
+        qty: 1,
+        unit_price: null,
+        checked: false
+    });
+    
+    updateSelectedItemsDisplay();
+}
+
+// Update selected items display
+function updateSelectedItemsDisplay() {
+    const container = document.getElementById('selected-items-list');
+    const countEl = document.getElementById('selected-count');
+    
+    countEl.textContent = selectedShoppingItems.length;
+    
+    if (selectedShoppingItems.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No items selected. Search and click items below to add.</p>';
+        return;
+    }
+    
+    container.innerHTML = selectedShoppingItems.map((item, index) => `
+        <div class="selected-item" style="padding: 0.75rem; margin: 0.5rem 0; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+            <div style="flex: 1;">
+                <div style="font-weight: 500; color: var(--text-primary);">${item.name}</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">${item.unit}</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary);">Qty:</label>
+                <input type="number" value="${item.qty}" min="0.1" step="0.1" onchange="updateItemQuantity(${index}, this.value)" style="width: 80px; padding: 0.5rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 6px; color: var(--text-primary); text-align: center;">
+            </div>
+            <button class="btn-icon" onclick="removeItemFromShoppingList(${index})" style="background: rgba(244, 63, 94, 0.2); color: var(--danger); padding: 0.5rem; border-radius: 6px;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `).join('');
+}
+
+// Update item quantity
+function updateItemQuantity(index, value) {
+    const qty = parseFloat(value);
+    if (qty > 0) {
+        selectedShoppingItems[index].qty = qty;
+    }
+}
+
+// Remove item from shopping list
+function removeItemFromShoppingList(index) {
+    selectedShoppingItems.splice(index, 1);
+    updateSelectedItemsDisplay();
+}
+
+// Save shopping list
+async function saveShoppingList() {
+    if (selectedShoppingItems.length === 0) {
+        alert('Please add at least one item to the shopping list');
+        return;
+    }
+    
+    // Create shopping list object
+    const now = new Date();
+    const listId = `shopping_${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}`;
+    
+    const shoppingList = {
+        id: listId,
+        status: 'pending',
+        created: now.toISOString(),
+        items: selectedShoppingItems,
+        total: null,
+        completed_date: null
+    };
+    
+    // Add to grocery data
+    if (!window.groceryData.shopping_lists) {
+        window.groceryData.shopping_lists = [];
+    }
+    
+    window.groceryData.shopping_lists.push(shoppingList);
+    
+    // Save to localStorage (temporary until GitHub sync)
+    localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
+    
+    // Close modal
+    closeShoppingModal();
+    
+    // Switch to shopping lists tab
+    switchTab('shopping');
+    
+    alert('✅ Shopping list created successfully!');
+}
+
+// Close shopping modal
+function closeShoppingModal() {
+    const modal = document.getElementById('shopping-list-modal');
+    modal.classList.remove('active');
+    selectedShoppingItems = [];
+}
+
+// Modal event listeners
+document.getElementById('close-shopping-modal').addEventListener('click', closeShoppingModal);
+document.getElementById('cancel-shopping-list').addEventListener('click', closeShoppingModal);
+document.getElementById('save-shopping-list').addEventListener('click', saveShoppingList);
+
+// Make functions globally accessible
+window.addItemToShoppingList = addItemToShoppingList;
+window.updateItemQuantity = updateItemQuantity;
+window.removeItemFromShoppingList = removeItemFromShoppingList;
+
+// Update renderShoppingLists function
+function renderShoppingLists() {
+    const container = document.getElementById('shopping-lists-container');
+    
+    if (!window.groceryData.shopping_lists || window.groceryData.shopping_lists.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                <i class="fas fa-shopping-cart" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                <p style="font-size: 1.1rem;">No shopping lists yet</p>
+                <p style="font-size: 0.9rem; opacity: 0.7;">Create your first shopping list to get started!</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const lists = window.groceryData.shopping_lists;
+    
+    container.innerHTML = lists.map(list => {
+        const statusBadge = list.status === 'pending' 
+            ? '<span style="background: rgba(245, 158, 11, 0.2); color: var(--warning); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">Pending</span>'
+            : list.status === 'active'
+            ? '<span style="background: rgba(59, 130, 246, 0.2); color: var(--info); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">Active</span>'
+            : '<span style="background: rgba(16, 185, 129, 0.2); color: var(--success); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">Completed</span>';
+        
+        const createdDate = new Date(list.created).toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric' 
+        });
+        
+        return `
+            <div class="stat-card" style="padding: 1.5rem; cursor: pointer; transition: var(--transition);" onclick="openShoppingMode('${list.id}')">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                    <div>
+                        <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem;">${list.id.replace('shopping_', 'Shopping List ')}</h3>
+                        <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">Created ${createdDate}</p>
+                    </div>
+                    ${statusBadge}
+                </div>
+                
+                <div style="display: flex; gap: 2rem; margin-top: 1rem;">
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">Items</div>
+                        <div style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary);">${list.items.length}</div>
+                    </div>
+                    ${list.total ? `
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Total</div>
+                            <div style="font-size: 1.2rem; font-weight: 600; color: var(--success);">₹${list.total}</div>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+                    ${list.status === 'pending' 
+                        ? '<button class="btn-primary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); startShopping(\'' + list.id + '\')"><i class="fas fa-shopping-cart"></i> Start Shopping</button>'
+                        : list.status === 'active'
+                        ? '<button class="btn-primary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); openShoppingMode(\'' + list.id + '\')"><i class="fas fa-edit"></i> Continue Shopping</button>'
+                        : '<button class="btn-secondary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); viewCompletedList(\'' + list.id + '\')"><i class="fas fa-eye"></i> View Details</button>'
+                    }
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Placeholder functions for Phase 3
+function openShoppingMode(listId) {
+    alert('Shopping mode coming in Phase 3!');
+}
+
+function startShopping(listId) {
+    const list = window.groceryData.shopping_lists.find(l => l.id === listId);
+    if (list) {
+        list.status = 'active';
+        localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
+        renderShoppingLists();
+    }
+}
+
+function viewCompletedList(listId) {
+    alert('View completed list details coming soon!');
+}
+
+// Make functions globally accessible
+window.openShoppingMode = openShoppingMode;
+window.startShopping = startShopping;
+window.viewCompletedList = viewCompletedList;

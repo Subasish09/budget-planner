@@ -284,6 +284,59 @@
 
         <script src="grocery_data.js"></script>
         <script src="grocery.js"></script>
+
+    <!-- Shopping List Creation Modal -->
+    <div class="modal-overlay" id="shopping-list-modal">
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2>Create Shopping List</h2>
+                <button class="close-modal" id="close-shopping-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Search Items -->
+                <div class="form-group">
+                    <label>Search Items</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
+                        <input type="text" id="shopping-item-search" placeholder="Search inventory..." style="padding-left: 2.5rem;">
+                    </div>
+                </div>
+
+                <!-- Selected Items -->
+                <div class="form-group">
+                    <label>Selected Items (<span id="selected-count">0</span>)</label>
+                    <div id="selected-items-container" style="max-height: 300px; overflow-y: auto; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1rem;">
+                        <div id="selected-items-list">
+                            <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                                No items selected. Search and click items below to add.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Items -->
+                <div class="form-group">
+                    <label>Available Items</label>
+                    <div id="available-items-container" style="max-height: 250px; overflow-y: auto; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 0.5rem;">
+                        <!-- Items populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn-secondary" id="cancel-shopping-list" style="flex: 1;">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn-primary" id="save-shopping-list" style="flex: 1;">
+                        <i class="fas fa-save"></i> Create Shopping List
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

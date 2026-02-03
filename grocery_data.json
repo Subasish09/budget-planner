@@ -1,4 +1,2408 @@
 {
-    "inventory": [{ "name": "Papad 180g", "unit": "180g", "category": "General", "current_price": 109 }, { "name": "Loose Moong Dal", "unit": "pcs", "category": "General", "current_price": 108 }, { "name": "Loose Kabuli Chana", "unit": "pcs", "category": "General", "current_price": 133 }, { "name": "Loose Chana brown", "unit": "pcs", "category": "General", "current_price": 81 }, { "name": "Tata Iodised Salt 1kg", "unit": "1kg", "category": "General", "current_price": 28 }, { "name": "Loose Chana Dal", "unit": "pcs", "category": "General", "current_price": 79 }, { "name": "Loose Sona Masoor Dal", "unit": "pcs", "category": "General", "current_price": 107 }, { "name": "Loose white peas", "unit": "pcs", "category": "General", "current_price": 51 }, { "name": "Biri White", "unit": "pcs", "category": "General", "current_price": 111 }, { "name": "Loose Sugar", "unit": "pcs", "category": "General", "current_price": 45 }, { "name": "Loose Navaratna Dal", "unit": "pcs", "category": "General", "current_price": 134 }, { "name": "Tata Tea 1kg", "unit": "1kg", "category": "General", "current_price": 340 }, { "name": "Tata Tea Gold 800G", "unit": "800G", "category": "General", "current_price": 423 }, { "name": "Masala Chillies 100g", "unit": "100g", "category": "General", "current_price": 85 }, { "name": "Foochka Panipuri 200g", "unit": "200g", "category": "General", "current_price": 9 }, { "name": "Loose Sabudana", "unit": "pcs", "category": "General", "current_price": 75 }, { "name": "Ruchi Curry or Sabji Masala 100g", "unit": "100g", "category": "General", "current_price": 47.5 }, { "name": "Ruchi Chicken Masala 100g", "unit": "100g", "category": "General", "current_price": 52 }, { "name": "Bharat Egg Curry Masala 50g", "unit": "50g", "category": "General", "current_price": 22 }, { "name": "Good Life Cashew 500g", "unit": "500g", "category": "General", "current_price": 559 }, { "name": "Good Life Phool Makhana 100g", "unit": "100g", "category": "General", "current_price": 155 }, { "name": "Raw peanuts", "unit": "pcs", "category": "General", "current_price": 147.01 }, { "name": "Good Life Sugar 1kg", "unit": "1kg", "category": "General", "current_price": 9 }, { "name": "ACT Popcorn 60g", "unit": "60g", "category": "General", "current_price": 49 }, { "name": "Maggi 2Min Insta Noodles", "unit": "pcs", "category": "General", "current_price": 14.7 }, { "name": "Maggi 2Min Spicy Noodles 70g", "unit": "70g", "category": "General", "current_price": 20.5 }, { "name": "Happydent Chewgum", "unit": "pcs", "category": "General", "current_price": 37.5 }, { "name": "Good Life Fard Dates 500G", "unit": "500G", "category": "General", "current_price": 179 }, { "name": "Sunfeast active marie light bsct 956G", "unit": "956G", "category": "General", "current_price": 117 }, { "name": "Britannia Marie Gold 950g", "unit": "950g", "category": "General", "current_price": 152.2 }, { "name": "Sugar free cashew cookies", "unit": "pcs", "category": "General", "current_price": 40 }, { "name": "Biskfarm Top Butter Biscuit 200g", "unit": "200g", "category": "General", "current_price": 24.3 }, { "name": "Nirmal Floor cleaner 1lt", "unit": "1lt", "category": "General", "current_price": 92 }, { "name": "Vim Lemon Dish Wash Liq 3.2lt", "unit": "3.2lt", "category": "General", "current_price": 380 }, { "name": "Vim Lemon Dish Wash Liq 2lt", "unit": "2lt", "category": "General", "current_price": 237 }, { "name": "Ezee Dtrgnt 900G", "unit": "900G", "category": "General", "current_price": 191.25 }, { "name": "Surf Excel Detergent Bar 250g", "unit": "250g", "category": "General", "current_price": 37.24 }, { "name": "Vim Lemon Bar 110g", "unit": "110g", "category": "General", "current_price": 9.8 }, { "name": "Surf Excel Detergent Powder 7kg", "unit": "7kg", "category": "General", "current_price": 618 }, { "name": "Bajaj Almond Hair Oil 625ml", "unit": "625ml", "category": "General", "current_price": 372 }, { "name": "Parachute adv gold ccnt oil 500ml", "unit": "500ml", "category": "General", "current_price": 258.16 }, { "name": "Lux Jasmine Soap 150g * 3", "unit": "150g", "category": "General", "current_price": 172.15 }, { "name": "Colgate red Gel 150g", "unit": "150g", "category": "General", "current_price": 137.5 }, { "name": "Colgate red Gel 150g * 2", "unit": "150g", "category": "General", "current_price": 229 }, { "name": "Sensodyne Fresh Gel 75g", "unit": "75g", "category": "General", "current_price": 137.2 }, { "name": "Sensodyne Fresh Gel 150g * 2", "unit": "150g", "category": "General", "current_price": 359.25 }, { "name": "Colgate Strong Dental Cream 200g", "unit": "200g", "category": "General", "current_price": 146.02 }, { "name": "Colgate Strong Dental Cream 100g", "unit": "100g", "category": "General", "current_price": 65.8 }, { "name": "Gala Super Scrub", "unit": "pcs", "category": "General", "current_price": 39 }, { "name": "My Home Scrubber Steel", "unit": "pcs", "category": "General", "current_price": 35 }, { "name": "Sweet Corn 2pc", "unit": "2pc", "category": "General", "current_price": 35 }, { "name": "Onion", "unit": "pcs", "category": "General", "current_price": 9 }, { "name": "Papaya", "unit": "pcs", "category": "General", "current_price": 45 }, { "name": "Jeera 500g", "unit": "500g", "category": "General", "current_price": 159 }, { "name": "MTR Vermicelli", "unit": "pcs", "category": "General", "current_price": 42 }, { "name": "Mangaladeep Agarabati 125g", "unit": "125g", "category": "General", "current_price": 38 }, { "name": "Cycle champa Agarabati 125g", "unit": "125g", "category": "General", "current_price": 37.5 }, { "name": "Cycle Flute Combo 375g", "unit": "375g", "category": "General", "current_price": 99 }, { "name": "Sugar free Gold Powder 100g", "unit": "100g", "category": "General", "current_price": 156 }, { "name": "Haldiram Bhujia 1kg", "unit": "1kg", "category": "General", "current_price": 284.2 }, { "name": "Nutrela Soya Chunks 1kg", "unit": "1kg", "category": "General", "current_price": 135 }, { "name": "Fortune Mini Soya Chunks 200G", "unit": "200G", "category": "General", "current_price": 47 }, { "name": "Bisk farm cracker sugar free 300g", "unit": "300g", "category": "General", "current_price": 49 }, { "name": "Britannia Sugar free cracker bisc 295g", "unit": "295g", "category": "General", "current_price": 49 }, { "name": "IM Lite 50Prcnt LS calories sugar 1KG", "unit": "1KG", "category": "General", "current_price": 215 }, { "name": "Santoor Hand wash 650ml * 2", "unit": "650ml", "category": "General", "current_price": 198 }, { "name": "Eveready Battery 4p", "unit": "pcs", "category": "General", "current_price": 63.7 }, { "name": "Dettol Liquid 1lt", "unit": "1lt", "category": "General", "current_price": 432.18 }, { "name": "Dettol Liquid 1.3lt", "unit": "1.3lt", "category": "General", "current_price": 488 }, { "name": "Lux Jasmine Soap 150g * 5", "unit": "150g", "category": "General", "current_price": 116 }, { "name": "Mysore Sandle Soap 125g", "unit": "125g", "category": "General", "current_price": 57.41 }, { "name": "Fiama Gel Bar 125G*5", "unit": "125G", "category": "General", "current_price": 159.66 }, { "name": "Loose Urad wash gota", "unit": "pcs", "category": "General", "current_price": 107 }, { "name": "Biriyani basmati rice", "unit": "pcs", "category": "General", "current_price": 89 }, { "name": "Loose Govind bhog rice", "unit": "pcs", "category": "General", "current_price": 199 }, { "name": "Loose toor dal", "unit": "pcs", "category": "General", "current_price": 111 }, { "name": "Tata agni tea 500g", "unit": "500g", "category": "General", "current_price": 117.6 }, { "name": "Jeera 200g", "unit": "200g", "category": "General", "current_price": 85 }, { "name": "Door mat", "unit": "pcs", "category": "General", "current_price": 77 }, { "name": "Oreo 275.55g", "unit": "275.55g", "category": "General", "current_price": 83 }, { "name": "Maska chaska 300g", "unit": "300g", "category": "General", "current_price": 85 }, { "name": "Monaco 696g", "unit": "696g", "category": "General", "current_price": 115 }, { "name": "Harpic 600ml * 3", "unit": "600ml", "category": "General", "current_price": 367.5 }, { "name": "Biotique Shampoo 650ml", "unit": "650ml", "category": "General", "current_price": 525 }, { "name": "Banana Ripe", "unit": "pcs", "category": "General", "current_price": 49 }, { "name": "Boro plus Antiseptic cream 80ml", "unit": "80ml", "category": "General", "current_price": 144 }, { "name": "Pears pure gentle soap 125g * 3", "unit": "125g", "category": "General", "current_price": 190.46 }, { "name": "Bottom Short", "unit": "pcs", "category": "General", "current_price": 349 }, { "name": "Good Night Combo 45ml * 4", "unit": "45ml", "category": "General", "current_price": 319.6 }, { "name": "Vaseline Moisturizer 40ml", "unit": "40ml", "category": "General", "current_price": 9 }, { "name": "Bathroom Floor Brush", "unit": "pcs", "category": "General", "current_price": 115 }, { "name": "Loose Chakki Atta", "unit": "pcs", "category": "General", "current_price": 34 }, { "name": "Bathmat", "unit": "pcs", "category": "General", "current_price": 93 }, { "name": "Designer printed mat", "unit": "pcs", "category": "General", "current_price": 249 }, { "name": "Wildstone Perfume", "unit": "pcs", "category": "General", "current_price": 9 }, { "name": "Crystal Bounce Ball", "unit": "pcs", "category": "General", "current_price": 149 }, { "name": "Fortune Refine Oil 1lt", "unit": "1lt", "category": "General", "current_price": 148.125 }, { "name": "Fortune Mustard Oil 1lt", "unit": "1lt", "category": "General", "current_price": 156.875 }, { "name": "Mota Chuda", "unit": "pcs", "category": "General", "current_price": 45 }, { "name": "Patala Chuda", "unit": "pcs", "category": "General", "current_price": 40 }, { "name": "Bharat Besan 1kg", "unit": "1kg", "category": "General", "current_price": 115 }, { "name": "Amul 500g", "unit": "500g", "category": "General", "current_price": 220 }, { "name": "Kashmir Lal Mirch 200g", "unit": "200g", "category": "General", "current_price": 180 }, { "name": "Ashribad Atta 5kg", "unit": "5kg", "category": "General", "current_price": 235 }, { "name": "Biri", "unit": "pcs", "category": "General", "current_price": 110 }, { "name": "Rice Packet 26kg", "unit": "26kg", "category": "General", "current_price": 1400 }, { "name": "Vermicelli 1kg", "unit": "1kg", "category": "General", "current_price": 80 }, { "name": "Suji", "unit": "pcs", "category": "General", "current_price": 45 }, { "name": "Harada Dal", "unit": "pcs", "category": "General", "current_price": 100 }, { "name": "Sugar", "unit": "pcs", "category": "General", "current_price": 46.6 }, { "name": "Soyabean", "unit": "pcs", "category": "General", "current_price": 50 }, { "name": "Cumin Powder 100g", "unit": "100g", "category": "General", "current_price": 50 }, { "name": "Shalimar Coconut Oil 200g", "unit": "200g", "category": "General", "current_price": 95 }, { "name": "Raw Peanut", "unit": "pcs", "category": "General", "current_price": 110 }, { "name": "Amul 1kg", "unit": "1kg", "category": "General", "current_price": 430 }, { "name": "Curry Powder 200g", "unit": "200g", "category": "General", "current_price": 100 }, { "name": "Tikka Lal 100g", "unit": "100g", "category": "General", "current_price": 60 }, { "name": "Chowmin 1kg", "unit": "1kg", "category": "General", "current_price": 65 }, { "name": "Dalchini Cinnamon 100g", "unit": "100g", "category": "General", "current_price": 35 }, { "name": "Elaichi 25g", "unit": "25g", "category": "General", "current_price": 85 }, { "name": "Gota Masala", "unit": "pcs", "category": "General", "current_price": 30 }, { "name": "Lijjat Papad 200g", "unit": "200g", "category": "General", "current_price": 80 }, { "name": "Tej Patta 50g", "unit": "50g", "category": "General", "current_price": 10 }, { "name": "Guda 1kg Cup", "unit": "1kg", "category": "General", "current_price": 60 }, { "name": "Good Night Liquid", "unit": "pcs", "category": "General", "current_price": 80 }, { "name": "Corn flour", "unit": "pcs", "category": "General", "current_price": 35 }, { "name": "Loose Soya Chunk 1KG", "unit": "1KG", "category": "General", "current_price": 100 }, { "name": "Match Box", "unit": "pcs", "category": "General", "current_price": 10 }, { "name": "Surf Excel Detergent Powder 3kg", "unit": "3kg", "category": "General", "current_price": 292 }, { "name": "Britannia Little hearts 70G", "unit": "70G", "category": "General", "current_price": 24 }, { "name": "Tata soulful Mlt Muesli 700g", "unit": "700g", "category": "General", "current_price": 244.45 }, { "name": "Kellogs real almond honey cornflakes 1KG", "unit": "1KG", "category": "General", "current_price": 366 }, { "name": "Kellogs corn flakes 1.15kg", "unit": "1.15kg", "category": "General", "current_price": 332 }, { "name": "Kellogs Oats 900G", "unit": "900G", "category": "General", "current_price": 163 }, { "name": "Lay's American style 80g", "unit": "80g", "category": "General", "current_price": 35.7 }, { "name": "Hit Cockroach killer 400ml", "unit": "400ml", "category": "General", "current_price": 163 }, { "name": "Black jeera 100g", "unit": "100g", "category": "General", "current_price": 40 }, { "name": "Black Pepper 100g", "unit": "100g", "category": "General", "current_price": 90 }, { "name": "Loose Dhania Coriander whole 1kg", "unit": "1kg", "category": "General", "current_price": 179 }, { "name": "Fennel 50g", "unit": "50g", "category": "General", "current_price": 30 }, { "name": "Milk maid 100g", "unit": "100g", "category": "General", "current_price": 125 }, { "name": "Rashi Laddu", "unit": "pcs", "category": "General", "current_price": 45 }, { "name": "Dry chilli 100g", "unit": "100g", "category": "General", "current_price": 30 }, { "name": "Juani Ajwain 100g", "unit": "100g", "category": "General", "current_price": 35 }, { "name": "Misri Rock sugar 1kg", "unit": "1kg", "category": "General", "current_price": 80 }, { "name": "Clinic plus sachet", "unit": "pcs", "category": "General", "current_price": 15 }, { "name": "Fair Glow n Lovely", "unit": "pcs", "category": "General", "current_price": 200 }, { "name": "Chowmin Masala", "unit": "pcs", "category": "General", "current_price": 5 }, { "name": "Kaju Gunda 100G", "unit": "100G", "category": "General", "current_price": 65 }, { "name": "Charu Magaj 100G", "unit": "100G", "category": "General", "current_price": 65 }, { "name": "Biriyani masala pouch", "unit": "pcs", "category": "General", "current_price": 10 }],
-    "history": [{ "id": "May-Jun 2025", "items": [{ "name": "Papad 180g", "qty": 1, "cost": 109 }, { "name": "Loose Moong Dal", "qty": 2.003, "cost": 216.324 }, { "name": "Loose Chana brown", "qty": 1.511, "cost": 122.391 }, { "name": "Tata Iodised Salt 1kg", "qty": 2, "cost": 56 }, { "name": "Loose Chana Dal", "qty": 1.053, "cost": 83.187 }, { "name": "Loose Sugar", "qty": 4.953, "cost": 222.885 }, { "name": "Loose Navaratna Dal", "qty": 0.995, "cost": 133.33 }, { "name": "Tata Tea 1kg", "qty": 1, "cost": 340 }, { "name": "Masala Chillies 100g", "qty": 1, "cost": 85 }, { "name": "Foochka Panipuri 200g", "qty": 4, "cost": 36 }, { "name": "Loose Sabudana", "qty": 1.601, "cost": 120.075 }, { "name": "Ruchi Curry or Sabji Masala 100g", "qty": 2, "cost": 95 }, { "name": "Ruchi Chicken Masala 100g", "qty": 2, "cost": 104 }, { "name": "Bharat Egg Curry Masala 50g", "qty": 1, "cost": 22 }, { "name": "Good Life Cashew 500g", "qty": 1, "cost": 559 }, { "name": "Raw peanuts", "qty": 0.995, "cost": 146.27495 }, { "name": "ACT Popcorn 60g", "qty": 1, "cost": 49 }, { "name": "Maggi 2Min Insta Noodles", "qty": 10, "cost": 147 }, { "name": "Happydent Chewgum", "qty": 1, "cost": 37.5 }, { "name": "Britannia Marie Gold 950g", "qty": 6, "cost": 913.2 }, { "name": "Sugar free cashew cookies", "qty": 2, "cost": 80 }, { "name": "Nirmal Floor cleaner 1lt", "qty": 1, "cost": 92 }, { "name": "Vim Lemon Dish Wash Liq 2lt", "qty": 1, "cost": 237 }, { "name": "Surf Excel Detergent Bar 250g", "qty": 3, "cost": 111.72 }, { "name": "Vim Lemon Bar 110g", "qty": 3, "cost": 29.4 }, { "name": "Surf Excel Detergent Powder 7kg", "qty": 1, "cost": 618 }, { "name": "Bajaj Almond Hair Oil 625ml", "qty": 1, "cost": 372 }, { "name": "Lux Jasmine Soap 150g * 3", "qty": 1, "cost": 172.15 }, { "name": "Colgate red Gel 150g", "qty": 1, "cost": 137.5 }, { "name": "Sensodyne Fresh Gel 150g * 2", "qty": 1, "cost": 359.25 }, { "name": "Colgate Strong Dental Cream 200g", "qty": 1, "cost": 146.02 }, { "name": "Gala Super Scrub", "qty": 2, "cost": 78 }, { "name": "My Home Scrubber Steel", "qty": 1, "cost": 35 }, { "name": "Dettol Liquid 1lt", "qty": 1, "cost": 432.18 }, { "name": "Fortune Refine Oil 1lt", "qty": 8, "cost": 1185 }, { "name": "Fortune Mustard Oil 1lt", "qty": 8, "cost": 1255 }, { "name": "Mota Chuda", "qty": 2, "cost": 90 }, { "name": "Patala Chuda", "qty": 2, "cost": 80 }, { "name": "Bharat Besan 1kg", "qty": 1, "cost": 115 }, { "name": "Amul 500g", "qty": 1, "cost": 220 }, { "name": "Kashmir Lal Mirch 200g", "qty": 1, "cost": 180 }, { "name": "Ashribad Atta 5kg", "qty": 4, "cost": 940 }, { "name": "Biri", "qty": 2, "cost": 220 }, { "name": "Rice Packet 26kg", "qty": 1, "cost": 1400 }, { "name": "Vermicelli 1kg", "qty": 2, "cost": 160 }, { "name": "Suji", "qty": 2, "cost": 90 }, { "name": "Harada Dal", "qty": 2, "cost": 200 }, { "name": "Sugar", "qty": 3, "cost": 139.8 }, { "name": "Soyabean", "qty": 1, "cost": 50 }, { "name": "Cumin Powder 100g", "qty": 1, "cost": 50 }], "total": 12872.19 }, { "id": "July-Aug 2025", "items": [{ "name": "Loose Moong Dal", "qty": 2.024, "cost": 232.76 }, { "name": "Loose Kabuli Chana", "qty": 1.052, "cost": 139.916 }, { "name": "Loose Chana brown", "qty": 2.04, "cost": 175.44 }, { "name": "Tata Iodised Salt 1kg", "qty": 4, "cost": 108 }, { "name": "Loose Chana Dal", "qty": 1.6, "cost": 137.6 }, { "name": "Loose Sona Masoor Dal", "qty": 2.032, "cost": 217.424 }, { "name": "Loose white peas", "qty": 2.536, "cost": 129.336 }, { "name": "Biri White", "qty": 2.024, "cost": 224.664 }, { "name": "Loose Sugar", "qty": 6.07, "cost": 282.255 }, { "name": "Tata Tea 1kg", "qty": 1, "cost": 365 }, { "name": "Masala Chillies 100g", "qty": 1, "cost": 85 }, { "name": "Maggi 2Min Insta Noodles", "qty": 10, "cost": 147 }, { "name": "Britannia Marie Gold 950g", "qty": 6, "cost": 943.2 }, { "name": "Nirmal Floor cleaner 1lt", "qty": 2, "cost": 184 }, { "name": "Vim Lemon Dish Wash Liq 2lt", "qty": 1, "cost": 275 }, { "name": "Surf Excel Detergent Bar 250g", "qty": 2, "cost": 74.48 }, { "name": "Vim Lemon Bar 110g", "qty": 3, "cost": 29.4 }, { "name": "Surf Excel Detergent Powder 7kg", "qty": 1, "cost": 756 }, { "name": "Lux Jasmine Soap 150g * 3", "qty": 1, "cost": 178 }, { "name": "Sensodyne Fresh Gel 75g", "qty": 1, "cost": 137.2 }, { "name": "Sweet Corn 2pc", "qty": 1, "cost": 35 }, { "name": "Onion", "qty": 2, "cost": 18 }, { "name": "Papaya", "qty": 1.416, "cost": 63.72 }, { "name": "Jeera 500g", "qty": 1, "cost": 159 }, { "name": "MTR Vermicelli", "qty": 4, "cost": 168 }, { "name": "Mangaladeep Agarabati 125g", "qty": 2, "cost": 76 }, { "name": "Cycle champa Agarabati 125g", "qty": 2, "cost": 75 }, { "name": "Sugar free Gold Powder 100g", "qty": 1, "cost": 156 }, { "name": "Haldiram Bhujia 1kg", "qty": 1, "cost": 284.2 }, { "name": "Nutrela Soya Chunks 1kg", "qty": 1, "cost": 135 }, { "name": "Bisk farm cracker sugar free 300g", "qty": 1, "cost": 49 }, { "name": "Britannia Sugar free cracker bisc 295g", "qty": 1, "cost": 49 }, { "name": "Santoor Hand wash 650ml * 2", "qty": 1, "cost": 198 }, { "name": "Eveready Battery 4p", "qty": 1, "cost": 63.7 }, { "name": "Dettol Liquid 1lt", "qty": 1, "cost": 391 }, { "name": "Fortune Refine Oil 1lt", "qty": 5, "cost": 725 }, { "name": "Fortune Mustard Oil 1lt", "qty": 5, "cost": 825 }, { "name": "Patala Chuda", "qty": 2, "cost": 80 }, { "name": "Kashmir Lal Mirch 200g", "qty": 1, "cost": 180 }, { "name": "Ashribad Atta 5kg", "qty": 4, "cost": 940 }, { "name": "Suji", "qty": 2, "cost": 90 }, { "name": "Harada Dal", "qty": 4, "cost": 400 }, { "name": "Shalimar Coconut Oil 200g", "qty": 1, "cost": 95 }, { "name": "Raw Peanut", "qty": 1, "cost": 110 }, { "name": "Amul 1kg", "qty": 1, "cost": 430 }, { "name": "Curry Powder 200g", "qty": 1, "cost": 100 }, { "name": "Tikka Lal 100g", "qty": 1, "cost": 60 }, { "name": "Chowmin 1kg", "qty": 1, "cost": 65 }, { "name": "Elaichi 25g", "qty": 1, "cost": 85 }, { "name": "Gota Masala", "qty": 4, "cost": 120 }, { "name": "Lijjat Papad 200g", "qty": 1, "cost": 80 }, { "name": "Tej Patta 50g", "qty": 1, "cost": 10 }, { "name": "Guda 1kg Cup", "qty": 1, "cost": 60 }, { "name": "Good Night Liquid", "qty": 1, "cost": 80 }], "total": 11277.3 }, { "id": "Sept-Oct 2025", "items": [{ "name": "Loose Moong Dal", "qty": 2.19, "cost": 256.23 }, { "name": "Loose Kabuli Chana", "qty": 1.06, "cost": 145.22 }, { "name": "Loose Chana brown", "qty": 1, "cost": 80 }, { "name": "Tata Iodised Salt 1kg", "qty": 4, "cost": 98 }, { "name": "Loose Chana Dal", "qty": 1.068, "cost": 93.984 }, { "name": "Loose Sona Masoor Dal", "qty": 1.56, "cost": 166.92 }, { "name": "Loose white peas", "qty": 2.072, "cost": 109.816 }, { "name": "Loose Navaratna Dal", "qty": 1.506, "cost": 206.322 }, { "name": "Maggi 2Min Insta Noodles", "qty": 12, "cost": 147.6 }, { "name": "Britannia Marie Gold 950g", "qty": 1, "cost": 154 }, { "name": "Nirmal Floor cleaner 1lt", "qty": 2, "cost": 184 }, { "name": "Vim Lemon Dish Wash Liq 2lt", "qty": 1, "cost": 283 }, { "name": "Surf Excel Detergent Bar 250g", "qty": 2, "cost": 57 }, { "name": "Vim Lemon Bar 110g", "qty": 3, "cost": 29.4 }, { "name": "Colgate red Gel 150g", "qty": 1, "cost": 168.56 }, { "name": "Sensodyne Fresh Gel 150g * 2", "qty": 1, "cost": 388 }, { "name": "MTR Vermicelli", "qty": 2, "cost": 106 }, { "name": "Cycle champa Agarabati 125g", "qty": 6, "cost": 225 }, { "name": "Britannia Sugar free cracker bisc 295g", "qty": 4, "cost": 162 }, { "name": "Dettol Liquid 1.3lt", "qty": 1, "cost": 488 }, { "name": "Lux Jasmine Soap 150g * 5", "qty": 1, "cost": 116 }, { "name": "Loose Urad wash gota", "qty": 3.116, "cost": 333.412 }, { "name": "Biriyani basmati rice", "qty": 2.058, "cost": 183.162 }, { "name": "Loose Govind bhog rice", "qty": 0.424, "cost": 84.376 }, { "name": "Loose toor dal", "qty": 4.062, "cost": 450.882 }, { "name": "Tata agni tea 500g", "qty": 1, "cost": 117.6 }, { "name": "Jeera 200g", "qty": 2, "cost": 170 }, { "name": "Door mat", "qty": 3, "cost": 231 }, { "name": "Oreo 275.55g", "qty": 1, "cost": 83 }, { "name": "Maska chaska 300g", "qty": 1, "cost": 85 }, { "name": "Monaco 696g", "qty": 1, "cost": 115 }, { "name": "Harpic 600ml * 3", "qty": 1, "cost": 367.5 }, { "name": "Biotique Shampoo 650ml", "qty": 1, "cost": 525 }, { "name": "Fortune Refine Oil 1lt", "qty": 7, "cost": 999.6 }, { "name": "Fortune Mustard Oil 1lt", "qty": 6, "cost": 930 }, { "name": "Patala Chuda", "qty": 2, "cost": 80 }, { "name": "Bharat Besan 1kg", "qty": 1, "cost": 110 }, { "name": "Kashmir Lal Mirch 200g", "qty": 1, "cost": 200 }, { "name": "Ashribad Atta 5kg", "qty": 3, "cost": 666 }, { "name": "Rice Packet 26kg", "qty": 1, "cost": 1400 }, { "name": "Suji", "qty": 2, "cost": 80 }, { "name": "Sugar", "qty": 6, "cost": 288 }, { "name": "Shalimar Coconut Oil 200g", "qty": 1, "cost": 110 }, { "name": "Raw Peanut", "qty": 1, "cost": 110 }, { "name": "Amul 1kg", "qty": 1, "cost": 440 }, { "name": "Chowmin 1kg", "qty": 1, "cost": 60 }, { "name": "Elaichi 25g", "qty": 1, "cost": 85 }, { "name": "Gota Masala", "qty": 4, "cost": 110 }, { "name": "Lijjat Papad 200g", "qty": 1, "cost": 85 }, { "name": "Tej Patta 50g", "qty": 1, "cost": 10 }, { "name": "Guda 1kg Cup", "qty": 1, "cost": 60 }, { "name": "Good Night Liquid", "qty": 2, "cost": 121 }, { "name": "Surf Excel Detergent Powder 3kg", "qty": 1, "cost": 292 }, { "name": "Britannia Little hearts 70G", "qty": 2, "cost": 48 }, { "name": "Kellogs corn flakes 1.15kg", "qty": 3, "cost": 996 }, { "name": "Lay's American style 80g", "qty": 3, "cost": 107.1 }, { "name": "Hit Cockroach killer 400ml", "qty": 1, "cost": 163 }, { "name": "Black jeera 100g", "qty": 1, "cost": 40 }, { "name": "Black Pepper 100g", "qty": 1, "cost": 90 }, { "name": "Fennel 50g", "qty": 1, "cost": 30 }, { "name": "Milk maid 100g", "qty": 1, "cost": 125 }, { "name": "Rashi Laddu", "qty": 1, "cost": 45 }, { "name": "Dry chilli 100g", "qty": 1, "cost": 30 }], "total": 14321.68 }, { "id": "Nov-Dec 2025", "items": [{ "name": "Papad 180g", "qty": 1, "cost": 49.5 }, { "name": "Loose Moong Dal", "qty": 3, "cost": 327 }, { "name": "Loose Kabuli Chana", "qty": 1.166, "cost": 139.92 }, { "name": "Tata Iodised Salt 1kg", "qty": 1, "cost": 29 }, { "name": "Loose Chana Dal", "qty": 1.55, "cost": 131.75 }, { "name": "Loose white peas", "qty": 2, "cost": 91.168 }, { "name": "Loose Sugar", "qty": 6, "cost": 264 }, { "name": "Loose Navaratna Dal", "qty": 2.122, "cost": 256.762 }, { "name": "Good Life Cashew 500g", "qty": 1, "cost": 459 }, { "name": "Good Life Phool Makhana 100g", "qty": 1, "cost": 155 }, { "name": "Good Life Sugar 1kg", "qty": 3, "cost": 27 }, { "name": "Maggi 2Min Insta Noodles", "qty": 20, "cost": 200 }, { "name": "Maggi 2Min Spicy Noodles 70g", "qty": 9, "cost": 184.5 }, { "name": "Britannia Marie Gold 950g", "qty": 2, "cost": 263 }, { "name": "Biskfarm Top Butter Biscuit 200g", "qty": 2, "cost": 48.6 }, { "name": "Nirmal Floor cleaner 1lt", "qty": 3, "cost": 276 }, { "name": "Surf Excel Detergent Bar 250g", "qty": 2, "cost": 73.2 }, { "name": "Vim Lemon Bar 110g", "qty": 3, "cost": 28.2 }, { "name": "Colgate red Gel 150g * 2", "qty": 1, "cost": 229 }, { "name": "Cycle champa Agarabati 125g", "qty": 3, "cost": 112.5 }, { "name": "Cycle Flute Combo 375g", "qty": 1, "cost": 99 }, { "name": "Haldiram Bhujia 1kg", "qty": 1, "cost": 193.38 }, { "name": "Santoor Hand wash 650ml * 2", "qty": 1, "cost": 176.62 }, { "name": "Mysore Sandle Soap 125g", "qty": 3, "cost": 172.23 }, { "name": "Loose Urad wash gota", "qty": 4.046, "cost": 432.922 }, { "name": "Loose toor dal", "qty": 4.994, "cost": 574.31 }, { "name": "Tata agni tea 500g", "qty": 1, "cost": 190 }, { "name": "Banana Ripe", "qty": 1.242, "cost": 60.858 }, { "name": "Boro plus Antiseptic cream 80ml", "qty": 1, "cost": 144 }, { "name": "Pears pure gentle soap 125g * 3", "qty": 1, "cost": 190.46 }, { "name": "Bottom Short", "qty": 1, "cost": 349 }, { "name": "Good Night Combo 45ml * 4", "qty": 1, "cost": 319.6 }, { "name": "Vaseline Moisturizer 40ml", "qty": 1, "cost": 9 }, { "name": "Bathroom Floor Brush", "qty": 3, "cost": 345 }, { "name": "Fortune Refine Oil 1lt", "qty": 6, "cost": 870 }, { "name": "Fortune Mustard Oil 1lt", "qty": 4, "cost": 700 }, { "name": "Patala Chuda", "qty": 3, "cost": 120 }, { "name": "Ashribad Atta 5kg", "qty": 3, "cost": 720 }, { "name": "Suji", "qty": 2, "cost": 90 }, { "name": "Raw Peanut", "qty": 1, "cost": 110 }, { "name": "Amul 1kg", "qty": 1, "cost": 440 }, { "name": "Tikka Lal 100g", "qty": 1, "cost": 50 }, { "name": "Chowmin 1kg", "qty": 1, "cost": 70 }, { "name": "Dalchini Cinnamon 100g", "qty": 1, "cost": 35 }, { "name": "Elaichi 25g", "qty": 2, "cost": 165 }, { "name": "Gota Masala", "qty": 4, "cost": 120 }, { "name": "Lijjat Papad 200g", "qty": 1, "cost": 80 }, { "name": "Tej Patta 50g", "qty": 2, "cost": 20 }, { "name": "Surf Excel Detergent Powder 3kg", "qty": 1, "cost": 352.5 }, { "name": "Kellogs corn flakes 1.15kg", "qty": 3, "cost": 1272 }, { "name": "Lay's American style 80g", "qty": 3, "cost": 99 }, { "name": "Loose Dhania Coriander whole 1kg", "qty": 0.296, "cost": 52.984 }, { "name": "Fennel 50g", "qty": 5, "cost": 157.5 }, { "name": "Dry chilli 100g", "qty": 2.5, "cost": 60 }, { "name": "Juani Ajwain 100g", "qty": 1, "cost": 35 }, { "name": "Misri Rock sugar 1kg", "qty": 1, "cost": 80 }, { "name": "Clinic plus sachet", "qty": 2, "cost": 30 }, { "name": "Fair Glow n Lovely", "qty": 1, "cost": 200 }, { "name": "Biriyani masala pouch", "qty": 2, "cost": 20 }], "total": 12550.46 }, { "id": "Jan-Feb 2026", "items": [{ "name": "Loose Moong Dal", "qty": 3, "cost": 330 }, { "name": "Loose Chana brown", "qty": 1.016, "cost": 86.36 }, { "name": "Tata Iodised Salt 1kg", "qty": 4, "cost": 110 }, { "name": "Loose Chana Dal", "qty": 1.494, "cost": 115.038 }, { "name": "Loose white peas", "qty": 2, "cost": 120 }, { "name": "Loose Sugar", "qty": 6.288, "cost": 282.96 }, { "name": "Loose Navaratna Dal", "qty": 1.686, "cost": 99.474 }, { "name": "Tata Tea Gold 800G", "qty": 2, "cost": 846 }, { "name": "Good Life Cashew 500g", "qty": 1, "cost": 455 }, { "name": "Good Life Phool Makhana 100g", "qty": 1, "cost": 179 }, { "name": "Good Life Sugar 1kg", "qty": 3, "cost": 27 }, { "name": "Maggi 2Min Insta Noodles", "qty": 20, "cost": 190 }, { "name": "Good Life Fard Dates 500G", "qty": 2, "cost": 358 }, { "name": "Sunfeast active marie light bsct 956G", "qty": 4, "cost": 468 }, { "name": "Nirmal Floor cleaner 1lt", "qty": 2, "cost": 184 }, { "name": "Vim Lemon Dish Wash Liq 3.2lt", "qty": 1, "cost": 380 }, { "name": "Ezee Dtrgnt 900G", "qty": 1, "cost": 191.25 }, { "name": "Surf Excel Detergent Bar 250g", "qty": 2, "cost": 71.44 }, { "name": "Vim Lemon Bar 110g", "qty": 1, "cost": 9.4 }, { "name": "Surf Excel Detergent Powder 7kg", "qty": 1, "cost": 730 }, { "name": "Parachute adv gold ccnt oil 500ml", "qty": 1, "cost": 258.16 }, { "name": "Colgate red Gel 150g * 2", "qty": 1, "cost": 131.18 }, { "name": "Sensodyne Fresh Gel 150g * 2", "qty": 1, "cost": 393 }, { "name": "Colgate Strong Dental Cream 100g", "qty": 1, "cost": 65.8 }, { "name": "Gala Super Scrub", "qty": 1, "cost": 65 }, { "name": "Cycle champa Agarabati 125g", "qty": 4, "cost": 150 }, { "name": "Haldiram Bhujia 1kg", "qty": 2, "cost": 306 }, { "name": "Fortune Mini Soya Chunks 200G", "qty": 1, "cost": 47 }, { "name": "IM Lite 50Prcnt LS calories sugar 1KG", "qty": 1, "cost": 215 }, { "name": "Dettol Liquid 1lt", "qty": 1, "cost": 427.58 }, { "name": "Fiama Gel Bar 125G*5", "qty": 1, "cost": 159.66 }, { "name": "Loose Urad wash gota", "qty": 3.102, "cost": 313.302 }, { "name": "Biriyani basmati rice", "qty": 1.984, "cost": 168.64 }, { "name": "Loose toor dal", "qty": 5.104, "cost": 586.96 }, { "name": "Biotique Shampoo 650ml", "qty": 1, "cost": 399.42 }, { "name": "Loose Chakki Atta", "qty": 1.52, "cost": 51.68 }, { "name": "Bathmat", "qty": 2, "cost": 186 }, { "name": "Designer printed mat", "qty": 1, "cost": 249 }, { "name": "Wildstone Perfume", "qty": 1, "cost": 9 }, { "name": "Crystal Bounce Ball", "qty": 1, "cost": 149 }, { "name": "Fortune Refine Oil 1lt", "qty": 8, "cost": 1185 }, { "name": "Fortune Mustard Oil 1lt", "qty": 7, "cost": 1209.95 }, { "name": "Patala Chuda", "qty": 2, "cost": 100 }, { "name": "Ashribad Atta 5kg", "qty": 3, "cost": 720 }, { "name": "Suji", "qty": 2, "cost": 90 }, { "name": "Amul 1kg", "qty": 1, "cost": 435 }, { "name": "Tikka Lal 100g", "qty": 1, "cost": 50 }, { "name": "Chowmin 1kg", "qty": 2, "cost": 130 }, { "name": "Dalchini Cinnamon 100g", "qty": 1, "cost": 40 }, { "name": "Elaichi 25g", "qty": 2, "cost": 170 }, { "name": "Gota Masala", "qty": 4, "cost": 120 }, { "name": "Tej Patta 50g", "qty": 2, "cost": 20 }, { "name": "Guda 1kg Cup", "qty": 2, "cost": 130 }, { "name": "Corn flour", "qty": 1, "cost": 35 }, { "name": "Loose Soya Chunk 1KG", "qty": 0.25, "cost": 25 }, { "name": "Match Box", "qty": 2, "cost": 20 }, { "name": "Tata soulful Mlt Muesli 700g", "qty": 1, "cost": 244.45 }, { "name": "Kellogs real almond honey cornflakes 1KG", "qty": 2, "cost": 732 }, { "name": "Kellogs Oats 900G", "qty": 1, "cost": 163 }, { "name": "Loose Dhania Coriander whole 1kg", "qty": 0.434, "cost": 78.12 }, { "name": "Fennel 50g", "qty": 4, "cost": 70 }, { "name": "Juani Ajwain 100g", "qty": 2.5, "cost": 90 }, { "name": "Misri Rock sugar 1kg", "qty": 1, "cost": 90 }, { "name": "Clinic plus sachet", "qty": 2, "cost": 30 }, { "name": "Chowmin Masala", "qty": 4, "cost": 20 }, { "name": "Kaju Gunda 100G", "qty": 1, "cost": 65 }, { "name": "Charu Magaj 100G", "qty": 1, "cost": 65 }], "total": 15691.82 }]
+    "inventory": [
+        {
+            "name": "Papad 180g",
+            "unit": "180g",
+            "category": "General",
+            "current_price": 109
+        },
+        {
+            "name": "Loose Moong Dal",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 108
+        },
+        {
+            "name": "Loose Kabuli Chana",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 133
+        },
+        {
+            "name": "Loose Chana brown",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 81
+        },
+        {
+            "name": "Tata Iodised Salt 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 28
+        },
+        {
+            "name": "Loose Chana Dal",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 79
+        },
+        {
+            "name": "Loose Sona Masoor Dal",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 107
+        },
+        {
+            "name": "Loose white peas",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 51
+        },
+        {
+            "name": "Biri White",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 111
+        },
+        {
+            "name": "Loose Sugar",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 45
+        },
+        {
+            "name": "Loose Navaratna Dal",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 134
+        },
+        {
+            "name": "Tata Tea 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 340
+        },
+        {
+            "name": "Tata Tea Gold 800G",
+            "unit": "800G",
+            "category": "General",
+            "current_price": 423
+        },
+        {
+            "name": "Masala Chillies 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 85
+        },
+        {
+            "name": "Foochka Panipuri 200g",
+            "unit": "200g",
+            "category": "General",
+            "current_price": 9
+        },
+        {
+            "name": "Loose Sabudana",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 75
+        },
+        {
+            "name": "Ruchi Curry or Sabji Masala 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 47.5
+        },
+        {
+            "name": "Ruchi Chicken Masala 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 52
+        },
+        {
+            "name": "Bharat Egg Curry Masala 50g",
+            "unit": "50g",
+            "category": "General",
+            "current_price": 22
+        },
+        {
+            "name": "Good Life Cashew 500g",
+            "unit": "500g",
+            "category": "General",
+            "current_price": 559
+        },
+        {
+            "name": "Good Life Phool Makhana 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 155
+        },
+        {
+            "name": "Raw peanuts",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 147.01
+        },
+        {
+            "name": "Good Life Sugar 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 9
+        },
+        {
+            "name": "ACT Popcorn 60g",
+            "unit": "60g",
+            "category": "General",
+            "current_price": 49
+        },
+        {
+            "name": "Maggi 2Min Insta Noodles",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 14.7
+        },
+        {
+            "name": "Maggi 2Min Spicy Noodles 70g",
+            "unit": "70g",
+            "category": "General",
+            "current_price": 20.5
+        },
+        {
+            "name": "Happydent Chewgum",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 37.5
+        },
+        {
+            "name": "Good Life Fard Dates 500G",
+            "unit": "500G",
+            "category": "General",
+            "current_price": 179
+        },
+        {
+            "name": "Sunfeast active marie light bsct 956G",
+            "unit": "956G",
+            "category": "General",
+            "current_price": 117
+        },
+        {
+            "name": "Britannia Marie Gold 950g",
+            "unit": "950g",
+            "category": "General",
+            "current_price": 152.2
+        },
+        {
+            "name": "Sugar free cashew cookies",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 40
+        },
+        {
+            "name": "Biskfarm Top Butter Biscuit 200g",
+            "unit": "200g",
+            "category": "General",
+            "current_price": 24.3
+        },
+        {
+            "name": "Nirmal Floor cleaner 1lt",
+            "unit": "1lt",
+            "category": "General",
+            "current_price": 92
+        },
+        {
+            "name": "Vim Lemon Dish Wash Liq 3.2lt",
+            "unit": "3.2lt",
+            "category": "General",
+            "current_price": 380
+        },
+        {
+            "name": "Vim Lemon Dish Wash Liq 2lt",
+            "unit": "2lt",
+            "category": "General",
+            "current_price": 237
+        },
+        {
+            "name": "Ezee Dtrgnt 900G",
+            "unit": "900G",
+            "category": "General",
+            "current_price": 191.25
+        },
+        {
+            "name": "Surf Excel Detergent Bar 250g",
+            "unit": "250g",
+            "category": "General",
+            "current_price": 37.24
+        },
+        {
+            "name": "Vim Lemon Bar 110g",
+            "unit": "110g",
+            "category": "General",
+            "current_price": 9.8
+        },
+        {
+            "name": "Surf Excel Detergent Powder 7kg",
+            "unit": "7kg",
+            "category": "General",
+            "current_price": 618
+        },
+        {
+            "name": "Bajaj Almond Hair Oil 625ml",
+            "unit": "625ml",
+            "category": "General",
+            "current_price": 372
+        },
+        {
+            "name": "Parachute adv gold ccnt oil 500ml",
+            "unit": "500ml",
+            "category": "General",
+            "current_price": 258.16
+        },
+        {
+            "name": "Lux Jasmine Soap 150g * 3",
+            "unit": "150g",
+            "category": "General",
+            "current_price": 172.15
+        },
+        {
+            "name": "Colgate red Gel 150g",
+            "unit": "150g",
+            "category": "General",
+            "current_price": 137.5
+        },
+        {
+            "name": "Colgate red Gel 150g * 2",
+            "unit": "150g",
+            "category": "General",
+            "current_price": 229
+        },
+        {
+            "name": "Sensodyne Fresh Gel 75g",
+            "unit": "75g",
+            "category": "General",
+            "current_price": 137.2
+        },
+        {
+            "name": "Sensodyne Fresh Gel 150g * 2",
+            "unit": "150g",
+            "category": "General",
+            "current_price": 359.25
+        },
+        {
+            "name": "Colgate Strong Dental Cream 200g",
+            "unit": "200g",
+            "category": "General",
+            "current_price": 146.02
+        },
+        {
+            "name": "Colgate Strong Dental Cream 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 65.8
+        },
+        {
+            "name": "Gala Super Scrub",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 39
+        },
+        {
+            "name": "My Home Scrubber Steel",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 35
+        },
+        {
+            "name": "Sweet Corn 2pc",
+            "unit": "2pc",
+            "category": "General",
+            "current_price": 35
+        },
+        {
+            "name": "Onion",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 9
+        },
+        {
+            "name": "Papaya",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 45
+        },
+        {
+            "name": "Jeera 500g",
+            "unit": "500g",
+            "category": "General",
+            "current_price": 159
+        },
+        {
+            "name": "MTR Vermicelli",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 42
+        },
+        {
+            "name": "Mangaladeep Agarabati 125g",
+            "unit": "125g",
+            "category": "General",
+            "current_price": 38
+        },
+        {
+            "name": "Cycle champa Agarabati 125g",
+            "unit": "125g",
+            "category": "General",
+            "current_price": 37.5
+        },
+        {
+            "name": "Cycle Flute Combo 375g",
+            "unit": "375g",
+            "category": "General",
+            "current_price": 99
+        },
+        {
+            "name": "Sugar free Gold Powder 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 156
+        },
+        {
+            "name": "Haldiram Bhujia 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 284.2
+        },
+        {
+            "name": "Nutrela Soya Chunks 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 135
+        },
+        {
+            "name": "Fortune Mini Soya Chunks 200G",
+            "unit": "200G",
+            "category": "General",
+            "current_price": 47
+        },
+        {
+            "name": "Bisk farm cracker sugar free 300g",
+            "unit": "300g",
+            "category": "General",
+            "current_price": 49
+        },
+        {
+            "name": "Britannia Sugar free cracker bisc 295g",
+            "unit": "295g",
+            "category": "General",
+            "current_price": 49
+        },
+        {
+            "name": "IM Lite 50Prcnt LS calories sugar 1KG",
+            "unit": "1KG",
+            "category": "General",
+            "current_price": 215
+        },
+        {
+            "name": "Santoor Hand wash 650ml * 2",
+            "unit": "650ml",
+            "category": "General",
+            "current_price": 198
+        },
+        {
+            "name": "Eveready Battery 4p",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 63.7
+        },
+        {
+            "name": "Dettol Liquid 1lt",
+            "unit": "1lt",
+            "category": "General",
+            "current_price": 432.18
+        },
+        {
+            "name": "Dettol Liquid 1.3lt",
+            "unit": "1.3lt",
+            "category": "General",
+            "current_price": 488
+        },
+        {
+            "name": "Lux Jasmine Soap 150g * 5",
+            "unit": "150g",
+            "category": "General",
+            "current_price": 116
+        },
+        {
+            "name": "Mysore Sandle Soap 125g",
+            "unit": "125g",
+            "category": "General",
+            "current_price": 57.41
+        },
+        {
+            "name": "Fiama Gel Bar 125G*5",
+            "unit": "125G",
+            "category": "General",
+            "current_price": 159.66
+        },
+        {
+            "name": "Loose Urad wash gota",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 107
+        },
+        {
+            "name": "Biriyani basmati rice",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 89
+        },
+        {
+            "name": "Loose Govind bhog rice",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 199
+        },
+        {
+            "name": "Loose toor dal",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 111
+        },
+        {
+            "name": "Tata agni tea 500g",
+            "unit": "500g",
+            "category": "General",
+            "current_price": 117.6
+        },
+        {
+            "name": "Jeera 200g",
+            "unit": "200g",
+            "category": "General",
+            "current_price": 85
+        },
+        {
+            "name": "Door mat",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 77
+        },
+        {
+            "name": "Oreo 275.55g",
+            "unit": "275.55g",
+            "category": "General",
+            "current_price": 83
+        },
+        {
+            "name": "Maska chaska 300g",
+            "unit": "300g",
+            "category": "General",
+            "current_price": 85
+        },
+        {
+            "name": "Monaco 696g",
+            "unit": "696g",
+            "category": "General",
+            "current_price": 115
+        },
+        {
+            "name": "Harpic 600ml * 3",
+            "unit": "600ml",
+            "category": "General",
+            "current_price": 367.5
+        },
+        {
+            "name": "Biotique Shampoo 650ml",
+            "unit": "650ml",
+            "category": "General",
+            "current_price": 525
+        },
+        {
+            "name": "Banana Ripe",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 49
+        },
+        {
+            "name": "Boro plus Antiseptic cream 80ml",
+            "unit": "80ml",
+            "category": "General",
+            "current_price": 144
+        },
+        {
+            "name": "Pears pure gentle soap 125g * 3",
+            "unit": "125g",
+            "category": "General",
+            "current_price": 190.46
+        },
+        {
+            "name": "Bottom Short",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 349
+        },
+        {
+            "name": "Good Night Combo 45ml * 4",
+            "unit": "45ml",
+            "category": "General",
+            "current_price": 319.6
+        },
+        {
+            "name": "Vaseline Moisturizer 40ml",
+            "unit": "40ml",
+            "category": "General",
+            "current_price": 9
+        },
+        {
+            "name": "Bathroom Floor Brush",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 115
+        },
+        {
+            "name": "Loose Chakki Atta",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 34
+        },
+        {
+            "name": "Bathmat",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 93
+        },
+        {
+            "name": "Designer printed mat",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 249
+        },
+        {
+            "name": "Wildstone Perfume",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 9
+        },
+        {
+            "name": "Crystal Bounce Ball",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 149
+        },
+        {
+            "name": "Fortune Refine Oil 1lt",
+            "unit": "1lt",
+            "category": "General",
+            "current_price": 148.125
+        },
+        {
+            "name": "Fortune Mustard Oil 1lt",
+            "unit": "1lt",
+            "category": "General",
+            "current_price": 156.875
+        },
+        {
+            "name": "Mota Chuda",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 45
+        },
+        {
+            "name": "Patala Chuda",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 40
+        },
+        {
+            "name": "Bharat Besan 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 115
+        },
+        {
+            "name": "Amul 500g",
+            "unit": "500g",
+            "category": "General",
+            "current_price": 220
+        },
+        {
+            "name": "Kashmir Lal Mirch 200g",
+            "unit": "200g",
+            "category": "General",
+            "current_price": 180
+        },
+        {
+            "name": "Ashribad Atta 5kg",
+            "unit": "5kg",
+            "category": "General",
+            "current_price": 235
+        },
+        {
+            "name": "Biri",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 110
+        },
+        {
+            "name": "Rice Packet 26kg",
+            "unit": "26kg",
+            "category": "General",
+            "current_price": 1400
+        },
+        {
+            "name": "Vermicelli 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 80
+        },
+        {
+            "name": "Suji",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 45
+        },
+        {
+            "name": "Harada Dal",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 100
+        },
+        {
+            "name": "Sugar",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 46.6
+        },
+        {
+            "name": "Soyabean",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 50
+        },
+        {
+            "name": "Cumin Powder 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 50
+        },
+        {
+            "name": "Shalimar Coconut Oil 200g",
+            "unit": "200g",
+            "category": "General",
+            "current_price": 95
+        },
+        {
+            "name": "Raw Peanut",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 110
+        },
+        {
+            "name": "Amul 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 430
+        },
+        {
+            "name": "Curry Powder 200g",
+            "unit": "200g",
+            "category": "General",
+            "current_price": 100
+        },
+        {
+            "name": "Tikka Lal 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 60
+        },
+        {
+            "name": "Chowmin 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 65
+        },
+        {
+            "name": "Dalchini Cinnamon 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 35
+        },
+        {
+            "name": "Elaichi 25g",
+            "unit": "25g",
+            "category": "General",
+            "current_price": 85
+        },
+        {
+            "name": "Gota Masala",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 30
+        },
+        {
+            "name": "Lijjat Papad 200g",
+            "unit": "200g",
+            "category": "General",
+            "current_price": 80
+        },
+        {
+            "name": "Tej Patta 50g",
+            "unit": "50g",
+            "category": "General",
+            "current_price": 10
+        },
+        {
+            "name": "Guda 1kg Cup",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 60
+        },
+        {
+            "name": "Good Night Liquid",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 80
+        },
+        {
+            "name": "Corn flour",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 35
+        },
+        {
+            "name": "Loose Soya Chunk 1KG",
+            "unit": "1KG",
+            "category": "General",
+            "current_price": 100
+        },
+        {
+            "name": "Match Box",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 10
+        },
+        {
+            "name": "Surf Excel Detergent Powder 3kg",
+            "unit": "3kg",
+            "category": "General",
+            "current_price": 292
+        },
+        {
+            "name": "Britannia Little hearts 70G",
+            "unit": "70G",
+            "category": "General",
+            "current_price": 24
+        },
+        {
+            "name": "Tata soulful Mlt Muesli 700g",
+            "unit": "700g",
+            "category": "General",
+            "current_price": 244.45
+        },
+        {
+            "name": "Kellogs real almond honey cornflakes 1KG",
+            "unit": "1KG",
+            "category": "General",
+            "current_price": 366
+        },
+        {
+            "name": "Kellogs corn flakes 1.15kg",
+            "unit": "1.15kg",
+            "category": "General",
+            "current_price": 332
+        },
+        {
+            "name": "Kellogs Oats 900G",
+            "unit": "900G",
+            "category": "General",
+            "current_price": 163
+        },
+        {
+            "name": "Lay's American style 80g",
+            "unit": "80g",
+            "category": "General",
+            "current_price": 35.7
+        },
+        {
+            "name": "Hit Cockroach killer 400ml",
+            "unit": "400ml",
+            "category": "General",
+            "current_price": 163
+        },
+        {
+            "name": "Black jeera 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 40
+        },
+        {
+            "name": "Black Pepper 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 90
+        },
+        {
+            "name": "Loose Dhania Coriander whole 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 179
+        },
+        {
+            "name": "Fennel 50g",
+            "unit": "50g",
+            "category": "General",
+            "current_price": 30
+        },
+        {
+            "name": "Milk maid 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 125
+        },
+        {
+            "name": "Rashi Laddu",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 45
+        },
+        {
+            "name": "Dry chilli 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 30
+        },
+        {
+            "name": "Juani Ajwain 100g",
+            "unit": "100g",
+            "category": "General",
+            "current_price": 35
+        },
+        {
+            "name": "Misri Rock sugar 1kg",
+            "unit": "1kg",
+            "category": "General",
+            "current_price": 80
+        },
+        {
+            "name": "Clinic plus sachet",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 15
+        },
+        {
+            "name": "Fair Glow n Lovely",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 200
+        },
+        {
+            "name": "Chowmin Masala",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 5
+        },
+        {
+            "name": "Kaju Gunda 100G",
+            "unit": "100G",
+            "category": "General",
+            "current_price": 65
+        },
+        {
+            "name": "Charu Magaj 100G",
+            "unit": "100G",
+            "category": "General",
+            "current_price": 65
+        },
+        {
+            "name": "Biriyani masala pouch",
+            "unit": "pcs",
+            "category": "General",
+            "current_price": 10
+        }
+    ],
+    "history": [
+        {
+            "id": "May-Jun 2025",
+            "items": [
+                {
+                    "name": "Papad 180g",
+                    "qty": 1,
+                    "cost": 109
+                },
+                {
+                    "name": "Loose Moong Dal",
+                    "qty": 2.003,
+                    "cost": 216.324
+                },
+                {
+                    "name": "Loose Chana brown",
+                    "qty": 1.511,
+                    "cost": 122.391
+                },
+                {
+                    "name": "Tata Iodised Salt 1kg",
+                    "qty": 2,
+                    "cost": 56
+                },
+                {
+                    "name": "Loose Chana Dal",
+                    "qty": 1.053,
+                    "cost": 83.187
+                },
+                {
+                    "name": "Loose Sugar",
+                    "qty": 4.953,
+                    "cost": 222.885
+                },
+                {
+                    "name": "Loose Navaratna Dal",
+                    "qty": 0.995,
+                    "cost": 133.33
+                },
+                {
+                    "name": "Tata Tea 1kg",
+                    "qty": 1,
+                    "cost": 340
+                },
+                {
+                    "name": "Masala Chillies 100g",
+                    "qty": 1,
+                    "cost": 85
+                },
+                {
+                    "name": "Foochka Panipuri 200g",
+                    "qty": 4,
+                    "cost": 36
+                },
+                {
+                    "name": "Loose Sabudana",
+                    "qty": 1.601,
+                    "cost": 120.075
+                },
+                {
+                    "name": "Ruchi Curry or Sabji Masala 100g",
+                    "qty": 2,
+                    "cost": 95
+                },
+                {
+                    "name": "Ruchi Chicken Masala 100g",
+                    "qty": 2,
+                    "cost": 104
+                },
+                {
+                    "name": "Bharat Egg Curry Masala 50g",
+                    "qty": 1,
+                    "cost": 22
+                },
+                {
+                    "name": "Good Life Cashew 500g",
+                    "qty": 1,
+                    "cost": 559
+                },
+                {
+                    "name": "Raw peanuts",
+                    "qty": 0.995,
+                    "cost": 146.27495
+                },
+                {
+                    "name": "ACT Popcorn 60g",
+                    "qty": 1,
+                    "cost": 49
+                },
+                {
+                    "name": "Maggi 2Min Insta Noodles",
+                    "qty": 10,
+                    "cost": 147
+                },
+                {
+                    "name": "Happydent Chewgum",
+                    "qty": 1,
+                    "cost": 37.5
+                },
+                {
+                    "name": "Britannia Marie Gold 950g",
+                    "qty": 6,
+                    "cost": 913.2
+                },
+                {
+                    "name": "Sugar free cashew cookies",
+                    "qty": 2,
+                    "cost": 80
+                },
+                {
+                    "name": "Nirmal Floor cleaner 1lt",
+                    "qty": 1,
+                    "cost": 92
+                },
+                {
+                    "name": "Vim Lemon Dish Wash Liq 2lt",
+                    "qty": 1,
+                    "cost": 237
+                },
+                {
+                    "name": "Surf Excel Detergent Bar 250g",
+                    "qty": 3,
+                    "cost": 111.72
+                },
+                {
+                    "name": "Vim Lemon Bar 110g",
+                    "qty": 3,
+                    "cost": 29.4
+                },
+                {
+                    "name": "Surf Excel Detergent Powder 7kg",
+                    "qty": 1,
+                    "cost": 618
+                },
+                {
+                    "name": "Bajaj Almond Hair Oil 625ml",
+                    "qty": 1,
+                    "cost": 372
+                },
+                {
+                    "name": "Lux Jasmine Soap 150g * 3",
+                    "qty": 1,
+                    "cost": 172.15
+                },
+                {
+                    "name": "Colgate red Gel 150g",
+                    "qty": 1,
+                    "cost": 137.5
+                },
+                {
+                    "name": "Sensodyne Fresh Gel 150g * 2",
+                    "qty": 1,
+                    "cost": 359.25
+                },
+                {
+                    "name": "Colgate Strong Dental Cream 200g",
+                    "qty": 1,
+                    "cost": 146.02
+                },
+                {
+                    "name": "Gala Super Scrub",
+                    "qty": 2,
+                    "cost": 78
+                },
+                {
+                    "name": "My Home Scrubber Steel",
+                    "qty": 1,
+                    "cost": 35
+                },
+                {
+                    "name": "Dettol Liquid 1lt",
+                    "qty": 1,
+                    "cost": 432.18
+                },
+                {
+                    "name": "Fortune Refine Oil 1lt",
+                    "qty": 8,
+                    "cost": 1185
+                },
+                {
+                    "name": "Fortune Mustard Oil 1lt",
+                    "qty": 8,
+                    "cost": 1255
+                },
+                {
+                    "name": "Mota Chuda",
+                    "qty": 2,
+                    "cost": 90
+                },
+                {
+                    "name": "Patala Chuda",
+                    "qty": 2,
+                    "cost": 80
+                },
+                {
+                    "name": "Bharat Besan 1kg",
+                    "qty": 1,
+                    "cost": 115
+                },
+                {
+                    "name": "Amul 500g",
+                    "qty": 1,
+                    "cost": 220
+                },
+                {
+                    "name": "Kashmir Lal Mirch 200g",
+                    "qty": 1,
+                    "cost": 180
+                },
+                {
+                    "name": "Ashribad Atta 5kg",
+                    "qty": 4,
+                    "cost": 940
+                },
+                {
+                    "name": "Biri",
+                    "qty": 2,
+                    "cost": 220
+                },
+                {
+                    "name": "Rice Packet 26kg",
+                    "qty": 1,
+                    "cost": 1400
+                },
+                {
+                    "name": "Vermicelli 1kg",
+                    "qty": 2,
+                    "cost": 160
+                },
+                {
+                    "name": "Suji",
+                    "qty": 2,
+                    "cost": 90
+                },
+                {
+                    "name": "Harada Dal",
+                    "qty": 2,
+                    "cost": 200
+                },
+                {
+                    "name": "Sugar",
+                    "qty": 3,
+                    "cost": 139.8
+                },
+                {
+                    "name": "Soyabean",
+                    "qty": 1,
+                    "cost": 50
+                },
+                {
+                    "name": "Cumin Powder 100g",
+                    "qty": 1,
+                    "cost": 50
+                }
+            ],
+            "total": 12872.19
+        },
+        {
+            "id": "July-Aug 2025",
+            "items": [
+                {
+                    "name": "Loose Moong Dal",
+                    "qty": 2.024,
+                    "cost": 232.76
+                },
+                {
+                    "name": "Loose Kabuli Chana",
+                    "qty": 1.052,
+                    "cost": 139.916
+                },
+                {
+                    "name": "Loose Chana brown",
+                    "qty": 2.04,
+                    "cost": 175.44
+                },
+                {
+                    "name": "Tata Iodised Salt 1kg",
+                    "qty": 4,
+                    "cost": 108
+                },
+                {
+                    "name": "Loose Chana Dal",
+                    "qty": 1.6,
+                    "cost": 137.6
+                },
+                {
+                    "name": "Loose Sona Masoor Dal",
+                    "qty": 2.032,
+                    "cost": 217.424
+                },
+                {
+                    "name": "Loose white peas",
+                    "qty": 2.536,
+                    "cost": 129.336
+                },
+                {
+                    "name": "Biri White",
+                    "qty": 2.024,
+                    "cost": 224.664
+                },
+                {
+                    "name": "Loose Sugar",
+                    "qty": 6.07,
+                    "cost": 282.255
+                },
+                {
+                    "name": "Tata Tea 1kg",
+                    "qty": 1,
+                    "cost": 365
+                },
+                {
+                    "name": "Masala Chillies 100g",
+                    "qty": 1,
+                    "cost": 85
+                },
+                {
+                    "name": "Maggi 2Min Insta Noodles",
+                    "qty": 10,
+                    "cost": 147
+                },
+                {
+                    "name": "Britannia Marie Gold 950g",
+                    "qty": 6,
+                    "cost": 943.2
+                },
+                {
+                    "name": "Nirmal Floor cleaner 1lt",
+                    "qty": 2,
+                    "cost": 184
+                },
+                {
+                    "name": "Vim Lemon Dish Wash Liq 2lt",
+                    "qty": 1,
+                    "cost": 275
+                },
+                {
+                    "name": "Surf Excel Detergent Bar 250g",
+                    "qty": 2,
+                    "cost": 74.48
+                },
+                {
+                    "name": "Vim Lemon Bar 110g",
+                    "qty": 3,
+                    "cost": 29.4
+                },
+                {
+                    "name": "Surf Excel Detergent Powder 7kg",
+                    "qty": 1,
+                    "cost": 756
+                },
+                {
+                    "name": "Lux Jasmine Soap 150g * 3",
+                    "qty": 1,
+                    "cost": 178
+                },
+                {
+                    "name": "Sensodyne Fresh Gel 75g",
+                    "qty": 1,
+                    "cost": 137.2
+                },
+                {
+                    "name": "Sweet Corn 2pc",
+                    "qty": 1,
+                    "cost": 35
+                },
+                {
+                    "name": "Onion",
+                    "qty": 2,
+                    "cost": 18
+                },
+                {
+                    "name": "Papaya",
+                    "qty": 1.416,
+                    "cost": 63.72
+                },
+                {
+                    "name": "Jeera 500g",
+                    "qty": 1,
+                    "cost": 159
+                },
+                {
+                    "name": "MTR Vermicelli",
+                    "qty": 4,
+                    "cost": 168
+                },
+                {
+                    "name": "Mangaladeep Agarabati 125g",
+                    "qty": 2,
+                    "cost": 76
+                },
+                {
+                    "name": "Cycle champa Agarabati 125g",
+                    "qty": 2,
+                    "cost": 75
+                },
+                {
+                    "name": "Sugar free Gold Powder 100g",
+                    "qty": 1,
+                    "cost": 156
+                },
+                {
+                    "name": "Haldiram Bhujia 1kg",
+                    "qty": 1,
+                    "cost": 284.2
+                },
+                {
+                    "name": "Nutrela Soya Chunks 1kg",
+                    "qty": 1,
+                    "cost": 135
+                },
+                {
+                    "name": "Bisk farm cracker sugar free 300g",
+                    "qty": 1,
+                    "cost": 49
+                },
+                {
+                    "name": "Britannia Sugar free cracker bisc 295g",
+                    "qty": 1,
+                    "cost": 49
+                },
+                {
+                    "name": "Santoor Hand wash 650ml * 2",
+                    "qty": 1,
+                    "cost": 198
+                },
+                {
+                    "name": "Eveready Battery 4p",
+                    "qty": 1,
+                    "cost": 63.7
+                },
+                {
+                    "name": "Dettol Liquid 1lt",
+                    "qty": 1,
+                    "cost": 391
+                },
+                {
+                    "name": "Fortune Refine Oil 1lt",
+                    "qty": 5,
+                    "cost": 725
+                },
+                {
+                    "name": "Fortune Mustard Oil 1lt",
+                    "qty": 5,
+                    "cost": 825
+                },
+                {
+                    "name": "Patala Chuda",
+                    "qty": 2,
+                    "cost": 80
+                },
+                {
+                    "name": "Kashmir Lal Mirch 200g",
+                    "qty": 1,
+                    "cost": 180
+                },
+                {
+                    "name": "Ashribad Atta 5kg",
+                    "qty": 4,
+                    "cost": 940
+                },
+                {
+                    "name": "Suji",
+                    "qty": 2,
+                    "cost": 90
+                },
+                {
+                    "name": "Harada Dal",
+                    "qty": 4,
+                    "cost": 400
+                },
+                {
+                    "name": "Shalimar Coconut Oil 200g",
+                    "qty": 1,
+                    "cost": 95
+                },
+                {
+                    "name": "Raw Peanut",
+                    "qty": 1,
+                    "cost": 110
+                },
+                {
+                    "name": "Amul 1kg",
+                    "qty": 1,
+                    "cost": 430
+                },
+                {
+                    "name": "Curry Powder 200g",
+                    "qty": 1,
+                    "cost": 100
+                },
+                {
+                    "name": "Tikka Lal 100g",
+                    "qty": 1,
+                    "cost": 60
+                },
+                {
+                    "name": "Chowmin 1kg",
+                    "qty": 1,
+                    "cost": 65
+                },
+                {
+                    "name": "Elaichi 25g",
+                    "qty": 1,
+                    "cost": 85
+                },
+                {
+                    "name": "Gota Masala",
+                    "qty": 4,
+                    "cost": 120
+                },
+                {
+                    "name": "Lijjat Papad 200g",
+                    "qty": 1,
+                    "cost": 80
+                },
+                {
+                    "name": "Tej Patta 50g",
+                    "qty": 1,
+                    "cost": 10
+                },
+                {
+                    "name": "Guda 1kg Cup",
+                    "qty": 1,
+                    "cost": 60
+                },
+                {
+                    "name": "Good Night Liquid",
+                    "qty": 1,
+                    "cost": 80
+                }
+            ],
+            "total": 11277.3
+        },
+        {
+            "id": "Sept-Oct 2025",
+            "items": [
+                {
+                    "name": "Loose Moong Dal",
+                    "qty": 2.19,
+                    "cost": 256.23
+                },
+                {
+                    "name": "Loose Kabuli Chana",
+                    "qty": 1.06,
+                    "cost": 145.22
+                },
+                {
+                    "name": "Loose Chana brown",
+                    "qty": 1,
+                    "cost": 80
+                },
+                {
+                    "name": "Tata Iodised Salt 1kg",
+                    "qty": 4,
+                    "cost": 98
+                },
+                {
+                    "name": "Loose Chana Dal",
+                    "qty": 1.068,
+                    "cost": 93.984
+                },
+                {
+                    "name": "Loose Sona Masoor Dal",
+                    "qty": 1.56,
+                    "cost": 166.92
+                },
+                {
+                    "name": "Loose white peas",
+                    "qty": 2.072,
+                    "cost": 109.816
+                },
+                {
+                    "name": "Loose Navaratna Dal",
+                    "qty": 1.506,
+                    "cost": 206.322
+                },
+                {
+                    "name": "Maggi 2Min Insta Noodles",
+                    "qty": 12,
+                    "cost": 147.6
+                },
+                {
+                    "name": "Britannia Marie Gold 950g",
+                    "qty": 1,
+                    "cost": 154
+                },
+                {
+                    "name": "Nirmal Floor cleaner 1lt",
+                    "qty": 2,
+                    "cost": 184
+                },
+                {
+                    "name": "Vim Lemon Dish Wash Liq 2lt",
+                    "qty": 1,
+                    "cost": 283
+                },
+                {
+                    "name": "Surf Excel Detergent Bar 250g",
+                    "qty": 2,
+                    "cost": 57
+                },
+                {
+                    "name": "Vim Lemon Bar 110g",
+                    "qty": 3,
+                    "cost": 29.4
+                },
+                {
+                    "name": "Colgate red Gel 150g",
+                    "qty": 1,
+                    "cost": 168.56
+                },
+                {
+                    "name": "Sensodyne Fresh Gel 150g * 2",
+                    "qty": 1,
+                    "cost": 388
+                },
+                {
+                    "name": "MTR Vermicelli",
+                    "qty": 2,
+                    "cost": 106
+                },
+                {
+                    "name": "Cycle champa Agarabati 125g",
+                    "qty": 6,
+                    "cost": 225
+                },
+                {
+                    "name": "Britannia Sugar free cracker bisc 295g",
+                    "qty": 4,
+                    "cost": 162
+                },
+                {
+                    "name": "Dettol Liquid 1.3lt",
+                    "qty": 1,
+                    "cost": 488
+                },
+                {
+                    "name": "Lux Jasmine Soap 150g * 5",
+                    "qty": 1,
+                    "cost": 116
+                },
+                {
+                    "name": "Loose Urad wash gota",
+                    "qty": 3.116,
+                    "cost": 333.412
+                },
+                {
+                    "name": "Biriyani basmati rice",
+                    "qty": 2.058,
+                    "cost": 183.162
+                },
+                {
+                    "name": "Loose Govind bhog rice",
+                    "qty": 0.424,
+                    "cost": 84.376
+                },
+                {
+                    "name": "Loose toor dal",
+                    "qty": 4.062,
+                    "cost": 450.882
+                },
+                {
+                    "name": "Tata agni tea 500g",
+                    "qty": 1,
+                    "cost": 117.6
+                },
+                {
+                    "name": "Jeera 200g",
+                    "qty": 2,
+                    "cost": 170
+                },
+                {
+                    "name": "Door mat",
+                    "qty": 3,
+                    "cost": 231
+                },
+                {
+                    "name": "Oreo 275.55g",
+                    "qty": 1,
+                    "cost": 83
+                },
+                {
+                    "name": "Maska chaska 300g",
+                    "qty": 1,
+                    "cost": 85
+                },
+                {
+                    "name": "Monaco 696g",
+                    "qty": 1,
+                    "cost": 115
+                },
+                {
+                    "name": "Harpic 600ml * 3",
+                    "qty": 1,
+                    "cost": 367.5
+                },
+                {
+                    "name": "Biotique Shampoo 650ml",
+                    "qty": 1,
+                    "cost": 525
+                },
+                {
+                    "name": "Fortune Refine Oil 1lt",
+                    "qty": 7,
+                    "cost": 999.6
+                },
+                {
+                    "name": "Fortune Mustard Oil 1lt",
+                    "qty": 6,
+                    "cost": 930
+                },
+                {
+                    "name": "Patala Chuda",
+                    "qty": 2,
+                    "cost": 80
+                },
+                {
+                    "name": "Bharat Besan 1kg",
+                    "qty": 1,
+                    "cost": 110
+                },
+                {
+                    "name": "Kashmir Lal Mirch 200g",
+                    "qty": 1,
+                    "cost": 200
+                },
+                {
+                    "name": "Ashribad Atta 5kg",
+                    "qty": 3,
+                    "cost": 666
+                },
+                {
+                    "name": "Rice Packet 26kg",
+                    "qty": 1,
+                    "cost": 1400
+                },
+                {
+                    "name": "Suji",
+                    "qty": 2,
+                    "cost": 80
+                },
+                {
+                    "name": "Sugar",
+                    "qty": 6,
+                    "cost": 288
+                },
+                {
+                    "name": "Shalimar Coconut Oil 200g",
+                    "qty": 1,
+                    "cost": 110
+                },
+                {
+                    "name": "Raw Peanut",
+                    "qty": 1,
+                    "cost": 110
+                },
+                {
+                    "name": "Amul 1kg",
+                    "qty": 1,
+                    "cost": 440
+                },
+                {
+                    "name": "Chowmin 1kg",
+                    "qty": 1,
+                    "cost": 60
+                },
+                {
+                    "name": "Elaichi 25g",
+                    "qty": 1,
+                    "cost": 85
+                },
+                {
+                    "name": "Gota Masala",
+                    "qty": 4,
+                    "cost": 110
+                },
+                {
+                    "name": "Lijjat Papad 200g",
+                    "qty": 1,
+                    "cost": 85
+                },
+                {
+                    "name": "Tej Patta 50g",
+                    "qty": 1,
+                    "cost": 10
+                },
+                {
+                    "name": "Guda 1kg Cup",
+                    "qty": 1,
+                    "cost": 60
+                },
+                {
+                    "name": "Good Night Liquid",
+                    "qty": 2,
+                    "cost": 121
+                },
+                {
+                    "name": "Surf Excel Detergent Powder 3kg",
+                    "qty": 1,
+                    "cost": 292
+                },
+                {
+                    "name": "Britannia Little hearts 70G",
+                    "qty": 2,
+                    "cost": 48
+                },
+                {
+                    "name": "Kellogs corn flakes 1.15kg",
+                    "qty": 3,
+                    "cost": 996
+                },
+                {
+                    "name": "Lay's American style 80g",
+                    "qty": 3,
+                    "cost": 107.1
+                },
+                {
+                    "name": "Hit Cockroach killer 400ml",
+                    "qty": 1,
+                    "cost": 163
+                },
+                {
+                    "name": "Black jeera 100g",
+                    "qty": 1,
+                    "cost": 40
+                },
+                {
+                    "name": "Black Pepper 100g",
+                    "qty": 1,
+                    "cost": 90
+                },
+                {
+                    "name": "Fennel 50g",
+                    "qty": 1,
+                    "cost": 30
+                },
+                {
+                    "name": "Milk maid 100g",
+                    "qty": 1,
+                    "cost": 125
+                },
+                {
+                    "name": "Rashi Laddu",
+                    "qty": 1,
+                    "cost": 45
+                },
+                {
+                    "name": "Dry chilli 100g",
+                    "qty": 1,
+                    "cost": 30
+                }
+            ],
+            "total": 14321.68
+        },
+        {
+            "id": "Nov-Dec 2025",
+            "items": [
+                {
+                    "name": "Papad 180g",
+                    "qty": 1,
+                    "cost": 49.5
+                },
+                {
+                    "name": "Loose Moong Dal",
+                    "qty": 3,
+                    "cost": 327
+                },
+                {
+                    "name": "Loose Kabuli Chana",
+                    "qty": 1.166,
+                    "cost": 139.92
+                },
+                {
+                    "name": "Tata Iodised Salt 1kg",
+                    "qty": 1,
+                    "cost": 29
+                },
+                {
+                    "name": "Loose Chana Dal",
+                    "qty": 1.55,
+                    "cost": 131.75
+                },
+                {
+                    "name": "Loose white peas",
+                    "qty": 2,
+                    "cost": 91.168
+                },
+                {
+                    "name": "Loose Sugar",
+                    "qty": 6,
+                    "cost": 264
+                },
+                {
+                    "name": "Loose Navaratna Dal",
+                    "qty": 2.122,
+                    "cost": 256.762
+                },
+                {
+                    "name": "Good Life Cashew 500g",
+                    "qty": 1,
+                    "cost": 459
+                },
+                {
+                    "name": "Good Life Phool Makhana 100g",
+                    "qty": 1,
+                    "cost": 155
+                },
+                {
+                    "name": "Good Life Sugar 1kg",
+                    "qty": 3,
+                    "cost": 27
+                },
+                {
+                    "name": "Maggi 2Min Insta Noodles",
+                    "qty": 20,
+                    "cost": 200
+                },
+                {
+                    "name": "Maggi 2Min Spicy Noodles 70g",
+                    "qty": 9,
+                    "cost": 184.5
+                },
+                {
+                    "name": "Britannia Marie Gold 950g",
+                    "qty": 2,
+                    "cost": 263
+                },
+                {
+                    "name": "Biskfarm Top Butter Biscuit 200g",
+                    "qty": 2,
+                    "cost": 48.6
+                },
+                {
+                    "name": "Nirmal Floor cleaner 1lt",
+                    "qty": 3,
+                    "cost": 276
+                },
+                {
+                    "name": "Surf Excel Detergent Bar 250g",
+                    "qty": 2,
+                    "cost": 73.2
+                },
+                {
+                    "name": "Vim Lemon Bar 110g",
+                    "qty": 3,
+                    "cost": 28.2
+                },
+                {
+                    "name": "Colgate red Gel 150g * 2",
+                    "qty": 1,
+                    "cost": 229
+                },
+                {
+                    "name": "Cycle champa Agarabati 125g",
+                    "qty": 3,
+                    "cost": 112.5
+                },
+                {
+                    "name": "Cycle Flute Combo 375g",
+                    "qty": 1,
+                    "cost": 99
+                },
+                {
+                    "name": "Haldiram Bhujia 1kg",
+                    "qty": 1,
+                    "cost": 193.38
+                },
+                {
+                    "name": "Santoor Hand wash 650ml * 2",
+                    "qty": 1,
+                    "cost": 176.62
+                },
+                {
+                    "name": "Mysore Sandle Soap 125g",
+                    "qty": 3,
+                    "cost": 172.23
+                },
+                {
+                    "name": "Loose Urad wash gota",
+                    "qty": 4.046,
+                    "cost": 432.922
+                },
+                {
+                    "name": "Loose toor dal",
+                    "qty": 4.994,
+                    "cost": 574.31
+                },
+                {
+                    "name": "Tata agni tea 500g",
+                    "qty": 1,
+                    "cost": 190
+                },
+                {
+                    "name": "Banana Ripe",
+                    "qty": 1.242,
+                    "cost": 60.858
+                },
+                {
+                    "name": "Boro plus Antiseptic cream 80ml",
+                    "qty": 1,
+                    "cost": 144
+                },
+                {
+                    "name": "Pears pure gentle soap 125g * 3",
+                    "qty": 1,
+                    "cost": 190.46
+                },
+                {
+                    "name": "Bottom Short",
+                    "qty": 1,
+                    "cost": 349
+                },
+                {
+                    "name": "Good Night Combo 45ml * 4",
+                    "qty": 1,
+                    "cost": 319.6
+                },
+                {
+                    "name": "Vaseline Moisturizer 40ml",
+                    "qty": 1,
+                    "cost": 9
+                },
+                {
+                    "name": "Bathroom Floor Brush",
+                    "qty": 3,
+                    "cost": 345
+                },
+                {
+                    "name": "Fortune Refine Oil 1lt",
+                    "qty": 6,
+                    "cost": 870
+                },
+                {
+                    "name": "Fortune Mustard Oil 1lt",
+                    "qty": 4,
+                    "cost": 700
+                },
+                {
+                    "name": "Patala Chuda",
+                    "qty": 3,
+                    "cost": 120
+                },
+                {
+                    "name": "Ashribad Atta 5kg",
+                    "qty": 3,
+                    "cost": 720
+                },
+                {
+                    "name": "Suji",
+                    "qty": 2,
+                    "cost": 90
+                },
+                {
+                    "name": "Raw Peanut",
+                    "qty": 1,
+                    "cost": 110
+                },
+                {
+                    "name": "Amul 1kg",
+                    "qty": 1,
+                    "cost": 440
+                },
+                {
+                    "name": "Tikka Lal 100g",
+                    "qty": 1,
+                    "cost": 50
+                },
+                {
+                    "name": "Chowmin 1kg",
+                    "qty": 1,
+                    "cost": 70
+                },
+                {
+                    "name": "Dalchini Cinnamon 100g",
+                    "qty": 1,
+                    "cost": 35
+                },
+                {
+                    "name": "Elaichi 25g",
+                    "qty": 2,
+                    "cost": 165
+                },
+                {
+                    "name": "Gota Masala",
+                    "qty": 4,
+                    "cost": 120
+                },
+                {
+                    "name": "Lijjat Papad 200g",
+                    "qty": 1,
+                    "cost": 80
+                },
+                {
+                    "name": "Tej Patta 50g",
+                    "qty": 2,
+                    "cost": 20
+                },
+                {
+                    "name": "Surf Excel Detergent Powder 3kg",
+                    "qty": 1,
+                    "cost": 352.5
+                },
+                {
+                    "name": "Kellogs corn flakes 1.15kg",
+                    "qty": 3,
+                    "cost": 1272
+                },
+                {
+                    "name": "Lay's American style 80g",
+                    "qty": 3,
+                    "cost": 99
+                },
+                {
+                    "name": "Loose Dhania Coriander whole 1kg",
+                    "qty": 0.296,
+                    "cost": 52.984
+                },
+                {
+                    "name": "Fennel 50g",
+                    "qty": 5,
+                    "cost": 157.5
+                },
+                {
+                    "name": "Dry chilli 100g",
+                    "qty": 2.5,
+                    "cost": 60
+                },
+                {
+                    "name": "Juani Ajwain 100g",
+                    "qty": 1,
+                    "cost": 35
+                },
+                {
+                    "name": "Misri Rock sugar 1kg",
+                    "qty": 1,
+                    "cost": 80
+                },
+                {
+                    "name": "Clinic plus sachet",
+                    "qty": 2,
+                    "cost": 30
+                },
+                {
+                    "name": "Fair Glow n Lovely",
+                    "qty": 1,
+                    "cost": 200
+                },
+                {
+                    "name": "Biriyani masala pouch",
+                    "qty": 2,
+                    "cost": 20
+                }
+            ],
+            "total": 12550.46
+        },
+        {
+            "id": "Jan-Feb 2026",
+            "items": [
+                {
+                    "name": "Loose Moong Dal",
+                    "qty": 3,
+                    "cost": 330
+                },
+                {
+                    "name": "Loose Chana brown",
+                    "qty": 1.016,
+                    "cost": 86.36
+                },
+                {
+                    "name": "Tata Iodised Salt 1kg",
+                    "qty": 4,
+                    "cost": 110
+                },
+                {
+                    "name": "Loose Chana Dal",
+                    "qty": 1.494,
+                    "cost": 115.038
+                },
+                {
+                    "name": "Loose white peas",
+                    "qty": 2,
+                    "cost": 120
+                },
+                {
+                    "name": "Loose Sugar",
+                    "qty": 6.288,
+                    "cost": 282.96
+                },
+                {
+                    "name": "Loose Navaratna Dal",
+                    "qty": 1.686,
+                    "cost": 99.474
+                },
+                {
+                    "name": "Tata Tea Gold 800G",
+                    "qty": 2,
+                    "cost": 846
+                },
+                {
+                    "name": "Good Life Cashew 500g",
+                    "qty": 1,
+                    "cost": 455
+                },
+                {
+                    "name": "Good Life Phool Makhana 100g",
+                    "qty": 1,
+                    "cost": 179
+                },
+                {
+                    "name": "Good Life Sugar 1kg",
+                    "qty": 3,
+                    "cost": 27
+                },
+                {
+                    "name": "Maggi 2Min Insta Noodles",
+                    "qty": 20,
+                    "cost": 190
+                },
+                {
+                    "name": "Good Life Fard Dates 500G",
+                    "qty": 2,
+                    "cost": 358
+                },
+                {
+                    "name": "Sunfeast active marie light bsct 956G",
+                    "qty": 4,
+                    "cost": 468
+                },
+                {
+                    "name": "Nirmal Floor cleaner 1lt",
+                    "qty": 2,
+                    "cost": 184
+                },
+                {
+                    "name": "Vim Lemon Dish Wash Liq 3.2lt",
+                    "qty": 1,
+                    "cost": 380
+                },
+                {
+                    "name": "Ezee Dtrgnt 900G",
+                    "qty": 1,
+                    "cost": 191.25
+                },
+                {
+                    "name": "Surf Excel Detergent Bar 250g",
+                    "qty": 2,
+                    "cost": 71.44
+                },
+                {
+                    "name": "Vim Lemon Bar 110g",
+                    "qty": 1,
+                    "cost": 9.4
+                },
+                {
+                    "name": "Surf Excel Detergent Powder 7kg",
+                    "qty": 1,
+                    "cost": 730
+                },
+                {
+                    "name": "Parachute adv gold ccnt oil 500ml",
+                    "qty": 1,
+                    "cost": 258.16
+                },
+                {
+                    "name": "Colgate red Gel 150g * 2",
+                    "qty": 1,
+                    "cost": 131.18
+                },
+                {
+                    "name": "Sensodyne Fresh Gel 150g * 2",
+                    "qty": 1,
+                    "cost": 393
+                },
+                {
+                    "name": "Colgate Strong Dental Cream 100g",
+                    "qty": 1,
+                    "cost": 65.8
+                },
+                {
+                    "name": "Gala Super Scrub",
+                    "qty": 1,
+                    "cost": 65
+                },
+                {
+                    "name": "Cycle champa Agarabati 125g",
+                    "qty": 4,
+                    "cost": 150
+                },
+                {
+                    "name": "Haldiram Bhujia 1kg",
+                    "qty": 2,
+                    "cost": 306
+                },
+                {
+                    "name": "Fortune Mini Soya Chunks 200G",
+                    "qty": 1,
+                    "cost": 47
+                },
+                {
+                    "name": "IM Lite 50Prcnt LS calories sugar 1KG",
+                    "qty": 1,
+                    "cost": 215
+                },
+                {
+                    "name": "Dettol Liquid 1lt",
+                    "qty": 1,
+                    "cost": 427.58
+                },
+                {
+                    "name": "Fiama Gel Bar 125G*5",
+                    "qty": 1,
+                    "cost": 159.66
+                },
+                {
+                    "name": "Loose Urad wash gota",
+                    "qty": 3.102,
+                    "cost": 313.302
+                },
+                {
+                    "name": "Biriyani basmati rice",
+                    "qty": 1.984,
+                    "cost": 168.64
+                },
+                {
+                    "name": "Loose toor dal",
+                    "qty": 5.104,
+                    "cost": 586.96
+                },
+                {
+                    "name": "Biotique Shampoo 650ml",
+                    "qty": 1,
+                    "cost": 399.42
+                },
+                {
+                    "name": "Loose Chakki Atta",
+                    "qty": 1.52,
+                    "cost": 51.68
+                },
+                {
+                    "name": "Bathmat",
+                    "qty": 2,
+                    "cost": 186
+                },
+                {
+                    "name": "Designer printed mat",
+                    "qty": 1,
+                    "cost": 249
+                },
+                {
+                    "name": "Wildstone Perfume",
+                    "qty": 1,
+                    "cost": 9
+                },
+                {
+                    "name": "Crystal Bounce Ball",
+                    "qty": 1,
+                    "cost": 149
+                },
+                {
+                    "name": "Fortune Refine Oil 1lt",
+                    "qty": 8,
+                    "cost": 1185
+                },
+                {
+                    "name": "Fortune Mustard Oil 1lt",
+                    "qty": 7,
+                    "cost": 1209.95
+                },
+                {
+                    "name": "Patala Chuda",
+                    "qty": 2,
+                    "cost": 100
+                },
+                {
+                    "name": "Ashribad Atta 5kg",
+                    "qty": 3,
+                    "cost": 720
+                },
+                {
+                    "name": "Suji",
+                    "qty": 2,
+                    "cost": 90
+                },
+                {
+                    "name": "Amul 1kg",
+                    "qty": 1,
+                    "cost": 435
+                },
+                {
+                    "name": "Tikka Lal 100g",
+                    "qty": 1,
+                    "cost": 50
+                },
+                {
+                    "name": "Chowmin 1kg",
+                    "qty": 2,
+                    "cost": 130
+                },
+                {
+                    "name": "Dalchini Cinnamon 100g",
+                    "qty": 1,
+                    "cost": 40
+                },
+                {
+                    "name": "Elaichi 25g",
+                    "qty": 2,
+                    "cost": 170
+                },
+                {
+                    "name": "Gota Masala",
+                    "qty": 4,
+                    "cost": 120
+                },
+                {
+                    "name": "Tej Patta 50g",
+                    "qty": 2,
+                    "cost": 20
+                },
+                {
+                    "name": "Guda 1kg Cup",
+                    "qty": 2,
+                    "cost": 130
+                },
+                {
+                    "name": "Corn flour",
+                    "qty": 1,
+                    "cost": 35
+                },
+                {
+                    "name": "Loose Soya Chunk 1KG",
+                    "qty": 0.25,
+                    "cost": 25
+                },
+                {
+                    "name": "Match Box",
+                    "qty": 2,
+                    "cost": 20
+                },
+                {
+                    "name": "Tata soulful Mlt Muesli 700g",
+                    "qty": 1,
+                    "cost": 244.45
+                },
+                {
+                    "name": "Kellogs real almond honey cornflakes 1KG",
+                    "qty": 2,
+                    "cost": 732
+                },
+                {
+                    "name": "Kellogs Oats 900G",
+                    "qty": 1,
+                    "cost": 163
+                },
+                {
+                    "name": "Loose Dhania Coriander whole 1kg",
+                    "qty": 0.434,
+                    "cost": 78.12
+                },
+                {
+                    "name": "Fennel 50g",
+                    "qty": 4,
+                    "cost": 70
+                },
+                {
+                    "name": "Juani Ajwain 100g",
+                    "qty": 2.5,
+                    "cost": 90
+                },
+                {
+                    "name": "Misri Rock sugar 1kg",
+                    "qty": 1,
+                    "cost": 90
+                },
+                {
+                    "name": "Clinic plus sachet",
+                    "qty": 2,
+                    "cost": 30
+                },
+                {
+                    "name": "Chowmin Masala",
+                    "qty": 4,
+                    "cost": 20
+                },
+                {
+                    "name": "Kaju Gunda 100G",
+                    "qty": 1,
+                    "cost": 65
+                },
+                {
+                    "name": "Charu Magaj 100G",
+                    "qty": 1,
+                    "cost": 65
+                }
+            ],
+            "total": 15691.82
+        }
+    ],
+    "shopping_lists": []
 }
