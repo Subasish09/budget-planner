@@ -57,45 +57,82 @@
 
     <!-- Modal -->
     <div class="modal-overlay" id="sub-modal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 id="modal-title">Add Subscription</h3>
-                <button class="close-modal" id="close-modal"><i class="fas fa-times"></i></button>
+        <div class="modal" style="max-width: 400px; padding: 2rem;">
+            <div class="modal-header" style="justify-content: center; margin-bottom: 2rem; position: relative;">
+                <h3 id="modal-title" style="font-size: 1.5rem;">Add Subscription</h3>
+                <button class="close-modal" id="close-modal"
+                    style="position: absolute; right: 0; background: rgba(255,255,255,0.1); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i
+                        class="fas fa-times"></i></button>
             </div>
-            <div class="modal-body">
+
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 1.25rem;">
+
+                <!-- Service Name with Logo Preview Support (Future) -->
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" id="sub-name" placeholder="Netflix, Spotify...">
+                    <label
+                        style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">Service
+                        Name</label>
+                    <input type="text" id="sub-name" placeholder="Netflix, Hotstar, Zomato..."
+                        style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-size: 1rem;">
                 </div>
+
+                <!-- Cost Input styled big -->
                 <div class="form-group">
-                    <label>Cost</label>
-                    <div class="amount-input">
-                        <span class="currency">₹</span>
-                        <input type="number" id="sub-cost" placeholder="0">
+                    <label
+                        style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">Monthly/Yearly
+                        Cost</label>
+                    <div class="amount-input" style="position: relative;">
+                        <span
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: var(--text-secondary);">₹</span>
+                        <input type="number" id="sub-cost" placeholder="0"
+                            style="width: 100%; padding: 1rem 1rem 1rem 2.5rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-size: 1.2rem; font-weight: 600;">
                     </div>
                 </div>
+
+                <!-- Cycle Chips -->
                 <div class="form-group">
-                    <label>Cycle</label>
-                    <div style="display: flex; gap: 1rem;">
-                        <button class="chip active" data-value="monthly">Monthly</button>
-                        <button class="chip" data-value="yearly">Yearly</button>
+                    <label
+                        style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">Billing
+                        Cycle</label>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button class="chip active" data-value="monthly"
+                            style="flex: 1; padding: 0.75rem; border-radius: 10px; border: 1px solid var(--primary); background: rgba(236, 72, 153, 0.2); color: white; cursor: pointer;">Monthly</button>
+                        <button class="chip" data-value="yearly"
+                            style="flex: 1; padding: 0.75rem; border-radius: 10px; border: 1px solid var(--glass-border); background: transparent; color: var(--text-secondary); cursor: pointer;">Yearly</button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Due Date (Day of Month)</label>
-                    <input type="number" id="sub-date" min="1" max="31" placeholder="e.g 15">
-                </div>
-                <div class="form-group">
-                    <label>Category</label>
-                    <select id="sub-category">
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Utilities">Utilities</option>
-                        <option value="Software">Software</option>
-                        <option value="Other">Other</option>
-                    </select>
+
+                <div style="display: flex; gap: 1rem;">
+                    <!-- Due Date -->
+                    <div class="form-group" style="flex: 1;">
+                        <label
+                            style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">Due
+                            Date</label>
+                        <input type="number" id="sub-date" min="1" max="31" placeholder="Day (1-31)"
+                            style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-size: 1rem;">
+                    </div>
+
+                    <!-- Category/Type -->
+                    <div class="form-group" style="flex: 1;">
+                        <label
+                            style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">Category</label>
+                        <select id="sub-category"
+                            style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-size: 1rem; appearance: none;">
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Food">Food & Dining</option>
+                            <option value="Software">Software</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <button class="btn-primary" id="save-sub-btn">Save Subscription</button>
+
+            <button class="btn-primary" id="save-sub-btn"
+                style="width: 100%; margin-top: 2rem; padding: 1rem; font-size: 1.1rem; border-radius: 12px; background: linear-gradient(135deg, var(--primary), #db2777); border: none; color: white; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);">
+                Save Subscription
+            </button>
         </div>
     </div>
 
