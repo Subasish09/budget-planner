@@ -90,19 +90,26 @@ function updateStats() {
     document.getElementById('total-yearly').textContent = formatMoney(yearlyTotal);
 }
 
-// Helper: Get Logo URL
+// Helper: Get Logo URL (Using Brandfetch for reliability)
 function getLogoUrl(name, savedDomain) {
-    if (savedDomain) return `https://logo.clearbit.com/${savedDomain}`;
+    let domain = savedDomain;
 
-    // Attempt detection
-    const lowerName = name.toLowerCase().replace(/\s/g, '');
-    for (const [key, domain] of Object.entries(DOMAIN_MAP)) {
-        if (lowerName.includes(key)) {
-            return `https://logo.clearbit.com/${domain}`;
+    if (!domain) {
+        const lowerName = name.toLowerCase().replace(/\s/g, '');
+        for (const [key, d] of Object.entries(DOMAIN_MAP)) {
+            if (lowerName.includes(key)) {
+                domain = d;
+                break;
+            }
         }
     }
 
-    return null; // Fallback to icon
+    // Fallback: If no map match, assume name is domain-like or append .com
+    if (!domain && name.includes('.')) domain = name;
+
+    if (domain) return `https://cdn.brandfetch.io/${domain}/w/128/h/128`;
+
+    return null;
 }
 
 // Render List
@@ -123,8 +130,10 @@ function renderSubscriptions() {
         if (logoUrl) {
             iconHTML = `
                 <div class="sub-logo-wrapper">
-                    <img src="${logoUrl}" class="sub-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <i class="fas fa-receipt sub-logo-placeholder" style="display:none;"></i>
+                    <img src="${logoUrl}" class="sub-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="sub-logo-placeholder" style="display:none; width: 100%; height: 100%; align-items: center; justify-content: center;">
+                        <i class="fas fa-receipt"></i>
+                    </div>
                 </div>
             `;
         } else {
@@ -157,7 +166,8 @@ function addSubscription() {
     const name = document.getElementById('sub-name').value;
     const cost = parseFloat(document.getElementById('sub-cost').value);
     const date = parseInt(document.getElementById('sub-date').value);
-    const category = document.getElementById('sub-category').value;
+    // Get from hidden input
+    const category = document.getElementById('sub-category').value || 'Other';
     const cycleBtn = document.querySelector('.cycle-btn.active');
     const cycle = cycleBtn ? cycleBtn.dataset.value : 'monthly';
 
@@ -227,6 +237,37 @@ document.querySelectorAll('.cycle-btn').forEach(chip => {
         chip.classList.add('active');
     });
 });
+
+// Custom Dropdown Logic
+const catSelect = document.getElementById('custom-category-select');
+const catOptions = document.getElementById('category-options');
+const catText = document.getElementById('selected-category-text');
+const catHidden = document.getElementById('sub-category');
+
+if (catSelect) {
+    catSelect.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent modal close or other bubbles
+        const isVisible = catOptions.style.display === 'block';
+        catOptions.style.display = isVisible ? 'none' : 'block';
+    });
+
+    document.querySelectorAll('.cat-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+            const val = opt.getAttribute('data-value');
+            catHidden.value = val;
+            catText.textContent = val;
+            catOptions.style.display = 'none';
+            e.stopPropagation();
+        });
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (!catSelect.contains(e.target)) {
+            catOptions.style.display = 'none';
+        }
+    });
+}
 
 saveBtn.onclick = addSubscription;
 
