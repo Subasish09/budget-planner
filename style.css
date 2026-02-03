@@ -1197,6 +1197,8 @@ select,
     gap: 0.5rem;
     font-weight: 500;
     transition: var(--transition);
+}
+
     /* =========================================
    Subscription Manager UI
    ========================================= */
