@@ -65,7 +65,18 @@
       "domain": "primevideo.com",
       "lastPaid": null,
       "paymentHistory": []
+    },
+    {
+      "id": 1770141060544,
+      "name": "Times Prime",
+      "cost": 999,
+      "cycle": "yearly",
+      "date": "2026-11-20",
+      "category": "Other",
+      "domain": "primevideo.com",
+      "lastPaid": null,
+      "paymentHistory": []
     }
   ],
-  "lastSync": "2026-02-03T15:30:32.170Z"
+  "lastSync": "2026-02-03T17:51:00.545Z"
 }
