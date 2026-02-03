@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Subscriptions - Budget Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="auth.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h1>Subscriptions</h1>
+                <div class="user-greeting">Recurring</div>
+            </div>
+
+            <!-- Stats -->
+            <div class="dashboard-grid">
+                <div class="stat-card" style="border-color: rgba(99, 102, 241, 0.2);">
+                    <div class="stat-label">Monthly Cost</div>
+                    <div class="stat-value" id="total-monthly">₹0</div>
+                </div>
+                <div class="stat-card" style="border-color: rgba(236, 72, 153, 0.2);">
+                    <div class="stat-label">Yearly Cost</div>
+                    <div class="stat-value" id="total-yearly">₹0</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Subscription List -->
+        <div class="grocery-section">
+            <div class="section-header">
+                <h2>Active Subscriptions</h2>
+            </div>
+            <div id="subscription-list" class="transaction-list">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FAB -->
+    <button class="fab" id="add-sub-btn">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="sub-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">Add Subscription</h3>
+                <button class="close-modal" id="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="sub-name" placeholder="Netflix, Spotify...">
+                </div>
+                <div class="form-group">
+                    <label>Cost</label>
+                    <div class="amount-input">
+                        <span class="currency">₹</span>
+                        <input type="number" id="sub-cost" placeholder="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Cycle</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="chip active" data-value="monthly">Monthly</button>
+                        <button class="chip" data-value="yearly">Yearly</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Due Date (Day of Month)</label>
+                    <input type="number" id="sub-date" min="1" max="31" placeholder="e.g 15">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="sub-category">
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Software">Software</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn-primary" id="save-sub-btn">Save Subscription</button>
+        </div>
+    </div>
+
+    <script src="subscriptions.js"></script>
+</body>
+
+</html>
