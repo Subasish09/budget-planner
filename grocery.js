@@ -151,12 +151,13 @@ function renderUI() {
     const viewMode = periodSelect.value;
 
     if (viewMode === 'overview') {
+        listTitle.style.display = 'block';
         listTitle.innerText = "Grocery History";
         renderOverview();
     } else {
         const list = myGroceryLists.find(l => l.id === viewMode);
         if (list) {
-            listTitle.innerText = list.id;
+            listTitle.style.display = 'none'; // Hide duplicate title
             renderDetailView(list);
         } else {
             renderOverview(); // Fallback
@@ -801,6 +802,7 @@ function showSuggestions(query) {
             item.addEventListener('click', () => {
                 searchInput.value = name;
                 searchSuggestionsEl.classList.remove('active');
+                searchSuggestionsEl.innerHTML = ''; // Destroy suggestions
                 searchItems();
             });
 
@@ -843,6 +845,7 @@ searchInput.addEventListener('keydown', (e) => {
             if (x) x[currentFocus].click();
         } else {
             searchSuggestionsEl.classList.remove('active');
+            searchSuggestionsEl.innerHTML = ''; // Destroy suggestions
             searchItems();
         }
     }

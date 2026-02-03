@@ -28,8 +28,7 @@
             </div>
 
             <div class="header-controls">
-                <select id="period-select" class="period-dropdown"
-                    style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-card); color: var(--text-primary);">
+                <select id="period-select" class="period-dropdown" class="g-input">
                     <option value="overview">Overview</option>
                     <!-- Options populated by JS -->
                 </select>
@@ -76,18 +75,20 @@
             <!-- Removed explicit H2 header for cleaner look, arguably self-explanatory with placeholder -->
 
             <div class="search-container" style="position: relative; margin: 0 auto; max-width: 600px;">
-                <div class="search-wrapper">
-                    <i class="fas fa-search search-icon"></i>
+                <div class="grocery-search-wrapper" style="position: relative; width: 100%; display: block;">
+                    <i class="fas fa-search search-icon"
+                        style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none; z-index: 20;"></i>
                     <input type="text" id="item-search-input" placeholder="Search item history..."
                         class="g-search-input" autocomplete="off">
-                    <i class="fas fa-times search-reset" id="search-reset-btn"></i>
+                    <i class="fas fa-times search-reset" id="search-reset-btn"
+                        style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); cursor: pointer; z-index: 20; padding: 0.5rem; transition: all 0.2s ease;"></i>
                 </div>
                 <!-- Custom Suggestions Dropdown -->
                 <div id="search-suggestions" class="suggestions-dropdown"></div>
 
                 <!-- Hidden container for results to appear below nicely -->
                 <div id="search-results"
-                    style="display: none; margin-top: 1rem; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--glass-border); padding: 1.5rem; animation: slideDown 0.3s ease-out;">
+                    style="display: none; margin-top: 1rem; background: #0f172a; border-radius: 16px; border: 1px solid var(--glass-border); padding: 1.5rem; position: relative; z-index: 10; animation: slideDown 0.3s ease-out;">
                 </div>
             </div>
         </div>
