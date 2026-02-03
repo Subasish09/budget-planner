@@ -1058,3 +1058,118 @@ async function syncToGitHub() {
 }
 
 init();
+
+// ========================================
+// Tab Navigation Logic (Shopping List Feature)
+// ========================================
+
+function switchTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.tab === tabName) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Update view sections
+    document.querySelectorAll('.view-section').forEach(view => {
+        view.style.display = 'none';
+    });
+    
+    const activeView = document.getElementById(`${tabName}-view`);
+    if (activeView) {
+        activeView.style.display = 'block';
+        
+        // Render content based on active tab
+        if (tabName === 'shopping') {
+            renderShoppingLists();
+        } else if (tabName === 'inventory') {
+            renderInventory();
+        }
+    }
+}
+
+// ========================================
+// Shopping Lists Functions (Placeholder)
+// ========================================
+
+function renderShoppingLists() {
+    const container = document.getElementById('shopping-lists-container');
+    // TODO: Implement shopping list rendering
+    console.log('Rendering shopping lists...');
+}
+
+function createShoppingList() {
+    alert('Shopping list creation coming in Phase 2!');
+    // TODO: Implement shopping list creation modal
+}
+
+// ========================================
+// Inventory Browser Functions (Placeholder)
+// ========================================
+
+function renderInventory() {
+    const container = document.getElementById('inventory-container');
+    const countEl = document.getElementById('inventory-count');
+    
+    // Get inventory from imported data
+    if (!window.groceryData || !window.groceryData.inventory) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No inventory data available</p>';
+        return;
+    }
+    
+    const inventory = window.groceryData.inventory;
+    countEl.textContent = inventory.length;
+    
+    // Render inventory items
+    container.innerHTML = inventory.map(item => `
+        <div class="stat-card" style="padding: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: 600; color: var(--text-primary);">${item.name}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                        ${item.category || 'General'} • ${item.unit}
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 1.1rem; font-weight: 700; color: var(--success);">
+                        ₹${item.current_price}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    // Add search functionality
+    const searchInput = document.getElementById('inventory-search');
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const filtered = inventory.filter(item => 
+            item.name.toLowerCase().includes(query) ||
+            (item.category && item.category.toLowerCase().includes(query))
+        );
+        
+        container.innerHTML = filtered.map(item => `
+            <div class="stat-card" style="padding: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-primary);">${item.name}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                            ${item.category || 'General'} • ${item.unit}
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--success);">
+                            ₹${item.current_price}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    });
+}
+
+// Make functions globally accessible
+window.switchTab = switchTab;
+window.createShoppingList = createShoppingList;

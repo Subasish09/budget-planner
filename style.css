@@ -2450,3 +2450,89 @@ select,
     color: var(--text-primary);
     transition: var(--transition);
 }
+/* ========================================
+   Tab Navigation Styles (Shopping List Feature)
+   ======================================== */
+
+.tab-navigation {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    padding: 0.5rem;
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.tab-btn i {
+    font-size: 1rem;
+}
+
+/* View Sections */
+.view-section {
+    animation: fadeIn 0.3s ease;
+}
+
+.view-section.hidden {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .tab-btn {
+        font-size: 0.85rem;
+        padding: 0.65rem 1rem;
+    }
+    
+    .tab-btn i {
+        font-size: 0.9rem;
+    }
+    
+    /* Hide text on very small screens, show icons only */
+    @media (max-width: 480px) {
+        .tab-btn {
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+        }
+    }
+}

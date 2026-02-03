@@ -38,192 +38,252 @@
             </div>
         </header>
 
-        <!-- Stats Grid -->
-        <div class="dashboard-grid">
-            <div class="stat-card balance">
-                <div class="stat-label">Total Annual Spend</div>
-                <div class="stat-value" id="annual-total">₹0.00</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Avg. Cost / List</div>
-                <div class="stat-value" id="avg-cost">₹0.00</div>
-            </div>
-            <div class="stat-card income">
-                <div class="stat-label">Highest Spend</div>
-                <div class="stat-value" id="highest-spend">₹0.00</div>
-            </div>
-            <div class="stat-card expense">
-                <div class="stat-label">Most Valuable Item</div>
-                <div class="stat-value" id="mvp-item" style="font-size: 1.3rem;">-</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Spending Trend</div>
-                <div class="stat-value" id="spending-trend">-</div>
-            </div>
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="history" onclick="switchTab('history')">
+                <i class="fas fa-history"></i> History
+            </button>
+            <button class="tab-btn" data-tab="shopping" onclick="switchTab('shopping')">
+                <i class="fas fa-shopping-cart"></i> Shopping Lists
+            </button>
+            <button class="tab-btn" data-tab="inventory" onclick="switchTab('inventory')">
+                <i class="fas fa-boxes"></i> Inventory
+            </button>
         </div>
 
-        <!-- Dedicated Spending Chart Section -->
-        <div class="grocery-section" style="margin-bottom: 2rem;">
-            <div class="stat-card" style="width: 100%; padding: 1.5rem;">
-                <div class="stat-label">Spending History (Last 6 Periods)</div>
-                <div id="spending-chart-container" style="width: 100%; margin-top: 1rem;"></div>
-            </div>
-        </div>
+        <!-- History View (Existing Content) -->
+        <div id="history-view" class="view-section active">
 
-        <!-- Search & Insights -->
-        <div class="grocery-section" style="margin-bottom: 2rem;">
-            <!-- Removed explicit H2 header for cleaner look, arguably self-explanatory with placeholder -->
-
-            <div class="search-container" style="position: relative; margin: 0 auto; max-width: 600px;">
-                <div class="grocery-search-wrapper" style="position: relative; width: 100%; display: block;">
-                    <i class="fas fa-search search-icon"
-                        style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none; z-index: 20;"></i>
-                    <input type="text" id="item-search-input" placeholder="Search item history..."
-                        class="g-search-input" autocomplete="off">
-                    <i class="fas fa-times search-reset" id="search-reset-btn"
-                        style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); cursor: pointer; z-index: 20; padding: 0.5rem; transition: all 0.2s ease;"></i>
+            <!-- Stats Grid -->
+            <div class="dashboard-grid">
+                <div class="stat-card balance">
+                    <div class="stat-label">Total Annual Spend</div>
+                    <div class="stat-value" id="annual-total">₹0.00</div>
                 </div>
-                <!-- Custom Suggestions Dropdown -->
-                <div id="search-suggestions" class="suggestions-dropdown"></div>
-
-                <!-- Hidden container for results to appear below nicely -->
-                <div id="search-results"
-                    style="display: none; margin-top: 1rem; background: #0f172a; border-radius: 16px; border: 1px solid var(--glass-border); padding: 1.5rem; position: relative; z-index: 10; animation: slideDown 0.3s ease-out;">
+                <div class="stat-card">
+                    <div class="stat-label">Avg. Cost / List</div>
+                    <div class="stat-value" id="avg-cost">₹0.00</div>
+                </div>
+                <div class="stat-card income">
+                    <div class="stat-label">Highest Spend</div>
+                    <div class="stat-value" id="highest-spend">₹0.00</div>
+                </div>
+                <div class="stat-card expense">
+                    <div class="stat-label">Most Valuable Item</div>
+                    <div class="stat-value" id="mvp-item" style="font-size: 1.3rem;">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Spending Trend</div>
+                    <div class="stat-value" id="spending-trend">-</div>
                 </div>
             </div>
+
+            <!-- Dedicated Spending Chart Section -->
+            <div class="grocery-section" style="margin-bottom: 2rem;">
+                <div class="stat-card" style="width: 100%; padding: 1.5rem;">
+                    <div class="stat-label">Spending History (Last 6 Periods)</div>
+                    <div id="spending-chart-container" style="width: 100%; margin-top: 1rem;"></div>
+                </div>
+            </div>
+
+            <!-- Search & Insights -->
+            <div class="grocery-section" style="margin-bottom: 2rem;">
+                <!-- Removed explicit H2 header for cleaner look, arguably self-explanatory with placeholder -->
+
+                <div class="search-container" style="position: relative; margin: 0 auto; max-width: 600px;">
+                    <div class="grocery-search-wrapper" style="position: relative; width: 100%; display: block;">
+                        <i class="fas fa-search search-icon"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none; z-index: 20;"></i>
+                        <input type="text" id="item-search-input" placeholder="Search item history..."
+                            class="g-search-input" autocomplete="off">
+                        <i class="fas fa-times search-reset" id="search-reset-btn"
+                            style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); cursor: pointer; z-index: 20; padding: 0.5rem; transition: all 0.2s ease;"></i>
+                    </div>
+                    <!-- Custom Suggestions Dropdown -->
+                    <div id="search-suggestions" class="suggestions-dropdown"></div>
+
+                    <!-- Hidden container for results to appear below nicely -->
+                    <div id="search-results"
+                        style="display: none; margin-top: 1rem; background: #0f172a; border-radius: 16px; border: 1px solid var(--glass-border); padding: 1.5rem; position: relative; z-index: 10; animation: slideDown 0.3s ease-out;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- History/Lists -->
+            <div class="grocery-section">
+                <div class="section-header">
+                    <h2 id="list-title">Grocery History</h2>
+                    <div id="list-date" style="font-size: 0.9rem; color: var(--text-secondary);"></div>
+                </div>
+                <div class="grocery-grid" id="grocery-lists-container">
+                    <!-- Lists or Single List Table injected here -->
+                </div>
+            </div>
         </div>
 
-        <!-- History/Lists -->
-        <div class="grocery-section">
-            <div class="section-header">
-                <h2 id="list-title">Grocery History</h2>
-                <div id="list-date" style="font-size: 0.9rem; color: var(--text-secondary);"></div>
-            </div>
-            <div class="grocery-grid" id="grocery-lists-container">
-                <!-- Lists or Single List Table injected here -->
-            </div>
-        </div>
-    </div>
+        </div> <!-- End History View -->
 
-    <!-- Grocery Modal -->
-    <div class="modal-overlay" id="grocery-modal-overlay">
-        <div class="modal grocery-modal">
-            <div class="modal-header">
-                <h2>Grocery List Details</h2>
-                <div style="display: flex; gap: 1rem; align-items: center;">
-                    <span id="grocery-total-display"
-                        style="font-size: 1.2rem; font-weight: 700; color: var(--success);">₹0.00</span>
-                    <button class="close-modal" id="close-grocery-modal">
-                        <i class="fas fa-times"></i>
+        <!-- Shopping Lists View -->
+        <div id="shopping-view" class="view-section" style="display: none;">
+            <div class="grocery-section">
+                <div class="section-header">
+                    <h2>Shopping Lists</h2>
+                    <button class="fab-small" onclick="createShoppingList()">
+                        <i class="fas fa-plus"></i> Create List
                     </button>
                 </div>
+                <div id="shopping-lists-container" class="grocery-grid">
+                    <!-- Shopping lists will be rendered here -->
+                    <div class="empty-state" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-shopping-cart" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                        <p style="font-size: 1.1rem;">No shopping lists yet</p>
+                        <p style="font-size: 0.9rem; opacity: 0.7;">Create your first shopping list to get started!</p>
+                    </div>
+                </div>
             </div>
-            <form id="grocery-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Period Year</label>
-                        <select id="g-year" required>
-                            <!-- Populated by JS -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Start Month</label>
-                        <select id="g-month" required>
-                            <option value="Jan">January</option>
-                            <option value="Feb">February</option>
-                            <option value="Mar">March</option>
-                            <option value="Apr">April</option>
-                            <option value="May">May</option>
-                            <option value="Jun">June</option>
-                            <option value="Jul">July</option>
-                            <option value="Aug">August</option>
-                            <option value="Sept">September</option>
-                            <option value="Oct">October</option>
-                            <option value="Nov">November</option>
-                            <option value="Dec">December</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Date (Optional)</label>
-                        <select id="g-date">
-                            <!-- Populated by JS 1-31 -->
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grocery-items-container">
-                    <table class="grocery-table">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th style="width: 15%;">Qty</th>
-                                <th style="width: 20%;">Unit Price (₹)</th>
-                                <th style="width: 20%;">Total (₹)</th>
-                                <th style="width: 40px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="grocery-items-body">
-                            <!-- Rows go here -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn-text" id="add-grocery-row-btn">
-                        <i class="fas fa-plus"></i> Add Item
-                    </button>
-                    <button type="submit" class="btn-submit">Save List</button>
-                </div>
-            </form>
         </div>
-    </div>
 
-    <!-- Settings/Sync Modal -->
-    <div class="modal-overlay" id="settings-modal-overlay">
-        <div class="modal grocery-modal">
-            <div class="modal-header">
-                <h2>GitHub Sync Settings</h2>
-                <button class="close-modal" id="close-settings-modal"><i class="fas fa-times"></i></button>
+        <!-- Inventory View -->
+        <div id="inventory-view" class="view-section" style="display: none;">
+            <div class="grocery-section">
+                <div class="section-header">
+                    <h2>Inventory Browser</h2>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                        <span id="inventory-count">0</span> items
+                    </div>
+                </div>
+                
+                <!-- Search -->
+                <div class="search-container" style="margin-bottom: 1.5rem;">
+                    <input type="text" id="inventory-search" placeholder="Search inventory..." class="g-search-input">
+                </div>
+
+                <div id="inventory-container" class="grocery-grid">
+                    <!-- Inventory items will be rendered here -->
+                </div>
             </div>
-            <form id="settings-form">
-                <div class="form-group">
-                    <label>GitHub Username</label>
-                    <input type="text" id="gh-username" placeholder="e.g. johndoe" required>
+        </div>
+
+    </div> <!-- End Container -->
+        <!-- Grocery Modal -->
+        <div class="modal-overlay" id="grocery-modal-overlay">
+            <div class="modal grocery-modal">
+                <div class="modal-header">
+                    <h2>Grocery List Details</h2>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <span id="grocery-total-display"
+                            style="font-size: 1.2rem; font-weight: 700; color: var(--success);">₹0.00</span>
+                        <button class="close-modal" id="close-grocery-modal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Repository Name</label>
-                    <input type="text" id="gh-repo" placeholder="e.g. budget-planner" required>
+                <form id="grocery-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Period Year</label>
+                            <select id="g-year" required>
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Start Month</label>
+                            <select id="g-month" required>
+                                <option value="Jan">January</option>
+                                <option value="Feb">February</option>
+                                <option value="Mar">March</option>
+                                <option value="Apr">April</option>
+                                <option value="May">May</option>
+                                <option value="Jun">June</option>
+                                <option value="Jul">July</option>
+                                <option value="Aug">August</option>
+                                <option value="Sept">September</option>
+                                <option value="Oct">October</option>
+                                <option value="Nov">November</option>
+                                <option value="Dec">December</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date (Optional)</label>
+                            <select id="g-date">
+                                <!-- Populated by JS 1-31 -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grocery-items-container">
+                        <table class="grocery-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th style="width: 15%;">Qty</th>
+                                    <th style="width: 20%;">Unit Price (₹)</th>
+                                    <th style="width: 20%;">Total (₹)</th>
+                                    <th style="width: 40px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="grocery-items-body">
+                                <!-- Rows go here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-text" id="add-grocery-row-btn">
+                            <i class="fas fa-plus"></i> Add Item
+                        </button>
+                        <button type="submit" class="btn-submit">Save List</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Settings/Sync Modal -->
+        <div class="modal-overlay" id="settings-modal-overlay">
+            <div class="modal grocery-modal">
+                <div class="modal-header">
+                    <h2>GitHub Sync Settings</h2>
+                    <button class="close-modal" id="close-settings-modal"><i class="fas fa-times"></i></button>
                 </div>
-                <div class="form-group">
-                    <label>Personal Access Token (PAT) <span style="font-size:0.7em; opacity:0.7;">Stored
-                            Locally</span></label>
-                    <input type="password" id="gh-pat" placeholder="ghp_xxxxxxxxxxxx" required>
-                </div>
-                <div class="form-group">
+                <form id="settings-form">
+                    <div class="form-group">
+                        <label>GitHub Username</label>
+                        <input type="text" id="gh-username" placeholder="e.g. johndoe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Repository Name</label>
+                        <input type="text" id="gh-repo" placeholder="e.g. budget-planner" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Personal Access Token (PAT) <span style="font-size:0.7em; opacity:0.7;">Stored
+                                Locally</span></label>
+                        <input type="password" id="gh-pat" placeholder="ghp_xxxxxxxxxxxx" required>
+                    </div>
+                    <div class="form-group">
+                        <div style="display: flex; gap: 1rem;">
+                            <div style="flex: 1;">
+                                <label>Branch</label>
+                                <input type="text" id="gh-branch" value="main" required>
+                            </div>
+                            <div style="flex: 2;">
+                                <label>File Path</label>
+                                <input type="text" id="gh-path" value="grocery_data.json" required>
+                            </div>
+                        </div>
+                    </div>
+
                     <div style="display: flex; gap: 1rem;">
-                        <div style="flex: 1;">
-                            <label>Branch</label>
-                            <input type="text" id="gh-branch" value="main" required>
-                        </div>
-                        <div style="flex: 2;">
-                            <label>File Path</label>
-                            <input type="text" id="gh-path" value="grocery_data.json" required>
-                        </div>
+                        <button type="button" class="btn-submit" onclick="saveSettings()"
+                            style="flex: 1; background: #3f3f46;">Save Config</button>
+                        <button type="button" class="btn-submit" onclick="syncToGitHub()" style="flex: 1;">Sync Now <i
+                                class="fas fa-cloud-upload-alt"></i></button>
                     </div>
-                </div>
-
-                <div style="display: flex; gap: 1rem;">
-                    <button type="button" class="btn-submit" onclick="saveSettings()"
-                        style="flex: 1; background: #3f3f46;">Save Config</button>
-                    <button type="button" class="btn-submit" onclick="syncToGitHub()" style="flex: 1;">Sync Now <i
-                            class="fas fa-cloud-upload-alt"></i></button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <script src="grocery_data.js"></script>
-    <script src="grocery.js"></script>
+        <script src="grocery_data.js"></script>
+        <script src="grocery.js"></script>
 </body>
 
 </html>
