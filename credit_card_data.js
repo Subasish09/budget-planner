@@ -28,7 +28,9 @@ window.creditCardDataRaw = [
                         "amount": 150000,
                         "date": "2026-01-31"
                     }
-                ]
+                ],
+                "isPaid": true,
+                "paidDate": "2026-02-03"
             }
         ]
     },
