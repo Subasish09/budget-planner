@@ -1,17 +1,6 @@
 {
   "subscriptions": [
     {
-      "id": 2,
-      "name": "Spotify",
-      "cost": 119,
-      "cycle": "monthly",
-      "date": 21,
-      "category": "Entertainment",
-      "domain": "spotify.com",
-      "lastPaid": null,
-      "paymentHistory": []
-    },
-    {
       "id": 3,
       "name": "Amazon Prime",
       "cost": 1499,
@@ -23,5 +12,5 @@
       "paymentHistory": []
     }
   ],
-  "lastSync": "2026-02-03T15:05:40.929Z"
+  "lastSync": "2026-02-03T15:05:44.229Z"
 }
