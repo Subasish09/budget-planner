@@ -35,7 +35,8 @@ const DOMAIN_MAP = {
     'ola': 'olacabs.com',
     'blinkit': 'blinkit.com',
     'zepto': 'zeptonow.com',
-    'bigbasket': 'bigbasket.com'
+    'bigbasket': 'bigbasket.com',
+    'flipkart': 'flipkart.com'
 };
 
 // Helper: Calculate Next Renewal Date
