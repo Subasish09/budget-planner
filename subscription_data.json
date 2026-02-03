@@ -1,16 +1,4 @@
 {
-  "subscriptions": [
-    {
-      "id": 3,
-      "name": "Amazon Prime",
-      "cost": 1499,
-      "cycle": "yearly",
-      "date": "2026-08-15",
-      "category": "Entertainment",
-      "domain": "amazon.in",
-      "lastPaid": null,
-      "paymentHistory": []
-    }
-  ],
-  "lastSync": "2026-02-03T15:05:44.229Z"
+  "subscriptions": [],
+  "lastSync": "2026-02-03T15:05:51.812Z"
 }
