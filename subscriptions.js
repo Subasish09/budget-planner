@@ -6,8 +6,8 @@ let subscriptions = [];
 const DOMAIN_MAP = {
     'netflix': 'netflix.com',
     'spotify': 'spotify.com',
-    'prime': 'amazon.in',
-    'amazon': 'amazon.in',
+    'prime': 'primevideo.com',
+    'amazon': 'primevideo.com',
     'hotstar': 'hotstar.com',
     'disney': 'hotstar.com',
     'zee5': 'zee5.com',
