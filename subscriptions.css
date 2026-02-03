@@ -351,7 +351,7 @@
     }
 
     /* Modal - Bottom Sheet Style */
-    .modal {
+    .subscription-modal {
         width: 100%;
         max-width: 100%;
         height: auto;
@@ -375,7 +375,7 @@
         padding: 0;
     }
 
-    .modal-overlay.active .modal {
+    .modal-overlay.active .subscription-modal {
         transform: translateY(0);
     }
 
@@ -415,7 +415,7 @@
 
     /* Form Rows - Stack on mobile */
     .form-row {
-        flex-direction: column;
+        flex-direction: column !important;
         gap: 1rem;
     }
 
