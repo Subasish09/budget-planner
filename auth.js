@@ -1,10 +1,10 @@
 // Authentication & Privacy Lock Logic
 
 const AUTH_CONFIG = {
-    // Default PIN: 0000
+    // Default PIN: 2502
     // Simple client-side check. For higher security, this should be server-side, 
     // but for a static site/privacy layer, this works as a deterrent.
-    PIN: '0000',
+    PIN: '2502',
     SESSION_KEY: 'budget_planner_auth_token'
 };
 
