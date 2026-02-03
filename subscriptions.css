@@ -415,8 +415,19 @@
 
     /* Form Rows - Stack on mobile */
     .form-row {
-        flex-direction: column !important;
-        gap: 1rem;
+        display: block !important;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .form-row .input-group {
+        width: 100% !important;
+        margin-bottom: 1rem;
+    }
+
+    /* Remove Flex gaps since we use margin */
+    .form-row {
+        gap: 0;
     }
 
     .btn-save {
