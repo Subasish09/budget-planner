@@ -173,8 +173,11 @@ async function migrateFromLocalStorage() {
 
 // Save Data to GitHub
 async function syncToGitHub(message = 'Update subscriptions') {
+    // ALWAYS save to localStorage first (critical for persistence without GitHub token)
+    localStorage.setItem('mySubscriptions', JSON.stringify(subscriptions));
+
     if (!githubSync.hasToken()) {
-        console.warn('GitHub sync not configured');
+        console.warn('GitHub sync not configured - data saved to localStorage only');
         return false;
     }
 
@@ -473,6 +476,9 @@ function renderSubscriptions() {
             <button class="btn-icon" onclick="markAsPaid(${sub.id})" title="Mark as Paid" style="margin-left: 0.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
                 <i class="fas fa-check"></i>
             </button>
+            <button class="btn-icon" onclick="editSubscription(${sub.id})" title="Edit" style="margin-left: 0.5rem; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: var(--primary); padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                <i class="fas fa-edit"></i>
+            </button>
             <button class="delete-btn" onclick="deleteSubscription(${sub.id})" style="margin-left: 0.5rem; background: none; border: none; color: var(--text-secondary); opacity: 0.5; transition: opacity 0.2s;"><i class="fas fa-times"></i></button>
         `;
         return item;
@@ -516,8 +522,12 @@ function getActionSuffix(d) {
     }
 }
 
-// Add Subscription
+// Add or Update Subscription
 async function addSubscription() {
+    const saveBtn = document.getElementById('save-sub-btn');
+    const editId = saveBtn.dataset.editId;
+    const isEditing = !!editId;
+
     const name = document.getElementById('sub-name').value;
     const cost = parseFloat(document.getElementById('sub-cost').value);
     const category = document.getElementById('sub-category').value || 'Other';
@@ -549,20 +559,38 @@ async function addSubscription() {
         }
     }
 
-    const newSub = {
-        id: Date.now(),
-        name,
-        cost,
-        cycle,
-        date,
-        category,
-        domain,
-        lastPaid: null,
-        paymentHistory: []
-    };
+    if (isEditing) {
+        // Update existing subscription
+        const subIndex = subscriptions.findIndex(s => s.id === parseInt(editId));
+        if (subIndex !== -1) {
+            subscriptions[subIndex] = {
+                ...subscriptions[subIndex],
+                name,
+                cost,
+                cycle,
+                date,
+                category,
+                domain
+            };
+            await syncToGitHub(`Updated subscription: ${name}`);
+        }
+    } else {
+        // Add new subscription
+        const newSub = {
+            id: Date.now(),
+            name,
+            cost,
+            cycle,
+            date,
+            category,
+            domain,
+            lastPaid: null,
+            paymentHistory: []
+        };
+        subscriptions.push(newSub);
+        await syncToGitHub(`Added subscription: ${name}`);
+    }
 
-    subscriptions.push(newSub);
-    await syncToGitHub(`Added subscription: ${name}`);
     renderSubscriptions();
     updateStats();
     closeModal();
@@ -576,6 +604,53 @@ function deleteSubscription(id) {
         renderSubscriptions();
         updateStats();
     }
+}
+
+// Edit subscription
+function editSubscription(id) {
+    const sub = subscriptions.find(s => s.id === id);
+    if (!sub) return;
+
+    // Populate modal with existing data
+    document.getElementById('sub-name').value = sub.name;
+    document.getElementById('sub-cost').value = sub.cost;
+    document.getElementById('sub-category').value = sub.category || 'Other';
+    document.getElementById('selected-category-text').textContent = sub.category || 'Other';
+
+    // Set cycle
+    document.querySelectorAll('.cycle-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.value === sub.cycle) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Set date based on cycle
+    const monthlyInput = document.getElementById('sub-date');
+    const yearlyInput = document.getElementById('sub-full-date');
+    const dateLabel = document.getElementById('date-label');
+
+    if (sub.cycle === 'monthly') {
+        monthlyInput.value = sub.date;
+        monthlyInput.style.display = 'block';
+        yearlyInput.style.display = 'none';
+        dateLabel.textContent = "Renewal Day (Next Month)";
+    } else {
+        yearlyInput.value = sub.date;
+        monthlyInput.style.display = 'none';
+        yearlyInput.style.display = 'block';
+        dateLabel.textContent = "Renewal Date";
+    }
+
+    // Store the ID for updating instead of creating new
+    document.getElementById('save-sub-btn').dataset.editId = id;
+
+    // Change button text
+    document.getElementById('save-sub-btn').textContent = 'Update Subscription';
+
+    // Open modal
+    document.getElementById('sub-modal').classList.add('active');
+    setTimeout(() => document.getElementById('sub-name').focus(), 100);
 }
 
 // Mark subscription as paid
@@ -629,11 +704,17 @@ addBtn.onclick = () => {
 closeBtn.onclick = closeModal;
 
 function closeModal() {
+    const saveBtn = document.getElementById('save-sub-btn');
+
     modal.classList.remove('active');
     document.getElementById('sub-name').value = '';
     document.getElementById('sub-cost').value = '';
     document.getElementById('sub-date').value = '';
     document.getElementById('sub-full-date').value = '';
+
+    // Reset edit state
+    delete saveBtn.dataset.editId;
+    saveBtn.textContent = 'Save Subscription';
 }
 
 // Chip Toggle Logic with Input Switch
@@ -797,6 +878,7 @@ saveBtn.onclick = addSubscription;
 
 // Initialize
 window.deleteSubscription = deleteSubscription;
+window.editSubscription = editSubscription;
 window.markAsPaid = markAsPaid;
 window.handleSyncClick = handleSyncClick;
 document.addEventListener('DOMContentLoaded', loadSubscriptions);
