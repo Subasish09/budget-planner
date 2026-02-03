@@ -9,23 +9,19 @@ async function loadCreditCardData() {
             const text = await response.text();
             // Handle both pure JSON and JS assignment formats
             try {
-                return JSON.parse(text);
-            } catch (e) {
                 // Formatting is likely 'window.creditCardDataRaw = [...]'
                 // Remove the prefix 'window.creditCardDataRaw =' and potential trailing semicolon
                 let cleanText = text.replace(/^\s*window\.creditCardDataRaw\s*=\s*/, '');
                 cleanText = cleanText.replace(/;\s*$/, ''); // Remove trailing semicolon
 
-                try {
-                    return JSON.parse(cleanText);
-                } catch (parseError) {
-                    console.error('JSON Parse failed:', parseError);
-                    // Fallback: try finding the first [ and the last ]
-                    const firstBracket = text.indexOf('[');
-                    const lastBracket = text.lastIndexOf(']');
-                    if (firstBracket !== -1 && lastBracket !== -1) {
-                        return JSON.parse(text.substring(firstBracket, lastBracket + 1));
-                    }
+                return JSON.parse(cleanText);
+            } catch (e) {
+                // Formatting is likely 'window.creditCardDataRaw = [...]'
+                // Fallback: try finding the first [ and the last ]
+                const firstBracket = text.indexOf('[');
+                const lastBracket = text.lastIndexOf(']');
+                if (firstBracket !== -1 && lastBracket !== -1) {
+                    return JSON.parse(text.substring(firstBracket, lastBracket + 1));
                 }
             }
         }
@@ -219,6 +215,64 @@ function renderCategoryBreakdown(categories) {
     }
 }
 
+// Render recent transactions
+function renderRecentTransactions(cards) {
+    const listContainer = document.getElementById('recent-cc-transactions');
+    if (!listContainer) return;
+
+    // Flatten all transactions
+    let allTransactions = [];
+    cards.forEach(card => {
+        if (card.transactions) {
+            card.transactions.forEach(tx => {
+                allTransactions.push({
+                    ...tx,
+                    cardName: card.name,
+                    bankName: card.bank
+                });
+            });
+        }
+    });
+
+    // Sort by date descending
+    allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Take top 5
+    const recent = allTransactions.slice(0, 5);
+
+    if (recent.length === 0) {
+        listContainer.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 1rem;">No recent activity</div>`;
+        return;
+    }
+
+    let html = '';
+    recent.forEach(tx => {
+        const isLent = tx.isLent;
+        const icon = isLent ? 'fa-hand-holding-usd' : 'fa-shopping-bag';
+        const color = isLent ? '#f59e0b' : '#ec4899';
+        const bg = isLent ? 'rgba(245, 158, 11, 0.1)' : 'rgba(236, 72, 153, 0.1)';
+
+        html += `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--glass-border);">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 36px; height: 36px; border-radius: 10px; background: ${bg}; display: flex; align-items: center; justify-content: center; color: ${color};">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 500; font-size: 0.95rem;">${tx.desc}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">${tx.bankName} ${tx.cardName} • ${tx.date}</div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-weight: 600; color: var(--text-primary);">₹${tx.amount.toLocaleString('en-IN')}</div>
+                </div>
+            </div>
+        `;
+    });
+
+    listContainer.innerHTML = html;
+}
+
 // Update dashboard stats
 async function updateCreditCardStats() {
     const cards = await loadCreditCardData();
@@ -238,6 +292,7 @@ async function updateCreditCardStats() {
     if (unpaidEl) unpaidEl.textContent = `₹${unpaidAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
     renderCategoryBreakdown(categories);
+    renderRecentTransactions(cards);
 }
 
 // Initialize on page load
