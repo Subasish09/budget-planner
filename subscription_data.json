@@ -54,7 +54,18 @@
       "domain": "netflix.com",
       "lastPaid": null,
       "paymentHistory": []
+    },
+    {
+      "id": 1770132632170,
+      "name": "Anazon Prime",
+      "cost": 799,
+      "cycle": "yearly",
+      "date": "2026-07-29",
+      "category": "Entertainment",
+      "domain": "primevideo.com",
+      "lastPaid": null,
+      "paymentHistory": []
     }
   ],
-  "lastSync": "2026-02-03T15:24:38.218Z"
+  "lastSync": "2026-02-03T15:30:32.170Z"
 }
