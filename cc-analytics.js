@@ -1,19 +1,39 @@
 // Credit Card Analytics for Main Dashboard
 
 // Load credit card data
-function loadCreditCardData() {
+// Load credit card data
+async function loadCreditCardData() {
+    // Try localStorage first (fastest and most up-to-date locally)
+    const localData = localStorage.getItem('myCreditCards');
+    if (localData) {
+        try {
+            return JSON.parse(localData);
+        } catch (e) {
+            console.error('Error parsing local storage data:', e);
+        }
+    }
+
+    // Fallback: Try fetching the file
     try {
-        const response = fetch('credit_card_data.js')
-            .then(r => r.text())
-            .then(text => {
-                // Parse JSON
+        const response = await fetch('credit_card_data.js');
+        if (response.ok) {
+            const text = await response.text();
+            // Handle both pure JSON and JS assignment formats
+            try {
                 return JSON.parse(text);
-            });
-        return response;
+            } catch (e) {
+                // If it's JS format (window.xxx = ...), try to extract JSON
+                const match = text.match(/=\s*(\[[\s\S]*?\])/);
+                if (match) {
+                    return JSON.parse(match[1]);
+                }
+            }
+        }
     } catch (error) {
         console.error('Failed to load credit card data:', error);
-        return [];
     }
+
+    return [];
 }
 
 // Calculate total spend across all cards
