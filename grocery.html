@@ -223,6 +223,26 @@
 
     <script src="grocery_data.js"></script>
     <script src="grocery.js"></script>
+
+    <!-- Shopping Mode Overlay -->
+    <div id="shopping-mode-view">
+        <div class="shopping-header">
+            <h2>Shopping Mode</h2>
+            <button class="shopping-close-btn" id="exit-shop-mode"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="shopping-list-container" id="shopping-list-body">
+            <!-- Js will inject items here -->
+        </div>
+
+        <div class="shopping-footer">
+            <div>
+                <span class="cart-total-label\">Estimated Total</span>
+                <div class="cart-total-value" id="cart-live-total">₹0</div>
+            </div>
+            <button class="btn-finish-shop" id="finish-shop-btn">Finish</button>
+        </div>
+    </div>
 </body>
 
 </html>
