@@ -57,7 +57,7 @@
     },
     {
       "id": 1770132632170,
-      "name": "Anazon Prime",
+      "name": "Amazon Prime",
       "cost": 799,
       "cycle": "yearly",
       "date": "2026-07-29",
@@ -78,5 +78,5 @@
       "paymentHistory": []
     }
   ],
-  "lastSync": "2026-02-03T17:51:00.545Z"
+  "lastSync": "2026-02-03T18:31:18.067Z"
 }
