@@ -11,10 +11,21 @@ async function loadCreditCardData() {
             try {
                 return JSON.parse(text);
             } catch (e) {
-                // If it's JS format (window.xxx = ...), try to extract JSON
-                const match = text.match(/=\s*(\[[\s\S]*?\])/);
-                if (match) {
-                    return JSON.parse(match[1]);
+                // Formatting is likely 'window.creditCardDataRaw = [...]'
+                // Remove the prefix 'window.creditCardDataRaw =' and potential trailing semicolon
+                let cleanText = text.replace(/^\s*window\.creditCardDataRaw\s*=\s*/, '');
+                cleanText = cleanText.replace(/;\s*$/, ''); // Remove trailing semicolon
+
+                try {
+                    return JSON.parse(cleanText);
+                } catch (parseError) {
+                    console.error('JSON Parse failed:', parseError);
+                    // Fallback: try finding the first [ and the last ]
+                    const firstBracket = text.indexOf('[');
+                    const lastBracket = text.lastIndexOf(']');
+                    if (firstBracket !== -1 && lastBracket !== -1) {
+                        return JSON.parse(text.substring(firstBracket, lastBracket + 1));
+                    }
                 }
             }
         }
