@@ -1310,18 +1310,36 @@ function updateSelectedItemsDisplay() {
     }
 
     container.innerHTML = selectedShoppingItems.map((item, index) => `
-        <div class="selected-item" style="padding: 0.75rem; margin: 0.5rem 0; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
-            <div style="flex: 1;">
-                <div style="font-weight: 500; color: var(--text-primary);">${item.name}</div>
-                <div style="font-size: 0.8rem; color: var(--text-secondary);">${item.unit}</div>
+        <div class="selected-item" style="padding: 1rem; margin: 0.5rem 0; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; gap: 1rem;">
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">${item.name}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">${item.unit}</div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label style="font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap;">Qty:</label>
+                        <input 
+                            type="number" 
+                            value="${item.qty}" 
+                            min="0.1" 
+                            step="0.1" 
+                            onchange="updateItemQuantity(${index}, this.value)" 
+                            style="width: 70px; padding: 0.5rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 6px; color: var(--text-primary); text-align: center; font-size: 0.9rem;"
+                        >
+                    </div>
+                    
+                    <button 
+                        class="btn-icon" 
+                        onclick="removeItemFromShoppingList(${index})" 
+                        style="background: rgba(244, 63, 94, 0.2); color: var(--danger); padding: 0.5rem; border-radius: 6px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"
+                        title="Remove item"
+                    >
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <label style="font-size: 0.85rem; color: var(--text-secondary);">Qty:</label>
-                <input type="number" value="${item.qty}" min="0.1" step="0.1" onchange="updateItemQuantity(${index}, this.value)" style="width: 80px; padding: 0.5rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 6px; color: var(--text-primary); text-align: center;">
-            </div>
-            <button class="btn-icon" onclick="removeItemFromShoppingList(${index})" style="background: rgba(244, 63, 94, 0.2); color: var(--danger); padding: 0.5rem; border-radius: 6px;">
-                <i class="fas fa-times"></i>
-            </button>
         </div>
     `).join('');
 }
@@ -1342,41 +1360,58 @@ function removeItemFromShoppingList(index) {
 
 // Save shopping list
 async function saveShoppingList() {
+    const saveBtn = document.getElementById('save-shopping-list');
+    const editingId = saveBtn.dataset.editingId;
+
     if (selectedShoppingItems.length === 0) {
         alert('Please add at least one item to the shopping list');
         return;
     }
 
-    // Create shopping list object
-    const now = new Date();
-    const listId = `shopping_${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}`;
+    if (editingId) {
+        // Update existing list
+        const list = window.groceryData.shopping_lists.find(l => l.id === editingId);
+        if (list) {
+            list.items = selectedShoppingItems;
+            localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
+            alert('✅ Shopping list updated successfully!');
+        }
 
-    const shoppingList = {
-        id: listId,
-        status: 'pending',
-        created: now.toISOString(),
-        items: selectedShoppingItems,
-        total: null,
-        completed_date: null
-    };
+        // Reset button
+        delete saveBtn.dataset.editingId;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Create Shopping List';
+    } else {
+        // Create new shopping list
+        const now = new Date();
+        const listId = `shopping_${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}`;
 
-    // Add to grocery data
-    if (!window.groceryData.shopping_lists) {
-        window.groceryData.shopping_lists = [];
+        const shoppingList = {
+            id: listId,
+            status: 'pending',
+            created: now.toISOString(),
+            items: selectedShoppingItems,
+            total: null,
+            completed_date: null
+        };
+
+        // Add to grocery data
+        if (!window.groceryData.shopping_lists) {
+            window.groceryData.shopping_lists = [];
+        }
+
+        window.groceryData.shopping_lists.push(shoppingList);
+
+        // Save to localStorage (temporary until GitHub sync)
+        localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
+
+        alert('✅ Shopping list created successfully!');
     }
-
-    window.groceryData.shopping_lists.push(shoppingList);
-
-    // Save to localStorage (temporary until GitHub sync)
-    localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
 
     // Close modal
     closeShoppingModal();
 
     // Switch to shopping lists tab
     switchTab('shopping');
-
-    alert('✅ Shopping list created successfully!');
 }
 
 // Close shopping modal
@@ -1480,9 +1515,15 @@ function renderShoppingLists() {
                 
                 <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
                     ${list.status === 'pending'
-                ? '<button class="btn-primary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); startShopping(\'' + list.id + '\')"><i class="fas fa-shopping-cart"></i> Start Shopping</button>'
+                ? `<div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-secondary" style="flex: 1; padding: 0.75rem;" onclick="event.stopPropagation(); editShoppingList('${list.id}')"><i class="fas fa-edit"></i> Edit List</button>
+                            <button class="btn-primary" style="flex: 1; padding: 0.75rem;" onclick="event.stopPropagation(); startShopping('${list.id}')"><i class="fas fa-shopping-cart"></i> Start Shopping</button>
+                           </div>`
                 : list.status === 'active'
-                    ? '<button class="btn-primary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); openShoppingMode(\'' + list.id + '\')"><i class="fas fa-edit"></i> Continue Shopping</button>'
+                    ? `<div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-secondary" style="flex: 1; padding: 0.75rem;" onclick="event.stopPropagation(); editShoppingList('${list.id}')"><i class="fas fa-edit"></i> Edit List</button>
+                            <button class="btn-primary" style="flex: 1; padding: 0.75rem;" onclick="event.stopPropagation(); openShoppingMode('${list.id}')"><i class="fas fa-shopping-bag"></i> Continue Shopping</button>
+                           </div>`
                     : '<button class="btn-secondary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); viewCompletedList(\'' + list.id + '\')"><i class="fas fa-eye"></i> View Details</button>'
             }
                 </div>
@@ -1744,3 +1785,36 @@ if (document.readyState === 'loading') {
 // Make functions globally accessible
 window.toggleShoppingItem = toggleShoppingItem;
 window.updateItemPrice = updateItemPrice;
+
+// Edit shopping list - reopen creation modal with existing items
+function editShoppingList(listId) {
+    const list = window.groceryData.shopping_lists.find(l => l.id === listId);
+    if (!list) {
+        alert('Shopping list not found');
+        return;
+    }
+
+    // Load existing items into selected items
+    selectedShoppingItems = list.items.map(item => ({ ...item }));
+
+    // Open modal
+    const modal = document.getElementById('shopping-list-modal');
+    modal.classList.add('active');
+
+    // Update display
+    updateSelectedItemsDisplay();
+
+    // Load available items
+    loadAvailableItems();
+
+    // Setup search
+    setTimeout(() => setupShoppingSearch(), 100);
+
+    // Change save button to "Update List"
+    const saveBtn = document.getElementById('save-shopping-list');
+    saveBtn.innerHTML = '<i class="fas fa-save"></i> Update Shopping List';
+    saveBtn.dataset.editingId = listId;
+}
+
+// Make function globally accessible
+window.editShoppingList = editShoppingList;
