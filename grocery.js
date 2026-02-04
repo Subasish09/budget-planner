@@ -1216,13 +1216,13 @@ function loadAvailableItems() {
     const inventory = window.groceryData.inventory;
     console.log('Inventory items count:', inventory.length);
 
-    container.innerHTML = inventory.map(item => `
-        <div class="available-item" data-item='${JSON.stringify(item)}' style="padding: 0.75rem; margin: 0.25rem 0; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 8px; cursor: pointer; transition: var(--transition-fast); display: flex; justify-content: space-between; align-items: center;">
+    container.innerHTML = inventory.map((item, index) => `
+        <div class="available-item" data-index="${index}" style="padding: 0.75rem; margin: 0.25rem 0; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 8px; cursor: pointer; transition: var(--transition-fast); display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <div style="font-weight: 500; color: var(--text-primary);">${item.name}</div>
                 <div style="font-size: 0.8rem; color: var(--text-secondary);">${item.unit} • ₹${item.current_price}</div>
             </div>
-            <button class="btn-icon" onclick="addItemToShoppingList(event, this)" style="background: var(--primary); color: white; padding: 0.5rem; border-radius: 6px;">
+            <button class="btn-icon" onclick="addItemToShoppingList(event, ${index})" style="background: var(--primary); color: white; padding: 0.5rem; border-radius: 6px;">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
@@ -1261,7 +1261,8 @@ function setupShoppingSearch() {
         } else {
             // Filter items based on query
             items.forEach(itemEl => {
-                const itemData = JSON.parse(itemEl.dataset.item);
+                const itemIndex = parseInt(itemEl.dataset.index);
+                const itemData = window.groceryData.inventory[itemIndex];
                 const matches = itemData.name.toLowerCase().includes(query) ||
                     (itemData.category && itemData.category.toLowerCase().includes(query));
                 itemEl.style.display = matches ? 'flex' : 'none';
@@ -1273,11 +1274,15 @@ function setupShoppingSearch() {
 }
 
 // Add item to shopping list
-function addItemToShoppingList(event, button) {
+function addItemToShoppingList(event, itemIndex) {
     event.stopPropagation();
 
-    const itemEl = button.closest('.available-item');
-    const itemData = JSON.parse(itemEl.dataset.item);
+    const itemData = window.groceryData.inventory[itemIndex];
+
+    if (!itemData) {
+        console.error('Item not found at index:', itemIndex);
+        return;
+    }
 
     // Check if already added
     if (selectedShoppingItems.some(i => i.name === itemData.name)) {
