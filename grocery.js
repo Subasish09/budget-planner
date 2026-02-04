@@ -67,6 +67,19 @@ async function loadData() {
     window.groceryInventory = data.inventory;
     const groceryHistory = data.history;
 
+    // Initialize window.groceryData with full structure
+    window.groceryData = {
+        inventory: data.inventory || [],
+        history: data.history || [],
+        shopping_lists: data.shopping_lists || []
+    };
+
+    console.log('Grocery data loaded:', {
+        inventory: window.groceryData.inventory.length,
+        history: window.groceryData.history.length,
+        shopping_lists: window.groceryData.shopping_lists.length
+    });
+
     let dataChanged = false;
 
     // 1. Ensure all history items exist in local storage
@@ -79,13 +92,9 @@ async function loadData() {
                 myGroceryLists.push(historyList);
                 dataChanged = true;
             } else {
-                // Check for data integrity issues (e.g. truncated lists or placeholder corruption)
-                // If local version has significantly fewer items than source of truth, overwrite it.
-                // Also overwrite if local data appears to be placeholder spam (all "Item").
-                const isPlaceholderData = myGroceryLists[localListIndex].items.some(i => i.name === 'Item' && i.cost === 1);
-
-                if (myGroceryLists[localListIndex].items.length < historyList.items.length || isPlaceholderData) {
-                    console.log(`Restoring data for ${historyList.id} (Corrupt/Truncated)`);
+                // Existing item: check if remote has more items
+                const localList = myGroceryLists[localListIndex];
+                if (historyList.items.length > localList.items.length) {
                     myGroceryLists[localListIndex] = historyList;
                     dataChanged = true;
                 }
