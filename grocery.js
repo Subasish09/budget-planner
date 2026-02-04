@@ -1195,12 +1195,17 @@ function createShoppingList() {
 function loadAvailableItems() {
     const container = document.getElementById('available-items-container');
 
+    console.log('Loading available items...');
+    console.log('window.groceryData:', window.groceryData);
+
     if (!window.groceryData || !window.groceryData.inventory) {
+        console.error('No inventory data available');
         container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 1rem;">No inventory data available</p>';
         return;
     }
 
     const inventory = window.groceryData.inventory;
+    console.log('Inventory items count:', inventory.length);
 
     container.innerHTML = inventory.map(item => `
         <div class="available-item" data-item='${JSON.stringify(item)}' style="padding: 0.75rem; margin: 0.25rem 0; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 8px; cursor: pointer; transition: var(--transition-fast); display: flex; justify-content: space-between; align-items: center;">
@@ -1213,6 +1218,8 @@ function loadAvailableItems() {
             </button>
         </div>
     `).join('');
+
+    console.log('Items rendered:', container.querySelectorAll('.available-item').length);
 }
 
 // Setup search functionality (called once when modal opens)
