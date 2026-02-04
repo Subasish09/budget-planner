@@ -1220,22 +1220,40 @@ function setupShoppingSearch() {
     const searchInput = document.getElementById('shopping-item-search');
     const container = document.getElementById('available-items-container');
 
-    // Remove any existing listeners
+    if (!searchInput || !container) {
+        console.error('Search elements not found');
+        return;
+    }
+
+    // Clear search input
+    searchInput.value = '';
+
+    // Remove any existing listeners by cloning
     const newSearchInput = searchInput.cloneNode(true);
     searchInput.parentNode.replaceChild(newSearchInput, searchInput);
 
     // Add new listener
     newSearchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
+        const query = e.target.value.toLowerCase().trim();
         const items = container.querySelectorAll('.available-item');
 
-        items.forEach(itemEl => {
-            const itemData = JSON.parse(itemEl.dataset.item);
-            const matches = itemData.name.toLowerCase().includes(query) ||
-                (itemData.category && itemData.category.toLowerCase().includes(query));
-            itemEl.style.display = matches ? 'flex' : 'none';
-        });
+        if (query === '') {
+            // Show all items when search is empty
+            items.forEach(itemEl => {
+                itemEl.style.display = 'flex';
+            });
+        } else {
+            // Filter items based on query
+            items.forEach(itemEl => {
+                const itemData = JSON.parse(itemEl.dataset.item);
+                const matches = itemData.name.toLowerCase().includes(query) ||
+                    (itemData.category && itemData.category.toLowerCase().includes(query));
+                itemEl.style.display = matches ? 'flex' : 'none';
+            });
+        }
     });
+
+    console.log('Search setup complete');
 }
 
 // Add item to shopping list
@@ -1348,14 +1366,35 @@ async function saveShoppingList() {
 // Close shopping modal
 function closeShoppingModal() {
     const modal = document.getElementById('shopping-list-modal');
-    modal.classList.remove('active');
+    if (modal) {
+        modal.classList.remove('active');
+    }
     selectedShoppingItems = [];
 }
 
-// Modal event listeners
-document.getElementById('close-shopping-modal').addEventListener('click', closeShoppingModal);
-document.getElementById('cancel-shopping-list').addEventListener('click', closeShoppingModal);
-document.getElementById('save-shopping-list').addEventListener('click', saveShoppingList);
+// Setup modal event listeners when DOM is ready
+function setupShoppingModalListeners() {
+    const closeBtn = document.getElementById('close-shopping-modal');
+    const cancelBtn = document.getElementById('cancel-shopping-list');
+    const saveBtn = document.getElementById('save-shopping-list');
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeShoppingModal);
+    }
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeShoppingModal);
+    }
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveShoppingList);
+    }
+}
+
+// Call setup when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupShoppingModalListeners);
+} else {
+    setupShoppingModalListeners();
+}
 
 // Make functions globally accessible
 window.addItemToShoppingList = addItemToShoppingList;
