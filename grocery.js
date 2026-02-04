@@ -1747,12 +1747,22 @@ async function completeShopping() {
     }
     window.groceryData.history.push(historyEntry);
 
-    // Update inventory prices
+    // Update inventory prices and add custom items
     currentShoppingList.items.forEach(item => {
         if (item.unit_price && item.unit_price > 0) {
             const inventoryItem = window.groceryData.inventory.find(i => i.name === item.name);
             if (inventoryItem) {
+                // Update existing inventory item price
                 inventoryItem.current_price = item.unit_price;
+            } else if (item.isCustom) {
+                // Add new custom item to inventory
+                window.groceryData.inventory.push({
+                    name: item.name,
+                    unit: item.unit,
+                    current_price: item.unit_price,
+                    category: 'Custom'
+                });
+                console.log('Added new item to inventory:', item.name);
             }
         }
     });
@@ -1849,15 +1859,15 @@ window.editShoppingList = editShoppingList;
 function showCustomItemForm() {
     const form = document.getElementById('custom-item-form');
     const btn = document.getElementById('add-custom-item-btn');
-    
+
     form.style.display = 'block';
     btn.style.display = 'none';
-    
+
     // Clear form
     document.getElementById('custom-item-name').value = '';
     document.getElementById('custom-item-unit').value = '';
     document.getElementById('custom-item-qty').value = '1';
-    
+
     // Focus on name input
     setTimeout(() => document.getElementById('custom-item-name').focus(), 100);
 }
@@ -1866,7 +1876,7 @@ function showCustomItemForm() {
 function hideCustomItemForm() {
     const form = document.getElementById('custom-item-form');
     const btn = document.getElementById('add-custom-item-btn');
-    
+
     form.style.display = 'none';
     btn.style.display = 'block';
 }
@@ -1876,28 +1886,28 @@ function saveCustomItem() {
     const name = document.getElementById('custom-item-name').value.trim();
     const unit = document.getElementById('custom-item-unit').value.trim();
     const qty = parseFloat(document.getElementById('custom-item-qty').value);
-    
+
     if (!name) {
         alert('Please enter item name');
         return;
     }
-    
+
     if (!unit) {
         alert('Please enter unit (e.g., 1kg, 500g, 1L)');
         return;
     }
-    
+
     if (!qty || qty <= 0) {
         alert('Please enter valid quantity');
         return;
     }
-    
+
     // Check if already added
     if (selectedShoppingItems.some(i => i.name.toLowerCase() === name.toLowerCase())) {
         alert('Item already added to shopping list');
         return;
     }
-    
+
     // Add to selected items
     selectedShoppingItems.push({
         name: name,
@@ -1907,10 +1917,10 @@ function saveCustomItem() {
         checked: false,
         isCustom: true // Mark as custom item
     });
-    
+
     updateSelectedItemsDisplay();
     hideCustomItemForm();
-    
+
     console.log('Custom item added:', name);
 }
 
@@ -1919,7 +1929,7 @@ function setupCustomItemListeners() {
     const addBtn = document.getElementById('add-custom-item-btn');
     const cancelBtn = document.getElementById('cancel-custom-item');
     const saveBtn = document.getElementById('save-custom-item');
-    
+
     if (addBtn) {
         addBtn.addEventListener('click', showCustomItemForm);
     }
