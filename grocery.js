@@ -1071,16 +1071,16 @@ function switchTab(tabName) {
             btn.classList.add('active');
         }
     });
-    
+
     // Update view sections
     document.querySelectorAll('.view-section').forEach(view => {
         view.style.display = 'none';
     });
-    
+
     const activeView = document.getElementById(`${tabName}-view`);
     if (activeView) {
         activeView.style.display = 'block';
-        
+
         // Render content based on active tab
         if (tabName === 'shopping') {
             renderShoppingLists();
@@ -1107,16 +1107,16 @@ function createShoppingList() {
 function renderInventory() {
     const container = document.getElementById('inventory-container');
     const countEl = document.getElementById('inventory-count');
-    
+
     // Get inventory from imported data
     if (!window.groceryData || !window.groceryData.inventory) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No inventory data available</p>';
         return;
     }
-    
+
     const inventory = window.groceryData.inventory;
     countEl.textContent = inventory.length;
-    
+
     // Render inventory items
     container.innerHTML = inventory.map(item => `
         <div class="stat-card" style="padding: 1rem;">
@@ -1135,16 +1135,16 @@ function renderInventory() {
             </div>
         </div>
     `).join('');
-    
+
     // Add search functionality
     const searchInput = document.getElementById('inventory-search');
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
-        const filtered = inventory.filter(item => 
+        const filtered = inventory.filter(item =>
             item.name.toLowerCase().includes(query) ||
             (item.category && item.category.toLowerCase().includes(query))
         );
-        
+
         container.innerHTML = filtered.map(item => `
             <div class="stat-card" style="padding: 1rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1179,26 +1179,29 @@ let selectedShoppingItems = [];
 function createShoppingList() {
     const modal = document.getElementById('shopping-list-modal');
     modal.classList.add('active');
-    
+
     // Reset state
     selectedShoppingItems = [];
     updateSelectedItemsDisplay();
-    
+
     // Load available items
     loadAvailableItems();
+
+    // Setup search functionality
+    setTimeout(() => setupShoppingSearch(), 100);
 }
 
 // Load available items from inventory
 function loadAvailableItems() {
     const container = document.getElementById('available-items-container');
-    
+
     if (!window.groceryData || !window.groceryData.inventory) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 1rem;">No inventory data available</p>';
         return;
     }
-    
+
     const inventory = window.groceryData.inventory;
-    
+
     container.innerHTML = inventory.map(item => `
         <div class="available-item" data-item='${JSON.stringify(item)}' style="padding: 0.75rem; margin: 0.25rem 0; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 8px; cursor: pointer; transition: var(--transition-fast); display: flex; justify-content: space-between; align-items: center;">
             <div>
@@ -1210,17 +1213,26 @@ function loadAvailableItems() {
             </button>
         </div>
     `).join('');
-    
-    // Add search functionality
+}
+
+// Setup search functionality (called once when modal opens)
+function setupShoppingSearch() {
     const searchInput = document.getElementById('shopping-item-search');
-    searchInput.addEventListener('input', (e) => {
+    const container = document.getElementById('available-items-container');
+
+    // Remove any existing listeners
+    const newSearchInput = searchInput.cloneNode(true);
+    searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+
+    // Add new listener
+    newSearchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
         const items = container.querySelectorAll('.available-item');
-        
+
         items.forEach(itemEl => {
             const itemData = JSON.parse(itemEl.dataset.item);
-            const matches = itemData.name.toLowerCase().includes(query) || 
-                          (itemData.category && itemData.category.toLowerCase().includes(query));
+            const matches = itemData.name.toLowerCase().includes(query) ||
+                (itemData.category && itemData.category.toLowerCase().includes(query));
             itemEl.style.display = matches ? 'flex' : 'none';
         });
     });
@@ -1229,16 +1241,16 @@ function loadAvailableItems() {
 // Add item to shopping list
 function addItemToShoppingList(event, button) {
     event.stopPropagation();
-    
+
     const itemEl = button.closest('.available-item');
     const itemData = JSON.parse(itemEl.dataset.item);
-    
+
     // Check if already added
     if (selectedShoppingItems.some(i => i.name === itemData.name)) {
         alert('Item already added to shopping list');
         return;
     }
-    
+
     // Add to selected items with default quantity
     selectedShoppingItems.push({
         name: itemData.name,
@@ -1247,7 +1259,7 @@ function addItemToShoppingList(event, button) {
         unit_price: null,
         checked: false
     });
-    
+
     updateSelectedItemsDisplay();
 }
 
@@ -1255,14 +1267,14 @@ function addItemToShoppingList(event, button) {
 function updateSelectedItemsDisplay() {
     const container = document.getElementById('selected-items-list');
     const countEl = document.getElementById('selected-count');
-    
+
     countEl.textContent = selectedShoppingItems.length;
-    
+
     if (selectedShoppingItems.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No items selected. Search and click items below to add.</p>';
         return;
     }
-    
+
     container.innerHTML = selectedShoppingItems.map((item, index) => `
         <div class="selected-item" style="padding: 0.75rem; margin: 0.5rem 0; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
             <div style="flex: 1;">
@@ -1300,11 +1312,11 @@ async function saveShoppingList() {
         alert('Please add at least one item to the shopping list');
         return;
     }
-    
+
     // Create shopping list object
     const now = new Date();
     const listId = `shopping_${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}`;
-    
+
     const shoppingList = {
         id: listId,
         status: 'pending',
@@ -1313,23 +1325,23 @@ async function saveShoppingList() {
         total: null,
         completed_date: null
     };
-    
+
     // Add to grocery data
     if (!window.groceryData.shopping_lists) {
         window.groceryData.shopping_lists = [];
     }
-    
+
     window.groceryData.shopping_lists.push(shoppingList);
-    
+
     // Save to localStorage (temporary until GitHub sync)
     localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
-    
+
     // Close modal
     closeShoppingModal();
-    
+
     // Switch to shopping lists tab
     switchTab('shopping');
-    
+
     alert('✅ Shopping list created successfully!');
 }
 
@@ -1353,7 +1365,7 @@ window.removeItemFromShoppingList = removeItemFromShoppingList;
 // Update renderShoppingLists function
 function renderShoppingLists() {
     const container = document.getElementById('shopping-lists-container');
-    
+
     if (!window.groceryData.shopping_lists || window.groceryData.shopping_lists.length === 0) {
         container.innerHTML = `
             <div class="empty-state" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
@@ -1364,22 +1376,22 @@ function renderShoppingLists() {
         `;
         return;
     }
-    
+
     const lists = window.groceryData.shopping_lists;
-    
+
     container.innerHTML = lists.map(list => {
-        const statusBadge = list.status === 'pending' 
+        const statusBadge = list.status === 'pending'
             ? '<span style="background: rgba(245, 158, 11, 0.2); color: var(--warning); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">Pending</span>'
             : list.status === 'active'
-            ? '<span style="background: rgba(59, 130, 246, 0.2); color: var(--info); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">Active</span>'
-            : '<span style="background: rgba(16, 185, 129, 0.2); color: var(--success); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">Completed</span>';
-        
-        const createdDate = new Date(list.created).toLocaleDateString('en-US', { 
-            month: 'short', 
-            day: 'numeric', 
-            year: 'numeric' 
+                ? '<span style="background: rgba(59, 130, 246, 0.2); color: var(--info); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">Active</span>'
+                : '<span style="background: rgba(16, 185, 129, 0.2); color: var(--success); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">Completed</span>';
+
+        const createdDate = new Date(list.created).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
         });
-        
+
         return `
             <div class="stat-card" style="padding: 1.5rem; cursor: pointer; transition: var(--transition);" onclick="openShoppingMode('${list.id}')">
                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
@@ -1404,12 +1416,12 @@ function renderShoppingLists() {
                 </div>
                 
                 <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
-                    ${list.status === 'pending' 
-                        ? '<button class="btn-primary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); startShopping(\'' + list.id + '\')"><i class="fas fa-shopping-cart"></i> Start Shopping</button>'
-                        : list.status === 'active'
-                        ? '<button class="btn-primary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); openShoppingMode(\'' + list.id + '\')"><i class="fas fa-edit"></i> Continue Shopping</button>'
-                        : '<button class="btn-secondary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); viewCompletedList(\'' + list.id + '\')"><i class="fas fa-eye"></i> View Details</button>'
-                    }
+                    ${list.status === 'pending'
+                ? '<button class="btn-primary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); startShopping(\'' + list.id + '\')"><i class="fas fa-shopping-cart"></i> Start Shopping</button>'
+                : list.status === 'active'
+                    ? '<button class="btn-primary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); openShoppingMode(\'' + list.id + '\')"><i class="fas fa-edit"></i> Continue Shopping</button>'
+                    : '<button class="btn-secondary" style="width: 100%; padding: 0.75rem;" onclick="event.stopPropagation(); viewCompletedList(\'' + list.id + '\')"><i class="fas fa-eye"></i> View Details</button>'
+            }
                 </div>
             </div>
         `;
@@ -1452,16 +1464,16 @@ function openShoppingMode(listId) {
         alert('Shopping list not found');
         return;
     }
-    
+
     currentShoppingList = list;
-    
+
     const modal = document.getElementById('shopping-mode-modal');
     const title = document.getElementById('shopping-mode-title');
     const subtitle = document.getElementById('shopping-mode-subtitle');
-    
+
     title.textContent = list.id.replace('shopping_', 'Shopping - ');
     updateShoppingModeSubtitle();
-    
+
     renderShoppingModeItems();
     modal.classList.add('active');
 }
@@ -1469,12 +1481,12 @@ function openShoppingMode(listId) {
 // Render shopping mode items
 function renderShoppingModeItems() {
     const container = document.getElementById('shopping-mode-items');
-    
+
     if (!currentShoppingList || !currentShoppingList.items) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No items in this list</p>';
         return;
     }
-    
+
     container.innerHTML = currentShoppingList.items.map((item, index) => `
         <div class="shopping-item-card ${item.checked ? 'checked' : ''}" id="shopping-item-${index}">
             <div style="display: flex; gap: 1rem; align-items: start;">
@@ -1503,20 +1515,20 @@ function renderShoppingModeItems() {
             </div>
         </div>
     `).join('');
-    
+
     updateShoppingModeTotal();
 }
 
 // Toggle shopping item checked state
 function toggleShoppingItem(index) {
     if (!currentShoppingList) return;
-    
+
     currentShoppingList.items[index].checked = !currentShoppingList.items[index].checked;
-    
+
     // Update UI
     const card = document.getElementById(`shopping-item-${index}`);
     const checkbox = card.querySelector('.shopping-item-checkbox');
-    
+
     if (currentShoppingList.items[index].checked) {
         card.classList.add('checked');
         checkbox.classList.add('checked');
@@ -1524,9 +1536,9 @@ function toggleShoppingItem(index) {
         card.classList.remove('checked');
         checkbox.classList.remove('checked');
     }
-    
+
     updateShoppingModeSubtitle();
-    
+
     // Save to localStorage
     localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
 }
@@ -1534,12 +1546,12 @@ function toggleShoppingItem(index) {
 // Update item price
 function updateItemPrice(index, value) {
     if (!currentShoppingList) return;
-    
+
     const price = parseFloat(value);
     currentShoppingList.items[index].unit_price = price > 0 ? price : null;
-    
+
     updateShoppingModeTotal();
-    
+
     // Save to localStorage
     localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
 }
@@ -1547,27 +1559,27 @@ function updateItemPrice(index, value) {
 // Update shopping mode subtitle
 function updateShoppingModeSubtitle() {
     if (!currentShoppingList) return;
-    
+
     const subtitle = document.getElementById('shopping-mode-subtitle');
     const checkedCount = currentShoppingList.items.filter(i => i.checked).length;
     const totalCount = currentShoppingList.items.length;
-    
+
     subtitle.textContent = `${checkedCount} of ${totalCount} items checked`;
 }
 
 // Update shopping mode total
 function updateShoppingModeTotal() {
     if (!currentShoppingList) return;
-    
+
     const totalEl = document.getElementById('shopping-mode-total');
-    
+
     let total = 0;
     currentShoppingList.items.forEach(item => {
         if (item.unit_price && item.unit_price > 0) {
             total += item.unit_price * item.qty;
         }
     });
-    
+
     totalEl.textContent = `₹${Math.round(total)}`;
     currentShoppingList.total = Math.round(total);
 }
@@ -1575,15 +1587,15 @@ function updateShoppingModeTotal() {
 // Complete shopping
 async function completeShopping() {
     if (!currentShoppingList) return;
-    
+
     // Check if all items have prices
     const missingPrices = currentShoppingList.items.filter(i => !i.unit_price || i.unit_price <= 0);
-    
+
     if (missingPrices.length > 0) {
         const confirm = window.confirm(`${missingPrices.length} items don't have prices yet. Complete shopping anyway?`);
         if (!confirm) return;
     }
-    
+
     // Calculate total
     let total = 0;
     currentShoppingList.items.forEach(item => {
@@ -1591,7 +1603,7 @@ async function completeShopping() {
             total += item.unit_price * item.qty;
         }
     });
-    
+
     // Create history entry
     const historyEntry = {
         id: currentShoppingList.id.replace('shopping_', ''),
@@ -1602,13 +1614,13 @@ async function completeShopping() {
         })),
         total: Math.round(total)
     };
-    
+
     // Add to history
     if (!window.groceryData.history) {
         window.groceryData.history = [];
     }
     window.groceryData.history.push(historyEntry);
-    
+
     // Update inventory prices
     currentShoppingList.items.forEach(item => {
         if (item.unit_price && item.unit_price > 0) {
@@ -1618,24 +1630,24 @@ async function completeShopping() {
             }
         }
     });
-    
+
     // Mark shopping list as completed
     currentShoppingList.status = 'completed';
     currentShoppingList.completed_date = new Date().toISOString();
-    
+
     // Save to localStorage
     localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
-    
+
     // Close modal
     closeShoppingMode();
-    
+
     // Switch to history tab
     switchTab('history');
-    
+
     // Refresh UI
     renderUI();
     renderStats();
-    
+
     alert(`✅ Shopping completed! Total: ₹${Math.round(total)}\n\nAdded to grocery history.`);
 }
 
