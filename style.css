@@ -2450,6 +2450,7 @@ select,
     color: var(--text-primary);
     transition: var(--transition);
 }
+
 /* ========================================
    Tab Navigation Styles (Shopping List Feature)
    ======================================== */
@@ -2510,6 +2511,7 @@ select,
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -2522,11 +2524,11 @@ select,
         font-size: 0.85rem;
         padding: 0.65rem 1rem;
     }
-    
+
     .tab-btn i {
         font-size: 0.9rem;
     }
-    
+
     /* Hide text on very small screens, show icons only */
     @media (max-width: 480px) {
         .tab-btn {
@@ -2559,12 +2561,37 @@ select,
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
+    position: relative;
 }
 
 .shopping-mode-header h2 {
     margin: 0;
     font-size: 1.5rem;
     color: var(--text-primary);
+    flex: 1;
+}
+
+.shopping-mode-header .close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(244, 63, 94, 0.2);
+    color: var(--danger);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 10;
+}
+
+.shopping-mode-header .close-modal:hover {
+    background: rgba(244, 63, 94, 0.3);
+    transform: scale(1.05);
 }
 
 .shopping-mode-body {
@@ -2677,43 +2704,43 @@ select,
     .shopping-mode-header {
         padding: 1rem;
     }
-    
+
     .shopping-mode-header h2 {
         font-size: 1.25rem;
     }
-    
+
     .shopping-mode-body {
         padding: 0.75rem;
     }
-    
+
     .shopping-mode-footer {
         flex-direction: column;
         gap: 1rem;
         padding: 1rem;
     }
-    
-    .shopping-mode-footer > div {
+
+    .shopping-mode-footer>div {
         width: 100%;
         text-align: center;
     }
-    
+
     #complete-shopping-btn {
         width: 100%;
     }
-    
+
     .shopping-item-card {
         padding: 1rem;
     }
-    
+
     .shopping-item-checkbox {
         width: 28px;
         height: 28px;
     }
-    
+
     .shopping-item-name {
         font-size: 1rem;
     }
-    
+
     .shopping-item-price-input input {
         width: 100px;
         padding: 0.65rem;
