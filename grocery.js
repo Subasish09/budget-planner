@@ -1840,3 +1840,105 @@ function editShoppingList(listId) {
 
 // Make function globally accessible
 window.editShoppingList = editShoppingList;
+
+// ========================================
+// Custom Item Feature
+// ========================================
+
+// Show custom item form
+function showCustomItemForm() {
+    const form = document.getElementById('custom-item-form');
+    const btn = document.getElementById('add-custom-item-btn');
+    
+    form.style.display = 'block';
+    btn.style.display = 'none';
+    
+    // Clear form
+    document.getElementById('custom-item-name').value = '';
+    document.getElementById('custom-item-unit').value = '';
+    document.getElementById('custom-item-qty').value = '1';
+    
+    // Focus on name input
+    setTimeout(() => document.getElementById('custom-item-name').focus(), 100);
+}
+
+// Hide custom item form
+function hideCustomItemForm() {
+    const form = document.getElementById('custom-item-form');
+    const btn = document.getElementById('add-custom-item-btn');
+    
+    form.style.display = 'none';
+    btn.style.display = 'block';
+}
+
+// Save custom item to shopping list
+function saveCustomItem() {
+    const name = document.getElementById('custom-item-name').value.trim();
+    const unit = document.getElementById('custom-item-unit').value.trim();
+    const qty = parseFloat(document.getElementById('custom-item-qty').value);
+    
+    if (!name) {
+        alert('Please enter item name');
+        return;
+    }
+    
+    if (!unit) {
+        alert('Please enter unit (e.g., 1kg, 500g, 1L)');
+        return;
+    }
+    
+    if (!qty || qty <= 0) {
+        alert('Please enter valid quantity');
+        return;
+    }
+    
+    // Check if already added
+    if (selectedShoppingItems.some(i => i.name.toLowerCase() === name.toLowerCase())) {
+        alert('Item already added to shopping list');
+        return;
+    }
+    
+    // Add to selected items
+    selectedShoppingItems.push({
+        name: name,
+        unit: unit,
+        qty: qty,
+        unit_price: null,
+        checked: false,
+        isCustom: true // Mark as custom item
+    });
+    
+    updateSelectedItemsDisplay();
+    hideCustomItemForm();
+    
+    console.log('Custom item added:', name);
+}
+
+// Setup custom item event listeners
+function setupCustomItemListeners() {
+    const addBtn = document.getElementById('add-custom-item-btn');
+    const cancelBtn = document.getElementById('cancel-custom-item');
+    const saveBtn = document.getElementById('save-custom-item');
+    
+    if (addBtn) {
+        addBtn.addEventListener('click', showCustomItemForm);
+    }
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', hideCustomItemForm);
+    }
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveCustomItem);
+    }
+}
+
+// Call setup when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCustomItemListeners);
+} else {
+    setupCustomItemListeners();
+}
+
+// Make functions globally accessible
+window.showCustomItemForm = showCustomItemForm;
+window.hideCustomItemForm = hideCustomItemForm;
+window.saveCustomItem = saveCustomItem;
