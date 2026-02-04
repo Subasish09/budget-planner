@@ -1127,20 +1127,16 @@ function renderInventory() {
     countEl.textContent = inventory.length;
 
     // Render inventory items
-    container.innerHTML = inventory.map(item => `
-        <div class="stat-card" style="padding: 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <div style="font-weight: 600; color: var(--text-primary);">${item.name}</div>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                        ${item.category || 'General'} • ${item.unit}
-                    </div>
+    container.innerHTML = inventory.map((item, index) => `
+        <div class="inventory-item-card" onclick="quickAddFromInventory(${index})" style="padding: 1rem; margin: 0.5rem 0; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 12px; cursor: pointer; transition: var(--transition); display: flex; justify-content: space-between; align-items: center;">
+            <div style="flex: 1;">
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">${item.name}</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                    ${item.category || 'Uncategorized'} • ${item.unit} • ₹${item.current_price}
                 </div>
-                <div style="text-align: right;">
-                    <div style="font-size: 1.1rem; font-weight: 700; color: var(--success);">
-                        ₹${item.current_price}
-                    </div>
-                </div>
+            </div>
+            <div style="background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 0.5rem; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-plus"></i>
             </div>
         </div>
     `).join('');
@@ -1952,3 +1948,6 @@ if (document.readyState === 'loading') {
 window.showCustomItemForm = showCustomItemForm;
 window.hideCustomItemForm = hideCustomItemForm;
 window.saveCustomItem = saveCustomItem;
+
+// Make quickAddFromInventory globally accessible
+window.quickAddFromInventory = quickAddFromInventory;
