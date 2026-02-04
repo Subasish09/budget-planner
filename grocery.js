@@ -1381,9 +1381,26 @@ async function saveShoppingList() {
         delete saveBtn.dataset.editingId;
         saveBtn.innerHTML = '<i class="fas fa-save"></i> Create Shopping List';
     } else {
-        // Create new shopping list
+        // Create new shopping list with bi-monthly format
         const now = new Date();
-        const listId = `shopping_${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const year = now.getFullYear();
+        const month = now.getMonth(); // 0-11
+
+        // Determine bi-monthly period
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+        let startMonth, endMonth;
+
+        if (month % 2 === 0) {
+            // Even month (0=Jan, 2=Mar, 4=May, etc.) - start of bi-month
+            startMonth = monthNames[month];
+            endMonth = monthNames[month + 1];
+        } else {
+            // Odd month (1=Feb, 3=Apr, 5=Jun, etc.) - end of bi-month
+            startMonth = monthNames[month - 1];
+            endMonth = monthNames[month];
+        }
+
+        const listId = `${startMonth}-${endMonth} ${year}`;
 
         const shoppingList = {
             id: listId,
@@ -1710,7 +1727,7 @@ async function completeShopping() {
 
     // Create history entry
     const historyEntry = {
-        id: currentShoppingList.id.replace('shopping_', ''),
+        id: currentShoppingList.id, // Already in bi-monthly format
         items: currentShoppingList.items.map(item => ({
             name: item.name,
             qty: item.qty,
