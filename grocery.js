@@ -1405,7 +1405,15 @@ window.removeItemFromShoppingList = removeItemFromShoppingList;
 function renderShoppingLists() {
     const container = document.getElementById('shopping-lists-container');
 
-    if (!window.groceryData.shopping_lists || window.groceryData.shopping_lists.length === 0) {
+    // Initialize shopping_lists if it doesn't exist
+    if (!window.groceryData) {
+        window.groceryData = { shopping_lists: [] };
+    }
+    if (!window.groceryData.shopping_lists) {
+        window.groceryData.shopping_lists = [];
+    }
+
+    if (window.groceryData.shopping_lists.length === 0) {
         container.innerHTML = `
             <div class="empty-state" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
                 <i class="fas fa-shopping-cart" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
@@ -1697,9 +1705,25 @@ function closeShoppingMode() {
     currentShoppingList = null;
 }
 
-// Event listeners
-document.getElementById('close-shopping-mode').addEventListener('click', closeShoppingMode);
-document.getElementById('complete-shopping-btn').addEventListener('click', completeShopping);
+// Event listeners for shopping mode
+function setupShoppingModeListeners() {
+    const closeBtn = document.getElementById('close-shopping-mode');
+    const completeBtn = document.getElementById('complete-shopping-btn');
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeShoppingMode);
+    }
+    if (completeBtn) {
+        completeBtn.addEventListener('click', completeShopping);
+    }
+}
+
+// Setup when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupShoppingModeListeners);
+} else {
+    setupShoppingModeListeners();
+}
 
 // Make functions globally accessible
 window.toggleShoppingItem = toggleShoppingItem;
