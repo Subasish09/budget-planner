@@ -337,6 +337,38 @@
             </div>
         </div>
     </div>
+
+    <!-- Shopping Mode Modal (Full Screen) -->
+    <div class="modal-overlay" id="shopping-mode-modal" style="z-index: 2000;">
+        <div class="shopping-mode-container">
+            <!-- Header -->
+            <div class="shopping-mode-header">
+                <div>
+                    <h2 id="shopping-mode-title">Shopping Mode</h2>
+                    <p id="shopping-mode-subtitle" style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.25rem 0 0 0;">0 of 0 items checked</p>
+                </div>
+                <button class="close-modal" id="close-shopping-mode" style="background: rgba(244, 63, 94, 0.2); color: var(--danger);">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Items List -->
+            <div class="shopping-mode-body" id="shopping-mode-items">
+                <!-- Items populated by JS -->
+            </div>
+
+            <!-- Sticky Footer with Total -->
+            <div class="shopping-mode-footer">
+                <div style="flex: 1;">
+                    <div style="font-size: 0.9rem; color: var(--text-secondary);">Total Amount</div>
+                    <div id="shopping-mode-total" style="font-size: 2rem; font-weight: 700; color: var(--success);">₹0</div>
+                </div>
+                <button class="btn-primary" id="complete-shopping-btn" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                    <i class="fas fa-check-circle"></i> Complete Shopping
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

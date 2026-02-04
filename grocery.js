@@ -1438,3 +1438,218 @@ function viewCompletedList(listId) {
 window.openShoppingMode = openShoppingMode;
 window.startShopping = startShopping;
 window.viewCompletedList = viewCompletedList;
+
+// ========================================
+// Shopping Mode Logic (Phase 3)
+// ========================================
+
+let currentShoppingList = null;
+
+// Open shopping mode
+function openShoppingMode(listId) {
+    const list = window.groceryData.shopping_lists.find(l => l.id === listId);
+    if (!list) {
+        alert('Shopping list not found');
+        return;
+    }
+    
+    currentShoppingList = list;
+    
+    const modal = document.getElementById('shopping-mode-modal');
+    const title = document.getElementById('shopping-mode-title');
+    const subtitle = document.getElementById('shopping-mode-subtitle');
+    
+    title.textContent = list.id.replace('shopping_', 'Shopping - ');
+    updateShoppingModeSubtitle();
+    
+    renderShoppingModeItems();
+    modal.classList.add('active');
+}
+
+// Render shopping mode items
+function renderShoppingModeItems() {
+    const container = document.getElementById('shopping-mode-items');
+    
+    if (!currentShoppingList || !currentShoppingList.items) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No items in this list</p>';
+        return;
+    }
+    
+    container.innerHTML = currentShoppingList.items.map((item, index) => `
+        <div class="shopping-item-card ${item.checked ? 'checked' : ''}" id="shopping-item-${index}">
+            <div style="display: flex; gap: 1rem; align-items: start;">
+                <div class="shopping-item-checkbox ${item.checked ? 'checked' : ''}" onclick="toggleShoppingItem(${index})"></div>
+                
+                <div class="shopping-item-info">
+                    <div class="shopping-item-name">${item.name}</div>
+                    <div class="shopping-item-details">Quantity: ${item.qty} ${item.unit}</div>
+                    
+                    <div class="shopping-item-price-input">
+                        <label>Price per ${item.unit}:</label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary);">₹</span>
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                min="0" 
+                                placeholder="0.00"
+                                value="${item.unit_price || ''}"
+                                onchange="updateItemPrice(${index}, this.value)"
+                                style="padding-left: 2rem;"
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    updateShoppingModeTotal();
+}
+
+// Toggle shopping item checked state
+function toggleShoppingItem(index) {
+    if (!currentShoppingList) return;
+    
+    currentShoppingList.items[index].checked = !currentShoppingList.items[index].checked;
+    
+    // Update UI
+    const card = document.getElementById(`shopping-item-${index}`);
+    const checkbox = card.querySelector('.shopping-item-checkbox');
+    
+    if (currentShoppingList.items[index].checked) {
+        card.classList.add('checked');
+        checkbox.classList.add('checked');
+    } else {
+        card.classList.remove('checked');
+        checkbox.classList.remove('checked');
+    }
+    
+    updateShoppingModeSubtitle();
+    
+    // Save to localStorage
+    localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
+}
+
+// Update item price
+function updateItemPrice(index, value) {
+    if (!currentShoppingList) return;
+    
+    const price = parseFloat(value);
+    currentShoppingList.items[index].unit_price = price > 0 ? price : null;
+    
+    updateShoppingModeTotal();
+    
+    // Save to localStorage
+    localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
+}
+
+// Update shopping mode subtitle
+function updateShoppingModeSubtitle() {
+    if (!currentShoppingList) return;
+    
+    const subtitle = document.getElementById('shopping-mode-subtitle');
+    const checkedCount = currentShoppingList.items.filter(i => i.checked).length;
+    const totalCount = currentShoppingList.items.length;
+    
+    subtitle.textContent = `${checkedCount} of ${totalCount} items checked`;
+}
+
+// Update shopping mode total
+function updateShoppingModeTotal() {
+    if (!currentShoppingList) return;
+    
+    const totalEl = document.getElementById('shopping-mode-total');
+    
+    let total = 0;
+    currentShoppingList.items.forEach(item => {
+        if (item.unit_price && item.unit_price > 0) {
+            total += item.unit_price * item.qty;
+        }
+    });
+    
+    totalEl.textContent = `₹${Math.round(total)}`;
+    currentShoppingList.total = Math.round(total);
+}
+
+// Complete shopping
+async function completeShopping() {
+    if (!currentShoppingList) return;
+    
+    // Check if all items have prices
+    const missingPrices = currentShoppingList.items.filter(i => !i.unit_price || i.unit_price <= 0);
+    
+    if (missingPrices.length > 0) {
+        const confirm = window.confirm(`${missingPrices.length} items don't have prices yet. Complete shopping anyway?`);
+        if (!confirm) return;
+    }
+    
+    // Calculate total
+    let total = 0;
+    currentShoppingList.items.forEach(item => {
+        if (item.unit_price && item.unit_price > 0) {
+            total += item.unit_price * item.qty;
+        }
+    });
+    
+    // Create history entry
+    const historyEntry = {
+        id: currentShoppingList.id.replace('shopping_', ''),
+        items: currentShoppingList.items.map(item => ({
+            name: item.name,
+            qty: item.qty,
+            cost: (item.unit_price || 0) * item.qty
+        })),
+        total: Math.round(total)
+    };
+    
+    // Add to history
+    if (!window.groceryData.history) {
+        window.groceryData.history = [];
+    }
+    window.groceryData.history.push(historyEntry);
+    
+    // Update inventory prices
+    currentShoppingList.items.forEach(item => {
+        if (item.unit_price && item.unit_price > 0) {
+            const inventoryItem = window.groceryData.inventory.find(i => i.name === item.name);
+            if (inventoryItem) {
+                inventoryItem.current_price = item.unit_price;
+            }
+        }
+    });
+    
+    // Mark shopping list as completed
+    currentShoppingList.status = 'completed';
+    currentShoppingList.completed_date = new Date().toISOString();
+    
+    // Save to localStorage
+    localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
+    
+    // Close modal
+    closeShoppingMode();
+    
+    // Switch to history tab
+    switchTab('history');
+    
+    // Refresh UI
+    renderUI();
+    renderStats();
+    
+    alert(`✅ Shopping completed! Total: ₹${Math.round(total)}\n\nAdded to grocery history.`);
+}
+
+// Close shopping mode
+function closeShoppingMode() {
+    const modal = document.getElementById('shopping-mode-modal');
+    modal.classList.remove('active');
+    currentShoppingList = null;
+}
+
+// Event listeners
+document.getElementById('close-shopping-mode').addEventListener('click', closeShoppingMode);
+document.getElementById('complete-shopping-btn').addEventListener('click', completeShopping);
+
+// Make functions globally accessible
+window.toggleShoppingItem = toggleShoppingItem;
+window.updateItemPrice = updateItemPrice;
