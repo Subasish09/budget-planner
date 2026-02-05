@@ -1150,23 +1150,27 @@ function renderInventory() {
             (item.category && item.category.toLowerCase().includes(query))
         );
 
-        container.innerHTML = filtered.map(item => `
-            <div class="stat-card" style="padding: 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-weight: 600; color: var(--text-primary);">${item.name}</div>
-                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                            ${item.category || 'General'} • ${item.unit}
+        // Re-render with same clickable style
+        container.innerHTML = filtered.map((item, index) => {
+            // Find original index in full inventory
+            const originalIndex = inventory.findIndex(i => i.name === item.name);
+            return `
+                <div class="inventory-item-card" onclick="quickAddFromInventory(${originalIndex})" style="padding: 1rem; margin: 0.5rem 0; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 12px; cursor: pointer; transition: var(--transition); display: flex; justify-content: space-between; align-items: center;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">${item.name}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                            ${item.category || 'Uncategorized'} • ${item.unit} • ₹${item.current_price}
                         </div>
                     </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--success);">
-                            ₹${item.current_price}
-                        </div>
+                    <div style="background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 0.5rem; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-plus"></i>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
+
+        // Update count
+        countEl.textContent = filtered.length;
     });
 }
 
@@ -1953,28 +1957,28 @@ window.saveCustomItem = saveCustomItem;
 // Quick add from inventory
 function quickAddFromInventory(itemIndex) {
     const item = window.groceryData.inventory[itemIndex];
-    
+
     if (!item) {
         console.error('Item not found at index:', itemIndex);
         return;
     }
-    
+
     // Prompt for quantity
     const qty = prompt(`Add "${item.name}" to shopping list\n\nEnter quantity:`, '1');
-    
+
     if (!qty || parseFloat(qty) <= 0) {
         return; // User cancelled or invalid quantity
     }
-    
+
     // Get or create current bi-month shopping list
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth(); // 0-11
-    
+
     // Determine bi-monthly period
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     let startMonth, endMonth;
-    
+
     if (month % 2 === 0) {
         startMonth = monthNames[month];
         endMonth = monthNames[month + 1];
@@ -1982,17 +1986,17 @@ function quickAddFromInventory(itemIndex) {
         startMonth = monthNames[month - 1];
         endMonth = monthNames[month];
     }
-    
+
     const listId = `${startMonth}-${endMonth} ${year}`;
-    
+
     // Initialize shopping_lists if needed
     if (!window.groceryData.shopping_lists) {
         window.groceryData.shopping_lists = [];
     }
-    
+
     // Find or create shopping list
     let shoppingList = window.groceryData.shopping_lists.find(l => l.id === listId);
-    
+
     if (!shoppingList) {
         // Create new shopping list for current bi-month
         shoppingList = {
@@ -2005,10 +2009,10 @@ function quickAddFromInventory(itemIndex) {
         };
         window.groceryData.shopping_lists.push(shoppingList);
     }
-    
+
     // Check if item already in list
     const existingItem = shoppingList.items.find(i => i.name === item.name);
-    
+
     if (existingItem) {
         // Update quantity
         existingItem.qty = parseFloat(existingItem.qty) + parseFloat(qty);
@@ -2024,10 +2028,10 @@ function quickAddFromInventory(itemIndex) {
         });
         alert(`✅ Added "${item.name}" to shopping list\n\nList: ${listId}\nQuantity: ${qty} ${item.unit}`);
     }
-    
+
     // Save to localStorage
     localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
-    
+
     // Switch to shopping lists tab to show the list
     switchTab('shopping');
 }
