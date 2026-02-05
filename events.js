@@ -14,9 +14,7 @@ const EVENT_TYPES = {
 };
 
 // Initialize event data
-let eventData = {
-    events: []
-};
+let events = [];
 
 // Load data on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,17 +27,18 @@ function loadEventData() {
     const stored = localStorage.getItem('eventData');
     if (stored) {
         try {
-            eventData = JSON.parse(stored);
+            const data = JSON.parse(stored);
+        events = data.events || [];
         } catch (error) {
             console.error('Error loading event data:', error);
-            eventData = { events: [] };
+            events = [];
         }
     }
 }
 
 // Save event data to localStorage
 function saveEventData() {
-    localStorage.setItem('eventData', JSON.stringify(eventData));
+    localStorage.setItem('eventData', JSON.stringify({ events }));
 }
 
 // Generate unique ID
@@ -105,7 +104,7 @@ function saveEvent() {
     };
 
     // Add to events array
-    eventData.events.push(event);
+    events.push(event);
 
     // Save to localStorage
     saveEventData();
@@ -145,9 +144,9 @@ function renderDashboard() {
 
 // Update quick stats
 function updateQuickStats() {
-    const activeEvents = eventData.events.filter(e => e.status === 'active');
-    const totalBudget = eventData.events.reduce((sum, e) => sum + (e.totalBudget || 0), 0);
-    const totalSpent = eventData.events.reduce((sum, e) => {
+    const activeEvents = events.filter(e => e.status === 'active');
+    const totalBudget = events.reduce((sum, e) => sum + (e.totalBudget || 0), 0);
+    const totalSpent = events.reduce((sum, e) => {
         const eventSpent = e.expenses.reduce((s, exp) => s + exp.amount, 0);
         return sum + eventSpent;
     }, 0);
@@ -160,7 +159,7 @@ function updateQuickStats() {
 // Render active events
 function renderActiveEvents() {
     const container = document.getElementById('active-events-container');
-    const activeEvents = eventData.events.filter(e => e.status === 'active');
+    const activeEvents = events.filter(e => e.status === 'active');
 
     if (activeEvents.length === 0) {
         container.innerHTML = `
@@ -182,7 +181,7 @@ function renderActiveEvents() {
 // Render upcoming events
 function renderUpcomingEvents() {
     const container = document.getElementById('upcoming-events-container');
-    const upcomingEvents = eventData.events.filter(e => e.status === 'upcoming');
+    const upcomingEvents = events.filter(e => e.status === 'upcoming');
 
     if (upcomingEvents.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No upcoming events</p>';
@@ -195,7 +194,7 @@ function renderUpcomingEvents() {
 // Render completed events
 function renderCompletedEvents() {
     const container = document.getElementById('completed-events-container');
-    const completedEvents = eventData.events.filter(e => e.status === 'completed');
+    const completedEvents = events.filter(e => e.status === 'completed');
 
     if (completedEvents.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No completed events</p>';
@@ -225,7 +224,7 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
     if (percentage >= 100) progressColor = '#EF4444'; // Red
 
     return `
-        <div class="event-card" style="background: linear-gradient(135deg, ${event.color}15, ${event.color}05); border-left: 4px solid ${event.color};">
+        <div class="event-card" onclick="openEventDetail('${event.id}')" style="cursor: pointer;" style="background: linear-gradient(135deg, ${event.color}15, ${event.color}05); border-left: 4px solid ${event.color};">
             <div class="event-card-header">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <div class="event-icon" style="font-size: 2rem;">${event.icon}</div>
@@ -353,3 +352,285 @@ window.closeCreateEventModal = closeCreateEventModal;
 window.saveEvent = saveEvent;
 window.openEventDetails = openEventDetails;
 window.addExpenseToEvent = addExpenseToEvent;
+
+// ========================================
+// Expense Management Functions
+// ========================================
+
+// Open event detail view
+function openEventDetail(eventId) {
+    currentEventId = eventId;
+    const event = events.find(e => e.id === eventId);
+    if (!event) return;
+
+    // Set event details
+    document.getElementById('detail-event-name').textContent = event.name;
+    document.getElementById('detail-event-date').textContent = `${event.icon} ${formatDate(event.eventDate)}`;
+
+    // Show/hide budget summary
+    if (event.totalBudget > 0) {
+        const totalSpent = calculateTotalSpent(eventId);
+        const remaining = event.totalBudget - totalSpent;
+        const percentage = Math.min((totalSpent / event.totalBudget) * 100, 100);
+
+        document.getElementById('budget-summary-section').style.display = 'block';
+        document.getElementById('detail-budget').textContent = `₹${event.totalBudget.toLocaleString('en-IN')}`;
+        document.getElementById('detail-spent').textContent = `₹${totalSpent.toLocaleString('en-IN')}`;
+        document.getElementById('detail-remaining').textContent = `₹${remaining.toLocaleString('en-IN')}`;
+        document.getElementById('budget-progress-bar').style.width = `${percentage}%`;
+        
+        // Change color based on percentage
+        const progressBar = document.getElementById('budget-progress-bar');
+        if (percentage < 70) {
+            progressBar.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
+        } else if (percentage < 90) {
+            progressBar.style.background = 'linear-gradient(90deg, #f59e0b, #fbbf24)';
+        } else {
+            progressBar.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
+        }
+    } else {
+        document.getElementById('budget-summary-section').style.display = 'none';
+    }
+
+    // Render expenses list
+    renderExpensesList(eventId);
+
+    // Show modal
+    document.getElementById('event-detail-modal').classList.add('active');
+}
+
+// Close event detail view
+function closeEventDetail() {
+    document.getElementById('event-detail-modal').classList.remove('active');
+    currentEventId = null;
+}
+
+// Calculate total spent for an event
+function calculateTotalSpent(eventId) {
+    const event = events.find(e => e.id === eventId);
+    if (!event || !event.expenses) return 0;
+    return event.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+}
+
+// Render expenses list grouped by date
+function renderExpensesList(eventId) {
+    const event = events.find(e => e.id === eventId);
+    const container = document.getElementById('expenses-list-container');
+
+    if (!event || !event.expenses || event.expenses.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                <i class="fas fa-receipt" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <p>No expenses yet</p>
+                <p style="font-size: 0.9rem;">Click "Add Expense" to start tracking</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Group expenses by date
+    const groupedExpenses = {};
+    event.expenses.forEach(expense => {
+        if (!groupedExpenses[expense.date]) {
+            groupedExpenses[expense.date] = [];
+        }
+        groupedExpenses[expense.date].push(expense);
+    });
+
+    // Sort dates (newest first)
+    const sortedDates = Object.keys(groupedExpenses).sort((a, b) => new Date(b) - new Date(a));
+
+    let html = '';
+    sortedDates.forEach(date => {
+        const dateExpenses = groupedExpenses[date];
+        const dateTotal = dateExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+
+        html += `
+            <div style="margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--glass-border);">
+                    <h3 style="margin: 0; font-size: 1rem; color: var(--text-primary);">${formatDate(date)}</h3>
+                    <span style="font-weight: 600; color: var(--text-secondary);">₹${dateTotal.toLocaleString('en-IN')}</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    ${dateExpenses.map(expense => renderExpenseItem(expense)).join('')}
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+// Render single expense item
+function renderExpenseItem(expense) {
+    const category = EXPENSE_CATEGORIES[expense.category] || EXPENSE_CATEGORIES.other;
+    
+    return `
+        <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                <div style="font-size: 1.5rem;">${category.icon}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 500; margin-bottom: 0.25rem;">${expense.name}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">${category.label}</div>
+                    ${expense.notes ? `<div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem; font-style: italic;">${expense.notes}</div>` : ''}
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary);">₹${expense.amount.toLocaleString('en-IN')}</div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button onclick="editExpense('${expense.id}')" class="btn-icon" style="padding: 0.5rem;">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="deleteExpense('${expense.id}')" class="btn-icon" style="padding: 0.5rem; color: #ef4444;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Open add expense modal
+function openAddExpenseModal() {
+    if (!currentEventId) return;
+    
+    currentExpenseId = null;
+    document.getElementById('expense-modal-title').textContent = 'Add Expense';
+    document.getElementById('expense-form').reset();
+    
+    // Set default date to event date
+    const event = events.find(e => e.id === currentEventId);
+    if (event) {
+        document.getElementById('expense-date').value = event.eventDate;
+    }
+    
+    document.getElementById('expense-modal').classList.add('active');
+}
+
+// Close expense modal
+function closeExpenseModal() {
+    document.getElementById('expense-modal').classList.remove('active');
+    currentExpenseId = null;
+}
+
+// Save expense (add or edit)
+function saveExpense() {
+    const name = document.getElementById('expense-name').value.trim();
+    const category = document.getElementById('expense-category').value;
+    const amount = parseFloat(document.getElementById('expense-amount').value);
+    const date = document.getElementById('expense-date').value;
+    const notes = document.getElementById('expense-notes').value.trim();
+
+    // Validation
+    if (!name || !category || !amount || !date) {
+        alert('Please fill in all required fields');
+        return;
+    }
+
+    if (amount <= 0) {
+        alert('Amount must be greater than 0');
+        return;
+    }
+
+    const event = events.find(e => e.id === currentEventId);
+    if (!event) return;
+
+    if (!event.expenses) {
+        event.expenses = [];
+    }
+
+    if (currentExpenseId) {
+        // Edit existing expense
+        const expenseIndex = event.expenses.findIndex(e => e.id === currentExpenseId);
+        if (expenseIndex >= 0) {
+            event.expenses[expenseIndex] = {
+                ...event.expenses[expenseIndex],
+                name,
+                category,
+                amount,
+                date,
+                notes,
+                updatedAt: new Date().toISOString()
+            };
+        }
+    } else {
+        // Add new expense
+        const expense = {
+            id: generateId('exp'),
+            name,
+            category,
+            amount,
+            date,
+            notes,
+            createdAt: new Date().toISOString()
+        };
+        event.expenses.push(expense);
+    }
+
+    event.updatedAt = new Date().toISOString();
+    saveData();
+    renderExpensesList(currentEventId);
+    
+    // Update budget summary if visible
+    if (event.totalBudget > 0) {
+        const totalSpent = calculateTotalSpent(currentEventId);
+        const remaining = event.totalBudget - totalSpent;
+        const percentage = Math.min((totalSpent / event.totalBudget) * 100, 100);
+
+        document.getElementById('detail-spent').textContent = `₹${totalSpent.toLocaleString('en-IN')}`;
+        document.getElementById('detail-remaining').textContent = `₹${remaining.toLocaleString('en-IN')}`;
+        document.getElementById('budget-progress-bar').style.width = `${percentage}%`;
+    }
+
+    // Update dashboard
+    renderDashboard();
+    
+    closeExpenseModal();
+}
+
+// Edit expense
+function editExpense(expenseId) {
+    const event = events.find(e => e.id === currentEventId);
+    if (!event) return;
+
+    const expense = event.expenses.find(e => e.id === expenseId);
+    if (!expense) return;
+
+    currentExpenseId = expenseId;
+    document.getElementById('expense-modal-title').textContent = 'Edit Expense';
+    document.getElementById('expense-name').value = expense.name;
+    document.getElementById('expense-category').value = expense.category;
+    document.getElementById('expense-amount').value = expense.amount;
+    document.getElementById('expense-date').value = expense.date;
+    document.getElementById('expense-notes').value = expense.notes || '';
+
+    document.getElementById('expense-modal').classList.add('active');
+}
+
+// Delete expense
+function deleteExpense(expenseId) {
+    if (!confirm('Are you sure you want to delete this expense?')) return;
+
+    const event = events.find(e => e.id === currentEventId);
+    if (!event) return;
+
+    event.expenses = event.expenses.filter(e => e.id !== expenseId);
+    event.updatedAt = new Date().toISOString();
+    
+    saveData();
+    renderExpensesList(currentEventId);
+    
+    // Update budget summary if visible
+    if (event.totalBudget > 0) {
+        const totalSpent = calculateTotalSpent(currentEventId);
+        const remaining = event.totalBudget - totalSpent;
+        const percentage = Math.min((totalSpent / event.totalBudget) * 100, 100);
+
+        document.getElementById('detail-spent').textContent = `₹${totalSpent.toLocaleString('en-IN')}`;
+        document.getElementById('detail-remaining').textContent = `₹${remaining.toLocaleString('en-IN')}`;
+        document.getElementById('budget-progress-bar').style.width = `${percentage}%`;
+    }
+
+    // Update dashboard
+    renderDashboard();
+}
