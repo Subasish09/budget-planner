@@ -22,11 +22,12 @@
             <div class="header-title-group">
                 <a href="index.html" class="btn-icon"><i class="fas fa-arrow-left"></i></a>
                 <div>
-                    <h1>Event Spending Tracker</h1>
+                    <h1>Event Spending</h1>
                     <p class="subtitle">Track expenses for special occasions</p>
                 </div>
             </div>
             <div class="header-controls">
+                <div id="sync-status" class="sync-status"></div>
                 <button class="btn-primary" onclick="openCreateEventModal()">
                     <i class="fas fa-plus"></i> Create Event
                 </button>
@@ -34,40 +35,25 @@
         </header>
 
         <!-- Quick Stats -->
-        <div class="stats-grid" style="margin-bottom: 2rem;">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div class="stat-details">
-                    <div class="stat-label">Active Events</div>
-                    <div class="stat-value" id="active-events-count">0</div>
-                </div>
+        <div class="dashboard-grid" style="margin-bottom: 2rem;">
+            <div class="stat-card" style="border-color: rgba(139, 92, 246, 0.2);">
+                <div class="stat-label">Active Events</div>
+                <div class="stat-value" id="active-events-count">0</div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #3B82F6, #60A5FA);">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div class="stat-details">
-                    <div class="stat-label">Total Budget</div>
-                    <div class="stat-value" id="total-budget">₹0</div>
-                </div>
+            <div class="stat-card" style="border-color: rgba(59, 130, 246, 0.2);">
+                <div class="stat-label">Total Budget</div>
+                <div class="stat-value" id="total-budget">₹0</div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="stat-details">
-                    <div class="stat-label">Total Spent</div>
-                    <div class="stat-value" id="total-spent">₹0</div>
-                </div>
+            <div class="stat-card" style="border-color: rgba(16, 185, 129, 0.2);">
+                <div class="stat-label">Total Spent</div>
+                <div class="stat-value" id="total-spent">₹0</div>
             </div>
         </div>
 
         <!-- Active Events Section -->
-        <section class="section">
+        <div class="grocery-section" style="margin-bottom: 2rem;">
             <div class="section-header">
                 <h2><i class="fas fa-fire"></i> Active Events</h2>
             </div>
@@ -82,93 +68,93 @@
                     </button>
                 </div>
             </div>
-        </section>
+            </section>
 
-        <!-- Upcoming Events Section -->
-        <section class="section">
-            <div class="section-header">
-                <h2><i class="fas fa-clock"></i> Upcoming Events</h2>
-            </div>
-            <div id="upcoming-events-container">
-                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No upcoming events</p>
-            </div>
-        </section>
+            <!-- Upcoming Events Section -->
+            <section class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-clock"></i> Upcoming Events</h2>
+                </div>
+                <div id="upcoming-events-container">
+                    <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No upcoming events</p>
+                </div>
+            </section>
 
-        <!-- Completed Events Section -->
-        <section class="section">
-            <div class="section-header">
-                <h2><i class="fas fa-check-circle"></i> Completed Events</h2>
-            </div>
-            <div id="completed-events-container">
-                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No completed events</p>
-            </div>
-        </section>
-    </div>
+            <!-- Completed Events Section -->
+            <section class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-check-circle"></i> Completed Events</h2>
+                </div>
+                <div id="completed-events-container">
+                    <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No completed events</p>
+                </div>
+            </section>
+        </div>
 
-    <!-- Create Event Modal -->
-    <div class="modal-overlay" id="create-event-modal">
-        <div class="modal" style="max-width: 600px;">
-            <div class="modal-header">
-                <h2 id="event-modal-title">Create New Event</h2>
-                <button class="close-modal" onclick="closeCreateEventModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+        <!-- Create Event Modal -->
+        <div class="modal-overlay" id="create-event-modal">
+            <div class="modal" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h2 id="event-modal-title">Create New Event</h2>
+                    <button class="close-modal" onclick="closeCreateEventModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
 
-            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-                <form id="event-form">
-                    <!-- Event Name -->
-                    <div class="form-group">
-                        <label>Event Name *</label>
-                        <input type="text" id="event-name" placeholder="e.g., Wedding Ceremony, Birthday Party"
-                            required>
-                    </div>
-
-                    <!-- Event Type & Date in one row -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                    <form id="event-form">
+                        <!-- Event Name -->
                         <div class="form-group">
-                            <label>Event Type *</label>
-                            <select id="event-type" required>
-                                <option value="">Select...</option>
-                                <option value="wedding">💍 Wedding</option>
-                                <option value="party">🎉 Party</option>
-                                <option value="trip">🏖️ Trip</option>
-                                <option value="renovation">🏠 Renovation</option>
-                                <option value="festival">🪔 Festival</option>
-                                <option value="birthday">🎂 Birthday</option>
-                                <option value="other">📌 Other</option>
-                            </select>
+                            <label>Event Name *</label>
+                            <input type="text" id="event-name" placeholder="e.g., Wedding Ceremony, Birthday Party"
+                                required>
                         </div>
 
-                        <div class="form-group">
-                            <label>Event Date *</label>
-                            <input type="date" id="event-date" required>
+                        <!-- Event Type & Date in one row -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label>Event Type *</label>
+                                <select id="event-type" required>
+                                    <option value="">Select...</option>
+                                    <option value="wedding">💍 Wedding</option>
+                                    <option value="party">🎉 Party</option>
+                                    <option value="trip">🏖️ Trip</option>
+                                    <option value="renovation">🏠 Renovation</option>
+                                    <option value="festival">🪔 Festival</option>
+                                    <option value="birthday">🎂 Birthday</option>
+                                    <option value="other">📌 Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Event Date *</label>
+                                <input type="date" id="event-date" required>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Budget (Optional) -->
-                    <div class="form-group">
-                        <label>Budget (Optional)</label>
-                        <input type="number" id="event-budget" placeholder="₹ 0" min="0" step="1000">
-                        <small
-                            style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Leave
-                            empty if no budget limit</small>
-                    </div>
-                </form>
-            </div>
+                        <!-- Budget (Optional) -->
+                        <div class="form-group">
+                            <label>Budget (Optional)</label>
+                            <input type="number" id="event-budget" placeholder="₹ 0" min="0" step="1000">
+                            <small
+                                style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Leave
+                                empty if no budget limit</small>
+                        </div>
+                    </form>
+                </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn-secondary" onclick="closeCreateEventModal()">
-                    Cancel
-                </button>
-                <button type="button" class="btn-primary" onclick="saveEvent()">
-                    <i class="fas fa-save"></i> Create Event
-                </button>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeCreateEventModal()">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn-primary" onclick="saveEvent()">
+                        <i class="fas fa-save"></i> Create Event
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script src="events.js"></script>
+        <script src="events.js"></script>
 </body>
 
 </html>
