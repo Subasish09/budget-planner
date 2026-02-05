@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="manifest" href="manifest.json">
-    <script src="auth.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
@@ -17,51 +16,22 @@
 </head>
 
 <body>
-    <!-- Auth Overlay -->
-    <div id="auth-overlay" class="auth-overlay">
-        <div class="auth-card">
-            <div class="auth-icon">
-                <i class="fas fa-lock"></i>
-            </div>
-            <h2>Enter Password</h2>
-            <input type="password" id="auth-password" placeholder="Enter your password" autocomplete="off">
-            <button onclick="verifyPassword()" class="auth-submit">
-                <i class="fas fa-unlock"></i> Unlock
-            </button>
-            <p class="auth-hint">Hint: Your secure password</p>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="container" id="main-content">
+    <div class="container">
         <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1><i class="fas fa-calendar-star"></i> Event Spending Tracker</h1>
+        <header class="app-header">
+            <div class="header-title-group">
+                <a href="index.html" class="btn-icon"><i class="fas fa-arrow-left"></i></a>
+                <div>
+                    <h1>Event Spending Tracker</h1>
+                    <p class="subtitle">Track expenses for special occasions</p>
+                </div>
+            </div>
+            <div class="header-controls">
                 <button class="btn-primary" onclick="openCreateEventModal()">
                     <i class="fas fa-plus"></i> Create Event
                 </button>
             </div>
         </header>
-
-        <!-- Navigation -->
-        <nav class="nav-tabs">
-            <a href="index.html" class="nav-tab">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="credit-cards.html" class="nav-tab">
-                <i class="fas fa-credit-card"></i> Credit Cards
-            </a>
-            <a href="grocery.html" class="nav-tab">
-                <i class="fas fa-shopping-cart"></i> Grocery
-            </a>
-            <a href="subscriptions.html" class="nav-tab">
-                <i class="fas fa-sync-alt"></i> Subscriptions
-            </a>
-            <a href="events.html" class="nav-tab active">
-                <i class="fas fa-calendar-star"></i> Events
-            </a>
-        </nav>
 
         <!-- Quick Stats -->
         <div class="stats-grid" style="margin-bottom: 2rem;">
