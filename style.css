@@ -2990,3 +2990,89 @@ select,
         width: 100%;
     }
 }
+
+/* ========================================
+   Event Spending Tracker - Mobile Styles
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* Header adjustments for mobile */
+    .app-header .header-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .app-header .header-controls .btn-primary {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.95rem !important;
+    }
+
+    /* Stats grid - stack on mobile */
+    .dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Event cards */
+    .event-card {
+        padding: 1rem;
+    }
+
+    .event-card-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1rem;
+    }
+
+    .event-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .event-footer .btn-primary {
+        width: 100%;
+    }
+
+    /* Modal adjustments */
+    .modal {
+        max-width: 95% !important;
+        margin: 1rem;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem !important;
+    }
+
+    .modal-footer button {
+        width: 100%;
+        padding: 0.75rem !important;
+    }
+
+    /* Form grid - stack on mobile */
+    .modal-body form > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    .app-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+
+    .event-icon {
+        font-size: 1.5rem !important;
+    }
+}
