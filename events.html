@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Spending Tracker - Budget Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="auth.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Auth Overlay -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h2>Enter Password</h2>
+            <input type="password" id="auth-password" placeholder="Enter your password" autocomplete="off">
+            <button onclick="verifyPassword()" class="auth-submit">
+                <i class="fas fa-unlock"></i> Unlock
+            </button>
+            <p class="auth-hint">Hint: Your secure password</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" id="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-calendar-star"></i> Event Spending Tracker</h1>
+                <button class="btn-primary" onclick="openCreateEventModal()">
+                    <i class="fas fa-plus"></i> Create Event
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <a href="index.html" class="nav-tab">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="credit-cards.html" class="nav-tab">
+                <i class="fas fa-credit-card"></i> Credit Cards
+            </a>
+            <a href="grocery.html" class="nav-tab">
+                <i class="fas fa-shopping-cart"></i> Grocery
+            </a>
+            <a href="subscriptions.html" class="nav-tab">
+                <i class="fas fa-sync-alt"></i> Subscriptions
+            </a>
+            <a href="events.html" class="nav-tab active">
+                <i class="fas fa-calendar-star"></i> Events
+            </a>
+        </nav>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid" style="margin-bottom: 2rem;">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-label">Active Events</div>
+                    <div class="stat-value" id="active-events-count">0</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #3B82F6, #60A5FA);">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-label">Total Budget</div>
+                    <div class="stat-value" id="total-budget">₹0</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-label">Total Spent</div>
+                    <div class="stat-value" id="total-spent">₹0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Events Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-fire"></i> Active Events</h2>
+            </div>
+            <div id="active-events-container">
+                <div class="empty-state">
+                    <i class="fas fa-calendar-plus"
+                        style="font-size: 4rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
+                    <h3>No Active Events</h3>
+                    <p>Create your first event to start tracking expenses</p>
+                    <button class="btn-primary" onclick="openCreateEventModal()" style="margin-top: 1rem;">
+                        <i class="fas fa-plus"></i> Create Event
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Events Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-clock"></i> Upcoming Events</h2>
+            </div>
+            <div id="upcoming-events-container">
+                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No upcoming events</p>
+            </div>
+        </section>
+
+        <!-- Completed Events Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-check-circle"></i> Completed Events</h2>
+            </div>
+            <div id="completed-events-container">
+                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No completed events</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Create Event Modal -->
+    <div class="modal-overlay" id="create-event-modal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="event-modal-title">Create New Event</h2>
+                <button class="close-modal" onclick="closeCreateEventModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <form id="event-form">
+                    <!-- Event Name -->
+                    <div class="form-group">
+                        <label>Event Name *</label>
+                        <input type="text" id="event-name" placeholder="e.g., Wedding Ceremony" required>
+                    </div>
+
+                    <!-- Event Type -->
+                    <div class="form-group">
+                        <label>Event Type *</label>
+                        <select id="event-type" required>
+                            <option value="">Select type...</option>
+                            <option value="wedding">💍 Wedding</option>
+                            <option value="party">🎉 Party</option>
+                            <option value="trip">🏖️ Trip/Vacation</option>
+                            <option value="renovation">🏠 Home Renovation</option>
+                            <option value="festival">🪔 Festival</option>
+                            <option value="birthday">🎂 Birthday</option>
+                            <option value="other">📌 Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label>Start Date *</label>
+                            <input type="date" id="event-start-date" required>
+                        </div>
+                        <div>
+                            <label>End Date *</label>
+                            <input type="date" id="event-end-date" required>
+                        </div>
+                    </div>
+
+                    <!-- Total Budget -->
+                    <div class="form-group">
+                        <label>Total Budget (Optional)</label>
+                        <input type="number" id="event-budget" placeholder="₹ 0" min="0" step="1000">
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label>Description (Optional)</label>
+                        <textarea id="event-description" rows="3"
+                            placeholder="Add notes about this event..."></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeCreateEventModal()">
+                    Cancel
+                </button>
+                <button type="button" class="btn-primary" onclick="saveEvent()">
+                    <i class="fas fa-save"></i> Create Event
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="events.js"></script>
+</body>
+
+</html>
