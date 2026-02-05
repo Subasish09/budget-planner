@@ -94,28 +94,33 @@
 
         <!-- Create Event Modal -->
         <div class="modal-overlay" id="create-event-modal">
-            <div class="modal" style="max-width: 500px;">
-                <div class="modal-header">
-                    <h2 id="event-modal-title">Create New Event</h2>
+            <div class="modal" style="max-width: 500px !important;">
+                <div class="modal-header" style="padding: 1.5rem !important;">
+                    <h2 id="event-modal-title" style="margin: 0; font-size: 1.5rem;">Create New Event</h2>
                     <button class="close-modal" onclick="closeCreateEventModal()">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
 
-                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div class="modal-body" style="padding: 1.5rem !important;">
                     <form id="event-form">
                         <!-- Event Name -->
-                        <div class="form-group">
-                            <label>Event Name *</label>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label
+                                style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem;">Event
+                                Name *</label>
                             <input type="text" id="event-name" placeholder="e.g., Wedding Ceremony, Birthday Party"
-                                required>
+                                required style="width: 100%; padding: 0.75rem; font-size: 1rem; border-radius: 8px;">
                         </div>
 
                         <!-- Event Type & Date in one row -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div class="form-group">
-                                <label>Event Type *</label>
-                                <select id="event-type" required>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem;">Event
+                                    Type *</label>
+                                <select id="event-type" required
+                                    style="width: 100%; padding: 0.75rem; font-size: 1rem; border-radius: 8px;">
                                     <option value="">Select...</option>
                                     <option value="wedding">💍 Wedding</option>
                                     <option value="party">🎉 Party</option>
@@ -127,28 +132,38 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
-                                <label>Event Date *</label>
-                                <input type="date" id="event-date" required>
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem;">Event
+                                    Date *</label>
+                                <input type="date" id="event-date" required
+                                    style="width: 100%; padding: 0.75rem; font-size: 1rem; border-radius: 8px;">
                             </div>
                         </div>
 
                         <!-- Budget (Optional) -->
-                        <div class="form-group">
-                            <label>Budget (Optional)</label>
-                            <input type="number" id="event-budget" placeholder="₹ 0" min="0" step="1000">
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem;">Budget
+                                (Optional)</label>
+                            <input type="number" id="event-budget" placeholder="₹ 0" min="0" step="1000"
+                                style="width: 100%; padding: 0.75rem; font-size: 1rem; border-radius: 8px;">
                             <small
-                                style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Leave
-                                empty if no budget limit</small>
+                                style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; display: block;">
+                                Leave empty if no budget limit
+                            </small>
                         </div>
                     </form>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeCreateEventModal()">
+                <div class="modal-footer"
+                    style="padding: 1.25rem 1.5rem !important; display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-secondary" onclick="closeCreateEventModal()"
+                        style="padding: 0.75rem 1.5rem !important; font-size: 1rem !important;">
                         Cancel
                     </button>
-                    <button type="button" class="btn-primary" onclick="saveEvent()">
+                    <button type="button" class="btn-primary" onclick="saveEvent()"
+                        style="padding: 0.75rem 1.5rem !important; font-size: 1rem !important;">
                         <i class="fas fa-save"></i> Create Event
                     </button>
                 </div>
