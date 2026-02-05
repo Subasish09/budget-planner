@@ -107,20 +107,21 @@
                         <!-- Event Name -->
                         <div style="margin-bottom: 1.5rem;">
                             <label
-                                style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem;">Event
-                                Name *</label>
+                                style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Event
+                                name *</label>
                             <input type="text" id="event-name" placeholder="e.g., Wedding Ceremony, Birthday Party"
-                                required style="width: 100%; padding: 0.75rem; font-size: 1rem; border-radius: 8px;">
+                                required
+                                style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
                         </div>
 
                         <!-- Event Type & Date in one row -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                             <div>
                                 <label
-                                    style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem;">Event
-                                    Type *</label>
+                                    style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Event
+                                    type *</label>
                                 <select id="event-type" required
-                                    style="width: 100%; padding: 0.75rem; font-size: 1rem; border-radius: 8px;">
+                                    style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
                                     <option value="">Select...</option>
                                     <option value="wedding">💍 Wedding</option>
                                     <option value="party">🎉 Party</option>
@@ -134,22 +135,22 @@
 
                             <div>
                                 <label
-                                    style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem;">Event
-                                    Date *</label>
+                                    style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Event
+                                    date *</label>
                                 <input type="date" id="event-date" required
-                                    style="width: 100%; padding: 0.75rem; font-size: 1rem; border-radius: 8px;">
+                                    style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
                             </div>
                         </div>
 
                         <!-- Budget (Optional) -->
                         <div>
                             <label
-                                style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem;">Budget
-                                (Optional)</label>
+                                style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Budget
+                                (optional)</label>
                             <input type="number" id="event-budget" placeholder="₹ 0" min="0" step="1000"
-                                style="width: 100%; padding: 0.75rem; font-size: 1rem; border-radius: 8px;">
+                                style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
                             <small
-                                style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; display: block;">
+                                style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.75rem; display: block; opacity: 0.7;">
                                 Leave empty if no budget limit
                             </small>
                         </div>
@@ -157,13 +158,13 @@
                 </div>
 
                 <div class="modal-footer"
-                    style="padding: 1.25rem 1.5rem !important; display: flex; gap: 1rem; justify-content: flex-end;">
-                    <button type="button" class="btn-secondary" onclick="closeCreateEventModal()"
-                        style="padding: 0.75rem 1.5rem !important; font-size: 1rem !important;">
+                    style="padding: 1.5rem !important; display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--glass-border);">
+                    <button type="button" onclick="closeCreateEventModal()"
+                        style="padding: 0.875rem 1.75rem !important; font-size: 1rem !important; border-radius: 8px; border: 1px solid var(--glass-border); background: transparent; color: var(--text-primary); cursor: pointer; transition: all 0.2s;">
                         Cancel
                     </button>
-                    <button type="button" class="btn-primary" onclick="saveEvent()"
-                        style="padding: 0.75rem 1.5rem !important; font-size: 1rem !important;">
+                    <button type="button" onclick="saveEvent()"
+                        style="padding: 0.875rem 1.75rem !important; font-size: 1rem !important; border-radius: 8px; border: none; background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                         <i class="fas fa-save"></i> Create Event
                     </button>
                 </div>
