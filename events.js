@@ -13,8 +13,22 @@ const EVENT_TYPES = {
     other: { icon: '📌', color: '#6B7280', label: 'Other' }
 };
 
+
+// Expense categories with icons and colors
+const EXPENSE_CATEGORIES = {
+    venue: { icon: '🏛️', color: '#8b5cf6', label: 'Venue' },
+    food: { icon: '🍽️', color: '#10b981', label: 'Food & Catering' },
+    decoration: { icon: '🎨', color: '#f59e0b', label: 'Decoration' },
+    travel: { icon: '✈️', color: '#3b82f6', label: 'Travel' },
+    shopping: { icon: '🛍️', color: '#ec4899', label: 'Shopping' },
+    entertainment: { icon: '🎭', color: '#a855f7', label: 'Entertainment' },
+    other: { icon: '📌', color: '#6b7280', label: 'Other' }
+};
+
 // Initialize event data
 let events = [];
+let currentEventId = null;
+let currentExpenseId = null;
 
 // Load data on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -224,7 +238,7 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
     if (percentage >= 100) progressColor = '#EF4444'; // Red
 
     return `
-        <div class="event-card" onclick="openEventDetail('${event.id}')" style="cursor: pointer;" style="background: linear-gradient(135deg, ${event.color}15, ${event.color}05); border-left: 4px solid ${event.color};">
+        <div class="event-card" onclick="openEventDetail('${event.id}')"  style="cursor: pointer;" style="background: linear-gradient(135deg, ${event.color}15, ${event.color}05); border-left: 4px solid ${event.color};">
             <div class="event-card-header">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <div class="event-icon" style="font-size: 2rem;">${event.icon}</div>
@@ -281,7 +295,7 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
                         <i class="fas fa-fire"></i> Active
                     </span>`
         }
-                <button class="btn-primary" onclick="addExpenseToEvent('${event.id}')">
+                <button class="btn-primary" onclick="openEventDetail('${event.id}')">
                     <i class="fas fa-plus"></i> Add Expense
                 </button>
             </div>
@@ -301,16 +315,7 @@ function formatDate(dateStr) {
     return date.toLocaleDateString('en-US', options);
 }
 
-// Placeholder functions (to be implemented in next phases)
-function openEventDetails(eventId) {
-    alert('Event details page coming soon!');
-    // TODO: Navigate to event detail page
-}
-
-function addExpenseToEvent(eventId) {
-    alert('Add expense feature coming soon!');
-    // TODO: Open add expense modal
-}
+// Placeholder functions removed - implemented below
 
 // Toast notification (reuse from grocery.js)
 function showToast(message) {
@@ -568,7 +573,7 @@ function saveExpense() {
     }
 
     event.updatedAt = new Date().toISOString();
-    saveData();
+    saveEventData();
     renderExpensesList(currentEventId);
     
     // Update budget summary if visible
@@ -617,7 +622,7 @@ function deleteExpense(expenseId) {
     event.expenses = event.expenses.filter(e => e.id !== expenseId);
     event.updatedAt = new Date().toISOString();
     
-    saveData();
+    saveEventData();
     renderExpensesList(currentEventId);
     
     // Update budget summary if visible
