@@ -53,10 +53,9 @@ function openCreateEventModal() {
     document.getElementById('event-modal-title').textContent = 'Create New Event';
     document.getElementById('event-form').reset();
 
-    // Set default start date to today
+    // Set default date to today
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('event-start-date').value = today;
-    document.getElementById('event-end-date').value = today;
+    document.getElementById('event-date').value = today;
 
     modal.classList.add('active');
 }
@@ -71,10 +70,8 @@ function closeCreateEventModal() {
 function saveEvent() {
     const name = document.getElementById('event-name').value.trim();
     const type = document.getElementById('event-type').value;
-    const startDate = document.getElementById('event-start-date').value;
-    const endDate = document.getElementById('event-end-date').value;
+    const eventDate = document.getElementById('event-date').value;
     const budget = parseFloat(document.getElementById('event-budget').value) || 0;
-    const description = document.getElementById('event-description').value.trim();
 
     // Validation
     if (!name) {
@@ -87,13 +84,8 @@ function saveEvent() {
         return;
     }
 
-    if (!startDate || !endDate) {
-        alert('Please select start and end dates');
-        return;
-    }
-
-    if (new Date(endDate) < new Date(startDate)) {
-        alert('End date cannot be before start date');
+    if (!eventDate) {
+        alert('Please select event date');
         return;
     }
 
@@ -104,12 +96,9 @@ function saveEvent() {
         type: type,
         icon: EVENT_TYPES[type].icon,
         color: EVENT_TYPES[type].color,
-        startDate: startDate,
-        endDate: endDate,
+        eventDate: eventDate,
         totalBudget: budget,
-        categoryBudgets: {},
-        description: description,
-        status: determineEventStatus(startDate, endDate),
+        status: determineEventStatus(eventDate),
         expenses: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -131,18 +120,18 @@ function saveEvent() {
     renderDashboard();
 }
 
-// Determine event status based on dates
-function determineEventStatus(startDate, endDate) {
+// Determine event status based on date
+function determineEventStatus(eventDate) {
     const now = new Date();
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    if (now < start) {
+    now.setHours(0, 0, 0, 0);
+    
+    const event = new Date(eventDate);
+    event.setHours(0, 0, 0, 0);
+    
+    if (event > now) {
         return 'upcoming';
-    } else if (now > end) {
-        return 'completed';
     } else {
-        return 'active';
+        return 'active'; // Active until manually completed
     }
 }
 
@@ -225,10 +214,10 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
 
     // Calculate days
     const now = new Date();
-    const endDate = new Date(event.endDate);
-    const startDate = new Date(event.startDate);
-    const daysRemaining = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
-    const daysUntilStart = Math.ceil((startDate - now) / (1000 * 60 * 60 * 24));
+    const eventDate = new Date(event.eventDate);
+    
+    
+    const daysUntilStart = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
 
     // Progress bar color
     let progressColor = '#10B981'; // Green
@@ -243,7 +232,7 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
                     <div>
                         <h3 style="margin: 0; color: var(--text-primary);">${event.name}</h3>
                         <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
-                            ${formatDate(event.startDate)} - ${formatDate(event.endDate)}
+                            ${formatDate(event.eventDate)}
                         </p>
                     </div>
                 </div>
@@ -290,7 +279,7 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
                         <i class="fas fa-check-circle"></i> Completed
                     </span>` :
                 `<span style="color: var(--text-secondary); font-size: 0.9rem;">
-                        <i class="fas fa-calendar"></i> ${daysRemaining} day${daysRemaining !== 1 ? 's' : ''} remaining
+                        <i class="fas fa-fire"></i> Active
                     </span>`
         }
                 <button class="btn-primary" onclick="addExpenseToEvent('${event.id}')">

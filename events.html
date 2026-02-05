@@ -120,47 +120,39 @@
                     <!-- Event Name -->
                     <div class="form-group">
                         <label>Event Name *</label>
-                        <input type="text" id="event-name" placeholder="e.g., Wedding Ceremony" required>
+                        <input type="text" id="event-name" placeholder="e.g., Wedding Ceremony, Birthday Party"
+                            required>
                     </div>
 
-                    <!-- Event Type -->
-                    <div class="form-group">
-                        <label>Event Type *</label>
-                        <select id="event-type" required>
-                            <option value="">Select type...</option>
-                            <option value="wedding">💍 Wedding</option>
-                            <option value="party">🎉 Party</option>
-                            <option value="trip">🏖️ Trip/Vacation</option>
-                            <option value="renovation">🏠 Home Renovation</option>
-                            <option value="festival">🪔 Festival</option>
-                            <option value="birthday">🎂 Birthday</option>
-                            <option value="other">📌 Other</option>
-                        </select>
-                    </div>
-
-                    <!-- Date Range -->
-                    <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div>
-                            <label>Start Date *</label>
-                            <input type="date" id="event-start-date" required>
+                    <!-- Event Type & Date in one row -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Event Type *</label>
+                            <select id="event-type" required>
+                                <option value="">Select...</option>
+                                <option value="wedding">💍 Wedding</option>
+                                <option value="party">🎉 Party</option>
+                                <option value="trip">🏖️ Trip</option>
+                                <option value="renovation">🏠 Renovation</option>
+                                <option value="festival">🪔 Festival</option>
+                                <option value="birthday">🎂 Birthday</option>
+                                <option value="other">📌 Other</option>
+                            </select>
                         </div>
-                        <div>
-                            <label>End Date *</label>
-                            <input type="date" id="event-end-date" required>
+
+                        <div class="form-group">
+                            <label>Event Date *</label>
+                            <input type="date" id="event-date" required>
                         </div>
                     </div>
 
-                    <!-- Total Budget -->
+                    <!-- Budget (Optional) -->
                     <div class="form-group">
-                        <label>Total Budget (Optional)</label>
+                        <label>Budget (Optional)</label>
                         <input type="number" id="event-budget" placeholder="₹ 0" min="0" step="1000">
-                    </div>
-
-                    <!-- Description -->
-                    <div class="form-group">
-                        <label>Description (Optional)</label>
-                        <textarea id="event-description" rows="3"
-                            placeholder="Add notes about this event..."></textarea>
+                        <small
+                            style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Leave
+                            empty if no budget limit</small>
                     </div>
                 </form>
             </div>
