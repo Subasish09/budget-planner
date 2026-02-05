@@ -1955,30 +1955,28 @@ window.saveCustomItem = saveCustomItem;
 
 
 // Quick add from inventory
+
+// Quick add from inventory - using custom modal
+let pendingInventoryItem = null;
+let pendingListId = null;
+
 function quickAddFromInventory(itemIndex) {
     const item = window.groceryData.inventory[itemIndex];
-
+    
     if (!item) {
         console.error('Item not found at index:', itemIndex);
         return;
     }
-
-    // Prompt for quantity
-    const qty = prompt(`Add "${item.name}" to shopping list\n\nEnter quantity:`, '1');
-
-    if (!qty || parseFloat(qty) <= 0) {
-        return; // User cancelled or invalid quantity
-    }
-
+    
     // Get or create current bi-month shopping list
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth(); // 0-11
-
+    
     // Determine bi-monthly period
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     let startMonth, endMonth;
-
+    
     if (month % 2 === 0) {
         startMonth = monthNames[month];
         endMonth = monthNames[month + 1];
@@ -1986,54 +1984,165 @@ function quickAddFromInventory(itemIndex) {
         startMonth = monthNames[month - 1];
         endMonth = monthNames[month];
     }
-
+    
     const listId = `${startMonth}-${endMonth} ${year}`;
+    
+    // Store for later use
+    pendingInventoryItem = item;
+    pendingListId = listId;
+    
+    // Show custom modal
+    showQuantityModal(item, listId);
+}
 
+function showQuantityModal(item, listId) {
+    const modal = document.getElementById('quantity-modal');
+    
+    // Update modal content
+    document.getElementById('quantity-item-name').textContent = item.name;
+    document.getElementById('quantity-item-details').textContent = `${item.unit} • ₹${item.current_price}`;
+    document.getElementById('quantity-list-name').textContent = listId;
+    document.getElementById('quantity-input').value = '1';
+    
+    // Show modal
+    modal.classList.add('active');
+    
+    // Focus on input
+    setTimeout(() => {
+        const input = document.getElementById('quantity-input');
+        input.focus();
+        input.select();
+    }, 100);
+    
+    // Allow Enter key to submit
+    const input = document.getElementById('quantity-input');
+    input.onkeypress = (e) => {
+        if (e.key === 'Enter') {
+            confirmQuantityAdd();
+        }
+    };
+}
+
+function closeQuantityModal() {
+    const modal = document.getElementById('quantity-modal');
+    modal.classList.remove('active');
+    pendingInventoryItem = null;
+    pendingListId = null;
+}
+
+function confirmQuantityAdd() {
+    const qty = parseFloat(document.getElementById('quantity-input').value);
+    
+    if (!qty || qty <= 0) {
+        alert('Please enter a valid quantity');
+        return;
+    }
+    
+    if (!pendingInventoryItem || !pendingListId) {
+        console.error('No pending item');
+        return;
+    }
+    
+    const item = pendingInventoryItem;
+    const listId = pendingListId;
+    
     // Initialize shopping_lists if needed
     if (!window.groceryData.shopping_lists) {
         window.groceryData.shopping_lists = [];
     }
-
+    
     // Find or create shopping list
     let shoppingList = window.groceryData.shopping_lists.find(l => l.id === listId);
-
+    
     if (!shoppingList) {
         // Create new shopping list for current bi-month
         shoppingList = {
             id: listId,
             status: 'pending',
-            created: now.toISOString(),
+            created: new Date().toISOString(),
             items: [],
             total: null,
             completed_date: null
         };
         window.groceryData.shopping_lists.push(shoppingList);
     }
-
+    
     // Check if item already in list
     const existingItem = shoppingList.items.find(i => i.name === item.name);
-
+    
     if (existingItem) {
         // Update quantity
-        existingItem.qty = parseFloat(existingItem.qty) + parseFloat(qty);
-        alert(`✅ Updated "${item.name}"\nQuantity: ${existingItem.qty} ${item.unit}`);
+        existingItem.qty = parseFloat(existingItem.qty) + qty;
     } else {
         // Add new item
         shoppingList.items.push({
             name: item.name,
             unit: item.unit,
-            qty: parseFloat(qty),
+            qty: qty,
             unit_price: null,
             checked: false
         });
-        alert(`✅ Added "${item.name}" to shopping list\n\nList: ${listId}\nQuantity: ${qty} ${item.unit}`);
     }
-
+    
     // Save to localStorage
     localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
-
-    // Switch to shopping lists tab to show the list
-    switchTab('shopping');
+    
+    // Close modal
+    closeQuantityModal();
+    
+    // Show success message (you can make this a toast notification later)
+    const message = existingItem 
+        ? `✅ Updated "${item.name}"\nQuantity: ${existingItem.qty} ${item.unit}`
+        : `✅ Added "${item.name}"\nList: ${listId}\nQuantity: ${qty} ${item.unit}`;
+    
+    // Create a nice toast notification instead of alert
+    showToast(message);
+    
+    // Switch to shopping lists tab
+    setTimeout(() => switchTab('shopping'), 500);
 }
+
+// Simple toast notification
+function showToast(message) {
+    // Remove existing toast if any
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        z-index: 10000;
+        animation: slideInRight 0.3s ease;
+        max-width: 300px;
+        white-space: pre-line;
+        font-weight: 500;
+    `;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        toast.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
 // Make quickAddFromInventory globally accessible
 window.quickAddFromInventory = quickAddFromInventory;
+
+// Make quantity modal functions globally accessible
+window.showQuantityModal = showQuantityModal;
+window.closeQuantityModal = closeQuantityModal;
+window.confirmQuantityAdd = confirmQuantityAdd;
+window.showToast = showToast;

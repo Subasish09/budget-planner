@@ -2843,3 +2843,51 @@ select,
         max-height: 200px !important;
     }
 }
+
+/* Quantity Modal Animation */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Quantity Input Styling */
+#quantity-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+#quantity-input::-webkit-inner-spin-button,
+#quantity-input::-webkit-outer-spin-button {
+    opacity: 1;
+    height: 40px;
+}
+
+/* Toast Notification Animations */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
