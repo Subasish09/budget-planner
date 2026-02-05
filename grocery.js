@@ -1949,5 +1949,87 @@ window.showCustomItemForm = showCustomItemForm;
 window.hideCustomItemForm = hideCustomItemForm;
 window.saveCustomItem = saveCustomItem;
 
+
+// Quick add from inventory
+function quickAddFromInventory(itemIndex) {
+    const item = window.groceryData.inventory[itemIndex];
+    
+    if (!item) {
+        console.error('Item not found at index:', itemIndex);
+        return;
+    }
+    
+    // Prompt for quantity
+    const qty = prompt(`Add "${item.name}" to shopping list\n\nEnter quantity:`, '1');
+    
+    if (!qty || parseFloat(qty) <= 0) {
+        return; // User cancelled or invalid quantity
+    }
+    
+    // Get or create current bi-month shopping list
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); // 0-11
+    
+    // Determine bi-monthly period
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+    let startMonth, endMonth;
+    
+    if (month % 2 === 0) {
+        startMonth = monthNames[month];
+        endMonth = monthNames[month + 1];
+    } else {
+        startMonth = monthNames[month - 1];
+        endMonth = monthNames[month];
+    }
+    
+    const listId = `${startMonth}-${endMonth} ${year}`;
+    
+    // Initialize shopping_lists if needed
+    if (!window.groceryData.shopping_lists) {
+        window.groceryData.shopping_lists = [];
+    }
+    
+    // Find or create shopping list
+    let shoppingList = window.groceryData.shopping_lists.find(l => l.id === listId);
+    
+    if (!shoppingList) {
+        // Create new shopping list for current bi-month
+        shoppingList = {
+            id: listId,
+            status: 'pending',
+            created: now.toISOString(),
+            items: [],
+            total: null,
+            completed_date: null
+        };
+        window.groceryData.shopping_lists.push(shoppingList);
+    }
+    
+    // Check if item already in list
+    const existingItem = shoppingList.items.find(i => i.name === item.name);
+    
+    if (existingItem) {
+        // Update quantity
+        existingItem.qty = parseFloat(existingItem.qty) + parseFloat(qty);
+        alert(`✅ Updated "${item.name}"\nQuantity: ${existingItem.qty} ${item.unit}`);
+    } else {
+        // Add new item
+        shoppingList.items.push({
+            name: item.name,
+            unit: item.unit,
+            qty: parseFloat(qty),
+            unit_price: null,
+            checked: false
+        });
+        alert(`✅ Added "${item.name}" to shopping list\n\nList: ${listId}\nQuantity: ${qty} ${item.unit}`);
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('groceryData', JSON.stringify(window.groceryData));
+    
+    // Switch to shopping lists tab to show the list
+    switchTab('shopping');
+}
 // Make quickAddFromInventory globally accessible
 window.quickAddFromInventory = quickAddFromInventory;
