@@ -42,7 +42,7 @@ function loadEventData() {
     if (stored) {
         try {
             const data = JSON.parse(stored);
-        events = data.events || [];
+            events = data.events || [];
         } catch (error) {
             console.error('Error loading event data:', error);
             events = [];
@@ -140,13 +140,13 @@ function determineEventStatus(eventDate, currentStatus) {
     if (currentStatus === 'completed') {
         return 'completed';
     }
-    
+
     const now = new Date();
     now.setHours(0, 0, 0, 0);
-    
+
     const event = new Date(eventDate);
     event.setHours(0, 0, 0, 0);
-    
+
     if (event > now) {
         return 'upcoming';
     } else {
@@ -235,8 +235,8 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
     // Calculate days
     const now = new Date();
     const eventDate = new Date(event.eventDate);
-    
-    
+
+
     const daysUntilStart = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
 
     // Progress bar color
@@ -244,8 +244,43 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
     if (percentage > 80) progressColor = '#F59E0B'; // Yellow
     if (percentage >= 100) progressColor = '#EF4444'; // Red
 
+    // Completed Event Card (Flash Card Summary Style)
+    if (isCompleted) {
+        return `
+            <div class="event-card" onclick="openEventDetail('${event.id}')" style="cursor: pointer; background: linear-gradient(145deg, #1f2937, #111827); border: 1px solid var(--glass-border); opacity: 0.9;">
+                <div class="event-card-header" style="margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="event-icon" style="font-size: 1.5rem; filter: grayscale(0.5);">${event.icon}</div>
+                        <div>
+                            <h3 style="margin: 0; color: var(--text-secondary); font-size: 1.1rem; text-decoration: line-through;">${event.name}</h3>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.8rem;">Ended on ${formatDate(event.eventDate)}</p>
+                        </div>
+                    </div>
+                    <div style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <i class="fas fa-check"></i> Done
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0.5rem;">
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Total Spent</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">₹${formatNumber(totalSpent)}</div>
+                    </div>
+                    <div style="text-align: right;">
+                         <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Result</div>
+                         ${budget > 0 ? (remaining >= 0 ?
+                `<span style="color: #10b981; font-weight: 600;">Saved ₹${formatNumber(remaining)}</span>` :
+                `<span style="color: #ef4444; font-weight: 600;">Over ₹${formatNumber(Math.abs(remaining))}</span>`)
+                : `<span style="color: var(--text-secondary);">No Budget</span>`}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Active/Upcoming Event Card (Original Style)
     return `
-        <div class="event-card" onclick="openEventDetail('${event.id}')"  style="cursor: pointer;" style="background: linear-gradient(135deg, ${event.color}15, ${event.color}05); border-left: 4px solid ${event.color};">
+        <div class="event-card" onclick="openEventDetail('${event.id}')" style="cursor: pointer; background: linear-gradient(135deg, ${event.color}15, ${event.color}05); border-left: 4px solid ${event.color};">
             <div class="event-card-header">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <div class="event-icon" style="font-size: 2rem;">${event.icon}</div>
@@ -256,7 +291,7 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
                         </p>
                     </div>
                 </div>
-                <button class="btn-icon" onclick="openEventDetails('${event.id}')" title="View Details">
+                <button class="btn-icon" onclick="openEventDetail('${event.id}')" title="View Details">
                     <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -294,17 +329,13 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
             `<span style="color: var(--text-secondary); font-size: 0.9rem;">
                         <i class="fas fa-clock"></i> Starts in ${daysUntilStart} day${daysUntilStart !== 1 ? 's' : ''}
                     </span>` :
-            isCompleted ?
-                `<span style="color: var(--text-secondary); font-size: 0.9rem;">
-                        <i class="fas fa-check-circle"></i> Completed
-                    </span>` :
-                `<span style="color: var(--text-secondary); font-size: 0.9rem;">
+            `<span style="color: var(--text-secondary); font-size: 0.9rem;">
                         <i class="fas fa-fire"></i> Active
-                    </span>`
+                    </span>
+                    <button class="btn-primary" onclick="openEventDetail('${event.id}')" style="background: linear-gradient(135deg, ${event.color}, ${event.color}dd);">
+                        <i class="fas fa-plus"></i> Add Expense
+                    </button>`
         }
-                <button class="btn-primary" onclick="openEventDetail('${event.id}')">
-                    <i class="fas fa-plus"></i> Add Expense
-                </button>
             </div>
         </div>
     `;
@@ -390,7 +421,7 @@ function openEventDetail(eventId) {
         document.getElementById('detail-spent').textContent = `₹${totalSpent.toLocaleString('en-IN')}`;
         document.getElementById('detail-remaining').textContent = `₹${remaining.toLocaleString('en-IN')}`;
         document.getElementById('budget-progress-bar').style.width = `${percentage}%`;
-        
+
         // Change color based on percentage
         const progressBar = document.getElementById('budget-progress-bar');
         if (percentage < 70) {
@@ -404,17 +435,30 @@ function openEventDetail(eventId) {
         document.getElementById('budget-summary-section').style.display = 'none';
     }
 
-    // Render expenses list
-    renderExpensesList(eventId);
-
-    // Show/hide Complete Event button based on status
+    // Handle Completed vs Active Events
+    const addExpenseBtn = document.querySelector('button[onclick="openAddExpenseModal()"]');
     const completeBtn = document.getElementById('complete-event-btn');
-    if (completeBtn) {
-        if (event.status === 'completed') {
-            completeBtn.style.display = 'none';
-        } else {
-            completeBtn.style.display = 'block';
-        }
+
+    if (event.status === 'completed') {
+        // SUMMARY VIEW (Read-Only)
+        renderEventSummary(event);
+
+        // Hide Action Buttons
+        if (addExpenseBtn) addExpenseBtn.parentElement.style.display = 'none';
+        if (completeBtn) completeBtn.style.display = 'none';
+
+        // Update Title
+        document.getElementById('event-modal-title').textContent = 'Event Summary';
+    } else {
+        // ACTIVE VIEW (Editable)
+        renderExpensesList(eventId);
+
+        // Show Action Buttons
+        if (addExpenseBtn) addExpenseBtn.parentElement.style.display = 'grid'; // Restore grid
+        if (completeBtn) completeBtn.style.display = 'block';
+
+        // Restore Title
+        document.getElementById('event-modal-title').textContent = 'Event Details';
     }
 
     // Show modal
@@ -486,7 +530,7 @@ function renderExpensesList(eventId) {
 // Render single expense item
 function renderExpenseItem(expense) {
     const category = EXPENSE_CATEGORIES[expense.category] || EXPENSE_CATEGORIES.other;
-    
+
     return `
         <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
@@ -515,17 +559,17 @@ function renderExpenseItem(expense) {
 // Open add expense modal
 function openAddExpenseModal() {
     if (!currentEventId) return;
-    
+
     currentExpenseId = null;
     document.getElementById('expense-modal-title').textContent = 'Add Expense';
     document.getElementById('expense-form').reset();
-    
+
     // Set default date to event date
     const event = events.find(e => e.id === currentEventId);
     if (event) {
         document.getElementById('expense-date').value = event.eventDate;
     }
-    
+
     document.getElementById('expense-modal').classList.add('active');
 }
 
@@ -592,7 +636,7 @@ function saveExpense() {
     event.updatedAt = new Date().toISOString();
     saveEventData();
     renderExpensesList(currentEventId);
-    
+
     // Update budget summary if visible
     if (event.totalBudget > 0) {
         const totalSpent = calculateTotalSpent(currentEventId);
@@ -606,7 +650,7 @@ function saveExpense() {
 
     // Update dashboard
     renderDashboard();
-    
+
     closeExpenseModal();
 }
 
@@ -638,10 +682,10 @@ function deleteExpense(expenseId) {
 
     event.expenses = event.expenses.filter(e => e.id !== expenseId);
     event.updatedAt = new Date().toISOString();
-    
+
     saveEventData();
     renderExpensesList(currentEventId);
-    
+
     // Update budget summary if visible
     if (event.totalBudget > 0) {
         const totalSpent = calculateTotalSpent(currentEventId);
@@ -660,22 +704,97 @@ function deleteExpense(expenseId) {
 // Complete event manually
 function completeEvent() {
     if (!currentEventId) return;
-    
+
     if (!confirm('Mark this event as complete? You can still view it in the Completed section.')) {
         return;
     }
-    
+
     const event = events.find(e => e.id === currentEventId);
     if (!event) return;
-    
+
     event.status = 'completed';
     event.completedAt = new Date().toISOString();
     event.updatedAt = new Date().toISOString();
-    
+
     saveEventData();
     renderDashboard();
     closeEventDetail();
-    
+
     // Show success message
     alert('Event marked as complete! You can find it in the Completed Events section.');
+}
+
+
+// Render summary view for completed events
+function renderEventSummary(event) {
+    const container = document.getElementById('expenses-list-container');
+    const totalSpent = event.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+    const budget = event.totalBudget || 0;
+
+    // Calculate category totals
+    const categoryTotals = {};
+    event.expenses.forEach(exp => {
+        categoryTotals[exp.category] = (categoryTotals[exp.category] || 0) + exp.amount;
+    });
+
+    // Sort categories by spend (highest first)
+    const sortedCategories = Object.keys(categoryTotals).sort((a, b) => categoryTotals[b] - categoryTotals[a]);
+
+    // Generate Summary HTML
+    let html = `
+        <div style="animation: fadeIn 0.3s ease;">
+            <div style="background: linear-gradient(135deg, #1f2937, #111827); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--glass-border); text-align: center;">
+                <h3 style="color: var(--text-secondary); margin: 0 0 0.5rem 0; font-size: 0.9rem;">Final Total Spent</h3>
+                <div style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+                    ₹${totalSpent.toLocaleString('en-IN')}
+                </div>
+                ${budget > 0 ? `
+                    <div style="font-size: 0.9rem; color: ${totalSpent > budget ? '#ef4444' : '#10b981'};">
+                        ${totalSpent > budget ?
+                `<i class="fas fa-exclamation-triangle"></i> Over budget by ₹${(totalSpent - budget).toLocaleString('en-IN')}` :
+                `<i class="fas fa-check-circle"></i> Within budget (Saved ₹${(budget - totalSpent).toLocaleString('en-IN')})`
+            }
+                    </div>
+                ` : ''}
+            </div>
+
+            <h3 style="color: var(--text-primary); margin-bottom: 1rem;">Thinking Back (Spending Breakdown)</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+    `;
+
+    if (sortedCategories.length === 0) {
+        html += `<p style="text-align: center; color: var(--text-secondary);">No expenses recorded for this event.</p>`;
+    } else {
+        sortedCategories.forEach(catKey => {
+            const amount = categoryTotals[catKey];
+            const percentage = totalSpent > 0 ? (amount / totalSpent) * 100 : 0;
+            const category = EXPENSE_CATEGORIES[catKey] || EXPENSE_CATEGORIES.other;
+
+            html += `
+                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem; border: 1px solid var(--glass-border);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="font-size: 1.25rem;">${category.icon}</div>
+                            <span style="font-weight: 500;">${category.label}</span>
+                        </div>
+                        <span style="font-weight: 600;">₹${amount.toLocaleString('en-IN')}</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                        <div style="width: ${percentage}%; height: 100%; background: ${category.color}; border-radius: 3px;"></div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    html += `
+            </div>
+            
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                <p><i class="fas fa-lock"></i> This event is completed. Expenses cannot be modified.</p>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = html;
 }
