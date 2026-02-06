@@ -223,11 +223,19 @@
                         </div>
                     </div>
 
-                    <!-- Add Expense Button -->
-                    <div style="margin-bottom: 1.5rem;">
+                    <!-- Action Buttons -->
+                    <div style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <button onclick="openAddExpenseModal()"
-                            style="padding: 0.875rem 1.75rem !important; font-size: 1rem !important; border-radius: 8px; border: none; background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; cursor: pointer; transition: all 0.2s; font-weight: 500; width: 100%;">
+                            style="padding: 0.875rem 1.75rem !important; font-size: 1rem !important; border-radius: 8px; border: none; background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; cursor: pointer; transition: all 0.2s; font-weight: 500;"
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(139, 92, 246, 0.3)';"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
                             <i class="fas fa-plus"></i> Add Expense
+                        </button>
+                        <button id="complete-event-btn" onclick="completeEvent()"
+                            style="padding: 0.875rem 1.75rem !important; font-size: 1rem !important; border-radius: 8px; border: 1px solid #10b981; background: transparent; color: #10b981; cursor: pointer; transition: all 0.2s; font-weight: 500;"
+                            onmouseover="this.style.background='#10b981'; this.style.color='white';"
+                            onmouseout="this.style.background='transparent'; this.style.color='#10b981';">
+                            <i class="fas fa-check-circle"></i> Complete Event
                         </button>
                     </div>
 
