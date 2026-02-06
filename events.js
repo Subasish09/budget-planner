@@ -134,7 +134,13 @@ function saveEvent() {
 }
 
 // Determine event status based on date
-function determineEventStatus(eventDate) {
+// Note: Events stay active until manually marked as complete
+function determineEventStatus(eventDate, currentStatus) {
+    // If already completed, keep it completed
+    if (currentStatus === 'completed') {
+        return 'completed';
+    }
+    
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     
@@ -144,7 +150,8 @@ function determineEventStatus(eventDate) {
     if (event > now) {
         return 'upcoming';
     } else {
-        return 'active'; // Active until manually completed
+        // Event date has passed, but keep it active until manually completed
+        return 'active';
     }
 }
 
@@ -400,6 +407,16 @@ function openEventDetail(eventId) {
     // Render expenses list
     renderExpensesList(eventId);
 
+    // Show/hide Complete Event button based on status
+    const completeBtn = document.getElementById('complete-event-btn');
+    if (completeBtn) {
+        if (event.status === 'completed') {
+            completeBtn.style.display = 'none';
+        } else {
+            completeBtn.style.display = 'block';
+        }
+    }
+
     // Show modal
     document.getElementById('event-detail-modal').classList.add('active');
 }
@@ -638,4 +655,27 @@ function deleteExpense(expenseId) {
 
     // Update dashboard
     renderDashboard();
+}
+
+// Complete event manually
+function completeEvent() {
+    if (!currentEventId) return;
+    
+    if (!confirm('Mark this event as complete? You can still view it in the Completed section.')) {
+        return;
+    }
+    
+    const event = events.find(e => e.id === currentEventId);
+    if (!event) return;
+    
+    event.status = 'completed';
+    event.completedAt = new Date().toISOString();
+    event.updatedAt = new Date().toISOString();
+    
+    saveEventData();
+    renderDashboard();
+    closeEventDetail();
+    
+    // Show success message
+    alert('Event marked as complete! You can find it in the Completed Events section.');
 }

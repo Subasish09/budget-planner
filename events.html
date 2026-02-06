@@ -29,7 +29,9 @@
             <div class="header-controls">
                 <div id="sync-status" class="sync-status"></div>
                 <button class="btn-primary" onclick="openCreateEventModal()"
-                    style="padding: 0.75rem 1.5rem !important; font-size: 1rem !important;">
+                    style="padding: 0.75rem 1.5rem !important; font-size: 1rem !important; background: linear-gradient(135deg, #8b5cf6, #a78bfa) !important; border: none !important; border-radius: 8px !important; font-weight: 500 !important; transition: transform 0.2s, box-shadow 0.2s !important;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(139, 92, 246, 0.3)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
                     <i class="fas fa-plus"></i> Create Event
                 </button>
             </div>
@@ -64,7 +66,10 @@
                         style="font-size: 4rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
                     <h3>No Active Events</h3>
                     <p>Create your first event to start tracking expenses</p>
-                    <button class="btn-primary" onclick="openCreateEventModal()" style="margin-top: 1rem;">
+                    <button class="btn-primary" onclick="openCreateEventModal()"
+                        style="margin-top: 1rem; padding: 0.875rem 1.75rem !important; font-size: 1rem !important; background: linear-gradient(135deg, #8b5cf6, #a78bfa) !important; border: none !important; border-radius: 8px !important; font-weight: 500 !important; transition: transform 0.2s, box-shadow 0.2s !important;"
+                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(139, 92, 246, 0.3)';"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
                         <i class="fas fa-plus"></i> Create Event
                     </button>
                 </div>
@@ -171,134 +176,157 @@
             </div>
         </div>
 
-    
-    <!-- Event Detail Modal -->
-    <div class="modal-overlay" id="event-detail-modal">
-        <div class="modal" style="max-width: 900px !important; max-height: 90vh; overflow-y: auto;">
-            <div class="modal-header" style="padding: 1.5rem !important;">
-                <div>
-                    <h2 id="detail-event-name" style="margin: 0; font-size: 1.5rem;">Event Details</h2>
-                    <p id="detail-event-date" style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;"></p>
-                </div>
-                <button class="close-modal" onclick="closeEventDetail()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
 
-            <div class="modal-body" style="padding: 1.5rem !important;">
-                <!-- Budget Summary -->
-                <div id="budget-summary-section" style="display: none; margin-bottom: 2rem; padding: 1.25rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--glass-border);">
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Budget</div>
-                            <div id="detail-budget" style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary);">₹0</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Spent</div>
-                            <div id="detail-spent" style="font-size: 1.25rem; font-weight: 600; color: #f59e0b;">₹0</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Remaining</div>
-                            <div id="detail-remaining" style="font-size: 1.25rem; font-weight: 600; color: #10b981;">₹0</div>
-                        </div>
+        <!-- Event Detail Modal -->
+        <div class="modal-overlay" id="event-detail-modal">
+            <div class="modal" style="max-width: 900px !important; max-height: 90vh; overflow-y: auto;">
+                <div class="modal-header" style="padding: 1.5rem !important;">
+                    <div>
+                        <h2 id="detail-event-name" style="margin: 0; font-size: 1.5rem;">Event Details</h2>
+                        <p id="detail-event-date"
+                            style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;"></p>
                     </div>
-                    <div style="background: var(--bg-primary); border-radius: 8px; height: 8px; overflow: hidden;">
-                        <div id="budget-progress-bar" style="height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b); transition: width 0.3s; width: 0%;"></div>
-                    </div>
-                </div>
-
-                <!-- Add Expense Button -->
-                <div style="margin-bottom: 1.5rem;">
-                    <button onclick="openAddExpenseModal()" 
-                            style="padding: 0.875rem 1.75rem !important; font-size: 1rem !important; border-radius: 8px; border: none; background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; cursor: pointer; transition: all 0.2s; font-weight: 500; width: 100%;">
-                        <i class="fas fa-plus"></i> Add Expense
+                    <button class="close-modal" onclick="closeEventDetail()">
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
 
-                <!-- Expenses List -->
-                <div id="expenses-list-container">
-                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
-                        <i class="fas fa-receipt" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                        <p>No expenses yet</p>
-                        <p style="font-size: 0.9rem;">Click "Add Expense" to start tracking</p>
+                <div class="modal-body" style="padding: 1.5rem !important;">
+                    <!-- Budget Summary -->
+                    <div id="budget-summary-section"
+                        style="display: none; margin-bottom: 2rem; padding: 1.25rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--glass-border);">
+                        <div
+                            style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem;">
+                                    Budget</div>
+                                <div id="detail-budget"
+                                    style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary);">₹0</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem;">
+                                    Spent</div>
+                                <div id="detail-spent" style="font-size: 1.25rem; font-weight: 600; color: #f59e0b;">₹0
+                                </div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem;">
+                                    Remaining</div>
+                                <div id="detail-remaining"
+                                    style="font-size: 1.25rem; font-weight: 600; color: #10b981;">₹0</div>
+                            </div>
+                        </div>
+                        <div style="background: var(--bg-primary); border-radius: 8px; height: 8px; overflow: hidden;">
+                            <div id="budget-progress-bar"
+                                style="height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b); transition: width 0.3s; width: 0%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Expense Button -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <button onclick="openAddExpenseModal()"
+                            style="padding: 0.875rem 1.75rem !important; font-size: 1rem !important; border-radius: 8px; border: none; background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; cursor: pointer; transition: all 0.2s; font-weight: 500; width: 100%;">
+                            <i class="fas fa-plus"></i> Add Expense
+                        </button>
+                    </div>
+
+                    <!-- Expenses List -->
+                    <div id="expenses-list-container">
+                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                            <i class="fas fa-receipt" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p>No expenses yet</p>
+                            <p style="font-size: 0.9rem;">Click "Add Expense" to start tracking</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Add/Edit Expense Modal -->
-    <div class="modal-overlay" id="expense-modal">
-        <div class="modal" style="max-width: 500px !important;">
-            <div class="modal-header" style="padding: 1.5rem !important;">
-                <h2 id="expense-modal-title" style="margin: 0; font-size: 1.5rem;">Add Expense</h2>
-                <button class="close-modal" onclick="closeExpenseModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+        <!-- Add/Edit Expense Modal -->
+        <div class="modal-overlay" id="expense-modal">
+            <div class="modal" style="max-width: 500px !important;">
+                <div class="modal-header" style="padding: 1.5rem !important;">
+                    <h2 id="expense-modal-title" style="margin: 0; font-size: 1.5rem;">Add Expense</h2>
+                    <button class="close-modal" onclick="closeExpenseModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
 
-            <div class="modal-body" style="padding: 1.5rem !important;">
-                <form id="expense-form">
-                    <!-- Expense Name -->
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Expense name *</label>
-                        <input type="text" id="expense-name" placeholder="e.g., Venue booking, Catering" required
-                               style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
-                    </div>
-
-                    <!-- Category & Amount in one row -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                        <div>
-                            <label style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Category *</label>
-                            <select id="expense-category" required style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
-                                <option value="">Select...</option>
-                                <option value="venue">🏛️ Venue</option>
-                                <option value="food">🍽️ Food & Catering</option>
-                                <option value="decoration">🎨 Decoration</option>
-                                <option value="travel">✈️ Travel</option>
-                                <option value="shopping">🛍️ Shopping</option>
-                                <option value="entertainment">🎭 Entertainment</option>
-                                <option value="other">📌 Other</option>
-                            </select>
+                <div class="modal-body" style="padding: 1.5rem !important;">
+                    <form id="expense-form">
+                        <!-- Expense Name -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <label
+                                style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Expense
+                                name *</label>
+                            <input type="text" id="expense-name" placeholder="e.g., Venue booking, Catering" required
+                                style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
                         </div>
 
-                        <div>
-                            <label style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Amount *</label>
-                            <input type="number" id="expense-amount" placeholder="₹ 0" min="0" step="100" required
-                                   style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
+                        <!-- Category & Amount in one row -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Category
+                                    *</label>
+                                <select id="expense-category" required
+                                    style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
+                                    <option value="">Select...</option>
+                                    <option value="venue">🏛️ Venue</option>
+                                    <option value="food">🍽️ Food & Catering</option>
+                                    <option value="decoration">🎨 Decoration</option>
+                                    <option value="travel">✈️ Travel</option>
+                                    <option value="shopping">🛍️ Shopping</option>
+                                    <option value="entertainment">🎭 Entertainment</option>
+                                    <option value="other">📌 Other</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Amount
+                                    *</label>
+                                <input type="number" id="expense-amount" placeholder="₹ 0" min="0" step="100" required
+                                    style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Date -->
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Date *</label>
-                        <input type="date" id="expense-date" required
-                               style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
-                    </div>
+                        <!-- Date -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <label
+                                style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Date
+                                *</label>
+                            <input type="date" id="expense-date" required
+                                style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
+                        </div>
 
-                    <!-- Notes (Optional) -->
-                    <div>
-                        <label style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Notes (optional)</label>
-                        <textarea id="expense-notes" placeholder="Add any additional details..." rows="3"
-                                  style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary); resize: vertical;"></textarea>
-                    </div>
-                </form>
-            </div>
+                        <!-- Notes (Optional) -->
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary);">Notes
+                                (optional)</label>
+                            <textarea id="expense-notes" placeholder="Add any additional details..." rows="3"
+                                style="width: 100%; padding: 0.875rem; font-size: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-secondary); resize: vertical;"></textarea>
+                        </div>
+                    </form>
+                </div>
 
-            <div class="modal-footer" style="padding: 1.5rem !important; display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--glass-border);">
-                <button type="button" onclick="closeExpenseModal()"
+                <div class="modal-footer"
+                    style="padding: 1.5rem !important; display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--glass-border);">
+                    <button type="button" onclick="closeExpenseModal()"
                         style="padding: 0.875rem 1.75rem !important; font-size: 1rem !important; border-radius: 8px; border: 1px solid var(--glass-border); background: transparent; color: var(--text-primary); cursor: pointer; transition: all 0.2s;">
-                    Cancel
-                </button>
-                <button type="button" onclick="saveExpense()"
+                        Cancel
+                    </button>
+                    <button type="button" onclick="saveExpense()"
                         style="padding: 0.875rem 1.75rem !important; font-size: 1rem !important; border-radius: 8px; border: none; background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; cursor: pointer; transition: all 0.2s; font-weight: 500;">
-                    <i class="fas fa-save"></i> Save Expense
-                </button>
+                        <i class="fas fa-save"></i> Save Expense
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script src="events.js"></script>
+        <script src="events.js"></script>
 </body>
 
 </html>
