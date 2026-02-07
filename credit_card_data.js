@@ -47,7 +47,21 @@ window.creditCardDataRaw = [
             "total": 8,
             "used": 0
         },
-        "transactions": []
+        "transactions": [
+            {
+                "id": "1770490350685",
+                "desc": "Ved's Diaper",
+                "amount": 492,
+                "date": "2026-02-07",
+                "dueDate": "2026-03-21",
+                "category": "General",
+                "isLent": false,
+                "lentTo": null,
+                "repaid": false,
+                "isPaid": false,
+                "paidDate": null
+            }
+        ]
     },
     {
         "id": "icici-mmt-master",
