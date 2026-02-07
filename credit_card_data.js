@@ -104,7 +104,21 @@ window.creditCardDataRaw = [
             "total": 4,
             "used": 0
         },
-        "transactions": []
+        "transactions": [
+            {
+                "id": "1770493687622",
+                "desc": "Flipkart Shopping",
+                "amount": 889,
+                "date": "2026-02-04",
+                "dueDate": "2026-03-04",
+                "category": "Shopping",
+                "isLent": false,
+                "lentTo": null,
+                "repaid": false,
+                "isPaid": false,
+                "paidDate": null
+            }
+        ]
     },
     {
         "id": "icici-mmt-upi",
