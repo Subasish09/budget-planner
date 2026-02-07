@@ -31,6 +31,19 @@ window.creditCardDataRaw = [
                 ],
                 "isPaid": true,
                 "paidDate": "2026-02-03"
+            },
+            {
+                "id": "1770490404700",
+                "desc": "Ved's Summer pant",
+                "amount": 817,
+                "date": "2026-02-07",
+                "dueDate": "2026-03-01",
+                "category": "Shopping",
+                "isLent": false,
+                "lentTo": null,
+                "repaid": false,
+                "isPaid": false,
+                "paidDate": null
             }
         ]
     },
