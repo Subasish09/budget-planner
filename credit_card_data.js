@@ -12,40 +12,7 @@ window.creditCardDataRaw = [
             "total": 12,
             "used": 0
         },
-        "transactions": [
-            {
-                "id": "1770059630035",
-                "desc": "Lending",
-                "amount": 150000,
-                "date": "2026-01-06",
-                "category": "Lent",
-                "isLent": true,
-                "lentTo": "Dilip Kumar Patra",
-                "repaid": true,
-                "repayments": [
-                    {
-                        "id": "1770059934453",
-                        "amount": 150000,
-                        "date": "2026-01-31"
-                    }
-                ],
-                "isPaid": true,
-                "paidDate": "2026-02-03"
-            },
-            {
-                "id": "1770490404700",
-                "desc": "Ved's Summer pant",
-                "amount": 817,
-                "date": "2026-02-07",
-                "dueDate": "2026-03-01",
-                "category": "Shopping",
-                "isLent": false,
-                "lentTo": null,
-                "repaid": false,
-                "isPaid": false,
-                "paidDate": null
-            }
-        ]
+        "transactions": []
     },
     {
         "id": "tata-neu",
@@ -60,21 +27,7 @@ window.creditCardDataRaw = [
             "total": 8,
             "used": 0
         },
-        "transactions": [
-            {
-                "id": "1770490350685",
-                "desc": "Ved's Diaper",
-                "amount": 492,
-                "date": "2026-02-07",
-                "dueDate": "2026-03-21",
-                "category": "General",
-                "isLent": false,
-                "lentTo": null,
-                "repaid": false,
-                "isPaid": false,
-                "paidDate": null
-            }
-        ]
+        "transactions": []
     },
     {
         "id": "icici-mmt-master",
@@ -104,21 +57,7 @@ window.creditCardDataRaw = [
             "total": 4,
             "used": 0
         },
-        "transactions": [
-            {
-                "id": "1770493687622",
-                "desc": "Flipkart Shopping",
-                "amount": 889,
-                "date": "2026-02-04",
-                "dueDate": "2026-03-04",
-                "category": "Shopping",
-                "isLent": false,
-                "lentTo": null,
-                "repaid": false,
-                "isPaid": false,
-                "paidDate": null
-            }
-        ]
+        "transactions": []
     },
     {
         "id": "icici-mmt-upi",
@@ -131,28 +70,7 @@ window.creditCardDataRaw = [
         "lounge": {
             "hasAccess": false
         },
-        "transactions": [
-            {
-                "id": "1770059709950",
-                "desc": "Shopping of gold chain",
-                "amount": 60000,
-                "date": "2026-01-17",
-                "category": "Shopping",
-                "isLent": false,
-                "lentTo": null,
-                "repaid": false
-            },
-            {
-                "id": "1770059836518",
-                "desc": "Lending",
-                "amount": 70000,
-                "date": "2026-01-10",
-                "category": "Lent",
-                "isLent": true,
-                "lentTo": "Pradeep Kumar Dash",
-                "repaid": false
-            }
-        ]
+        "transactions": []
     },
     {
         "id": "hdfc-upi",
@@ -165,27 +83,6 @@ window.creditCardDataRaw = [
         "lounge": {
             "hasAccess": false
         },
-        "transactions": [
-            {
-                "id": "1770059767883",
-                "desc": "Lending",
-                "amount": 50000,
-                "date": "2026-01-14",
-                "category": "Lent",
-                "isLent": true,
-                "lentTo": "Dilip Kumar Patra",
-                "repaid": false
-            },
-            {
-                "id": "1770059797617",
-                "desc": "Lending",
-                "amount": 30000,
-                "date": "2026-01-17",
-                "category": "Lent",
-                "isLent": true,
-                "lentTo": "Dilip Kumar Patra",
-                "repaid": false
-            }
-        ]
+        "transactions": []
     }
 ];
