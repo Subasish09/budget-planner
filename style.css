@@ -624,7 +624,7 @@ h2 {
     box-shadow: 0 0 30px var(--primary-glow);
 }
 
-/* Modal */
+/* Modal Styles */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -634,34 +634,29 @@ h2 {
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(8px);
     display: flex;
-    align-items: center;
     justify-content: center;
-    z-index: 1000;
+    align-items: center;
     opacity: 0;
-    pointer-events: none;
-    transition: var(--transition);
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
 }
 
 .modal-overlay.active {
     opacity: 1;
-    pointer-events: all;
-    animation: fadeIn 0.3s ease-out;
+    visibility: visible;
 }
 
 .modal {
-    background: #18181b;
+    background: rgba(30, 41, 59, 0.9);
     border: 1px solid var(--glass-border);
-    padding: 2.5rem;
-    border-radius: 24px;
+    border-radius: 20px;
+    padding: 2rem;
     width: 90%;
-    max-width: 450px;
-    /* Comfortable width */
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     transform: translateY(20px);
-    transition: var(--transition);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    position: relative;
-    max-height: 85vh;
-    overflow-y: auto;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .modal-overlay.active .modal {
@@ -673,31 +668,109 @@ h2 {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .modal-header h3 {
     font-size: 1.5rem;
     font-weight: 600;
+    background: linear-gradient(135deg, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
 }
 
-.close-modal {
-    background: rgba(255, 255, 255, 0.05);
+.close-btn {
+    background: none;
     border: none;
     color: var(--text-secondary);
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     cursor: pointer;
-    transition: var(--transition);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transition: color 0.2s;
+    padding: 0;
+    line-height: 1;
 }
 
-.close-modal:hover {
+.close-btn:hover {
     color: var(--text-primary);
+}
+
+.modal-body {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+.modal-footer {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), #7c3aed);
+    color: white;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+}
+
+.btn-secondary:hover {
     background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
 }
 
 #cc-form,
@@ -2746,6 +2819,7 @@ select,
         padding: 0.65rem;
     }
 }
+
 /* ========================================
    Shopping List Modal - Mobile Improvements
    ======================================== */
@@ -2759,72 +2833,72 @@ select,
         margin: 0;
         border-radius: 0;
     }
-    
+
     #shopping-list-modal .modal-header {
         padding: 1rem;
     }
-    
+
     #shopping-list-modal .modal-header h2 {
         font-size: 1.25rem;
     }
-    
+
     #shopping-list-modal .modal-body {
         padding: 1rem;
     }
-    
+
     #shopping-list-modal .form-group {
         margin-bottom: 1rem;
     }
-    
+
     #shopping-list-modal .form-group label {
         font-size: 0.9rem;
         margin-bottom: 0.5rem;
     }
-    
+
     #shopping-list-modal #selected-items-container {
         max-height: 200px !important;
     }
-    
+
     #shopping-list-modal #available-items-container {
         max-height: 250px !important;
     }
-    
+
     #shopping-list-modal .modal-footer {
         padding: 1rem;
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     #shopping-list-modal .modal-footer button {
         width: 100% !important;
         flex: none !important;
     }
-    
+
     /* Selected item cards on mobile */
     .selected-item {
         padding: 0.75rem !important;
     }
-    
-    .selected-item > div {
+
+    .selected-item>div {
         flex-direction: column;
         align-items: start !important;
         gap: 0.75rem !important;
     }
-    
+
     .selected-item input[type="number"] {
         width: 60px !important;
     }
-    
+
     /* Available item cards on mobile */
     .available-item {
         padding: 0.75rem !important;
     }
-    
-    .available-item > div {
+
+    .available-item>div {
         flex: 1;
         min-width: 0;
     }
-    
+
     .available-item .btn-icon {
         flex-shrink: 0;
     }
@@ -2834,11 +2908,11 @@ select,
     #shopping-list-modal .modal-header h2 {
         font-size: 1.1rem;
     }
-    
+
     #shopping-list-modal #selected-items-container {
         max-height: 150px !important;
     }
-    
+
     #shopping-list-modal #available-items-container {
         max-height: 200px !important;
     }
@@ -2850,6 +2924,7 @@ select,
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -2875,6 +2950,7 @@ select,
         opacity: 0;
         transform: translateX(100px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -2886,6 +2962,7 @@ select,
         opacity: 1;
         transform: translateX(0);
     }
+
     to {
         opacity: 0;
         transform: translateX(100px);
@@ -2979,13 +3056,13 @@ select,
         align-items: flex-start;
         gap: 1rem;
     }
-    
+
     .event-footer {
         flex-direction: column;
         gap: 1rem;
         align-items: stretch;
     }
-    
+
     .event-footer button {
         width: 100%;
     }
@@ -2996,6 +3073,7 @@ select,
    ======================================== */
 
 @media (max-width: 768px) {
+
     /* Header adjustments for mobile */
     .app-header .header-controls {
         flex-direction: column;
@@ -3057,12 +3135,13 @@ select,
     }
 
     /* Form grid - stack on mobile */
-    .modal-body form > div[style*="grid-template-columns"] {
+    .modal-body form>div[style*="grid-template-columns"] {
         grid-template-columns: 1fr !important;
     }
 }
 
 @media (max-width: 480px) {
+
     /* Extra small screens */
     .app-header h1 {
         font-size: 1.5rem;
