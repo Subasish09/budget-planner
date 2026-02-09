@@ -144,3 +144,41 @@ modalOverlay.addEventListener('click', (e) => {
 window.removeTransaction = removeTransaction;
 
 init();
+
+
+// Settings Logic
+const settingsModal = document.getElementById('settings-modal');
+const ghTokenInput = document.getElementById('gh-token');
+const ghRepoInput = document.getElementById('gh-repo');
+
+document.getElementById('settings-btn').addEventListener('click', () => {
+    settingsModal.classList.add('active');
+    // Load existing values
+    const storedToken = localStorage.getItem('github_sync_token');
+    if (storedToken) ghTokenInput.value = atob(storedToken);
+    
+    // Attempt to guess repo if empty
+    // (This part assumes github-sync.js methods might be available globablly or logic duplicated)
+    // For simplicity, we just check local storage if we stored it separate, or let user type
+});
+
+function closeSettingsModal() {
+    settingsModal.classList.remove('active');
+}
+
+function saveSettings() {
+    const token = ghTokenInput.value.trim();
+    const repo = ghRepoInput.value.trim();
+    
+    if (token) {
+        localStorage.setItem('github_sync_token', btoa(token));
+        // Simple repo storage for now, github-sync.js auto-detects but this forces it
+        // We can reload the page to apply
+        alert('Settings saved! Reloading to apply sync...');
+        location.reload();
+    }
+}
+
+// Global exposure
+window.closeSettingsModal = closeSettingsModal;
+window.saveSettings = saveSettings;
