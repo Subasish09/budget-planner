@@ -108,6 +108,7 @@ function saveLocalCopy() {
 }
 
 // Save event data to localStorage and GitHub
+// Save event data to localStorage and GitHub
 async function saveEventData() {
     // 1. Save locally first (instant UI update)
     saveLocalCopy();
@@ -115,19 +116,23 @@ async function saveEventData() {
     // 2. Sync to GitHub if token exists
     if (githubSync.hasToken()) {
         try {
+            console.log('Syncing events to GitHub...');
             const content = JSON.stringify({ events }, null, 2);
-            await githubSync.commitFile('event_data.json', content, 'Update event data');
+            await githubSync.commitFile('event_data.json', content, 'Update event data via App');
             console.log('Events synced to GitHub');
 
-            // Optional: Show a subtle sync indicator
+            // Show a subtle sync indicator
             const syncIcon = document.getElementById('sync-status-icon');
             if (syncIcon) {
-                syncIcon.classList.add('fa-spin');
-                setTimeout(() => syncIcon.classList.remove('fa-spin'), 1000);
+                syncIcon.classList.remove('fa-exclamation-triangle', 'fa-spin');
+                syncIcon.classList.add('fa-check');
+                setTimeout(() => syncIcon.classList.remove('fa-check'), 2000);
             }
         } catch (error) {
             console.error('GitHub sync failed:', error);
             showToast('⚠️ Saved locally, but GitHub sync failed.');
+            const syncIcon = document.getElementById('sync-status-icon');
+            if (syncIcon) syncIcon.classList.add('fa-exclamation-triangle');
         }
     }
 }
