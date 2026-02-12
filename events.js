@@ -36,105 +36,23 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDashboard();
 });
 
-// Load event data from localStorage or GitHub
-async function loadEventData() {
-    let localEvents = [];
-    let remoteEvents = [];
-
-    // 1. Get Local Data
+// Load event data from localStorage
+function loadEventData() {
     const stored = localStorage.getItem('eventData');
     if (stored) {
         try {
             const data = JSON.parse(stored);
-            localEvents = data.events || [];
+            events = data.events || [];
         } catch (error) {
-            console.error('Error parsing local data:', error);
+            console.error('Error loading event data:', error);
+            events = [];
         }
     }
-
-    // 2. Get Remote Data (if connected)
-    if (githubSync.hasToken()) {
-        try {
-            const result = await githubSync.fetchFile('event_data.json');
-            if (result) {
-                const data = JSON.parse(result.content);
-                remoteEvents = data.events || [];
-                console.log('Fetched remote events:', remoteEvents.length);
-            }
-        } catch (error) {
-            console.error('GitHub fetch failed:', error);
-        }
-    }
-
-    // 3. SMART MERGE: Combine Local + Remote
-    // Use a Map to deduplicate by ID. 
-    // If conflict, prefer Remote (assuming it's newer) UNLESS Remote is less complete? 
-    // For now, let's just union them. If ID exists in both, use the one with more expenses? 
-    // Simple approach: Use Remote, but if Remote is empty and Local is not, KEEP Local.
-
-    const eventMap = new Map();
-
-    // Add Local first
-    localEvents.forEach(evt => eventMap.set(evt.id, evt));
-
-    // Add Remote (overwrite local if duplicate ID exists - assumption: cloud is truth)
-    // BUT exception: If we are initializing sync, Remote might be empty/stale.
-    // If Remote is empty, we don't want to overwrite Local.
-    remoteEvents.forEach(evt => eventMap.set(evt.id, evt));
-
-    events = Array.from(eventMap.values());
-
-    // 4. Sync Back if needed
-    // If we merged data that wasn't in cloud, we should push it.
-    // If local was empty but cloud had data, we save local.
-    const mergedCount = events.length;
-
-    // Save to Local cache
-    saveLocalCopy();
-
-    console.log(`Events Loaded: ${localEvents.length} Local, ${remoteEvents.length} Remote -> ${mergedCount} Merged`);
-
-    // If Local had data but Remote didn't (first sync), auto-push to cloud
-    if (localEvents.length > 0 && remoteEvents.length === 0 && githubSync.hasToken()) {
-        console.log('First sync detected: Pushing local data to cloud...');
-        saveEventData();
-    }
-
-    renderDashboard();
 }
 
-function saveLocalCopy() {
+// Save event data to localStorage
+function saveEventData() {
     localStorage.setItem('eventData', JSON.stringify({ events }));
-}
-
-// Save event data to localStorage and GitHub
-// Save event data to localStorage and GitHub
-async function saveEventData() {
-    // 1. Save locally first (instant UI update)
-    saveLocalCopy();
-
-    // 2. Sync to GitHub if token exists
-    if (githubSync.hasToken()) {
-        try {
-            console.log('Syncing events to GitHub...');
-            const content = JSON.stringify({ events }, null, 2);
-            await githubSync.commitFile('event_data.json', content, 'Update event data via App');
-            console.log('Events synced to GitHub');
-
-            // Show a subtle sync indicator
-            const syncIcon = document.getElementById('sync-status-icon');
-            if (syncIcon) {
-                syncIcon.classList.remove('fa-exclamation-triangle', 'fa-spin');
-                syncIcon.classList.add('fa-check');
-                setTimeout(() => syncIcon.classList.remove('fa-check'), 2000);
-            }
-        } catch (error) {
-            console.error('GitHub sync failed:', error);
-            showToast('⚠️ Saved locally, but GitHub sync failed.');
-            const syncIcon = document.getElementById('sync-status-icon');
-            if (syncIcon) syncIcon.classList.add('fa-exclamation-triangle');
-        }
-    }
 }
 
 // Generate unique ID
