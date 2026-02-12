@@ -25,6 +25,16 @@ const EXPENSE_CATEGORIES = {
     other: { icon: '📌', color: '#6b7280', label: 'Other' }
 };
 
+// Initialize event data
+let events = [];
+let currentEventId = null;
+let currentExpenseId = null;
+
+// Load data on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadEventData();
+});
+
 // Load event data from localStorage or GitHub (Smart Merge)
 async function loadEventData() {
     let localEvents = [];
