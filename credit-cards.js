@@ -85,838 +85,338 @@ const cardDashboard = document.getElementById('card-dashboard');
 const transactionsListEl = document.getElementById('card-transactions');
 const loungeCard = document.getElementById('lounge-card');
 
-// GitHub Config
-function getGitHubConfig() {
-    const config = JSON.parse(localStorage.getItem('ghConfig'));
-    if (!config || !config.username || !config.repo || !config.pat) {
-        return null;
+// Load Cards (Smart Merge: Local + Remote + Legacy Migration)
+async function loadCards() {
+    let localCards = [];
+    let remoteCards = [];
+    let legacyDataFound = false;
+
+    // 1. Get Local Data (New Key 'creditCards')
+    const stored = localStorage.getItem('creditCards');
+    if (stored) {
+        try {
+            localCards = JSON.parse(stored);
+        } catch (e) {
+            console.error('Error parsing local cards:', e);
+        }
     }
-    return config;
+
+    // 1b. Check Legacy Data (Recovery Mode - 'myCreditCards')
+    // If new key is empty, check the old 'myCreditCards' key logic used previously
+    if (localCards.length === 0) {
+        const legacyStored = localStorage.getItem('myCreditCards');
+        if (legacyStored) {
+            try {
+                console.log('Found legacy credit card data (myCreditCards), migrating...');
+                localCards = JSON.parse(legacyStored);
+                legacyDataFound = true;
+
+                // Keep the IDs consistent with defaultCards if possible, or just use what's there
+                // We might need to map them if the structure changed, but assuming it hasn't deeply
+            } catch (e) {
+                console.error('Error parsing legacy cards:', e);
+            }
+        }
+    }
+
+    // 2. Get Remote Data (if connected)
+    if (typeof githubSync !== 'undefined' && githubSync.hasToken()) {
+        try {
+            const result = await githubSync.fetchFile('credit_card_data.json');
+            if (result) {
+                const data = JSON.parse(result.content);
+                remoteCards = data.cards || [];
+                console.log('Fetched remote cards:', remoteCards.length);
+            }
+        } catch (error) {
+            console.error('GitHub fetch failed:', error);
+            // Don't error out, just continue with local data
+        }
+    }
+
+    // 3. Merge (Union by ID)
+    const cardMap = new Map();
+
+    // Default cards serve as the base structure
+    defaultCards.forEach(c => cardMap.set(c.id, JSON.parse(JSON.stringify(c))));
+
+    // Overlay Local Data
+    localCards.forEach(c => {
+        if (cardMap.has(c.id)) {
+            // Merge transactions and updated fields
+            const base = cardMap.get(c.id);
+            // Keep transactions from local
+            base.transactions = c.transactions || [];
+            // Keep lounge usage
+            if (c.lounge) base.lounge = c.lounge;
+            cardMap.set(c.id, base);
+        } else {
+            // It's a custom card maybe? Add it.
+            cardMap.set(c.id, c);
+        }
+    });
+
+    // Overlay Remote Data (Remote wins usually, but let's be careful about overwriting with empty)
+    if (remoteCards.length > 0) {
+        remoteCards.forEach(c => {
+            if (cardMap.has(c.id)) {
+                const base = cardMap.get(c.id);
+                // If remote has more transactions, trust it? 
+                // Simple strategy: Trust remote for now if it exists
+                base.transactions = c.transactions || [];
+                if (c.lounge) base.lounge = c.lounge;
+                cardMap.set(c.id, base);
+            } else {
+                cardMap.set(c.id, c);
+            }
+        });
+    }
+
+    myCards = Array.from(cardMap.values());
+
+    // 4. Save merged state locally (to new key)
+    localStorage.setItem('creditCards', JSON.stringify(myCards));
+
+    // 5. Initial Sync Push 
+    // If we recovered legacy data or have local data but remote is empty
+    if ((legacyDataFound || (localCards.length > 0 && remoteCards.length === 0)) && typeof githubSync !== 'undefined' && githubSync.hasToken()) {
+        console.log('Pushing recovered/initial cards to cloud...');
+        saveCards();
+    }
+
+    console.log('Cards Loaded:', myCards.length);
+    renderCarousel();
+    selectCard(0);
+    updateGlobalStats();
 }
 
-// Sync Status Indicator
-function updateSyncStatus(status, message = '') {
-    const indicator = document.getElementById('sync-status');
-    if (!indicator) return;
+// Save Cards (Local + GitHub)
+async function saveCards() {
+    // 1. Save Local
+    localStorage.setItem('creditCards', JSON.stringify(myCards));
 
-    indicator.className = 'sync-status';
+    // 2. Sync to GitHub
+    if (typeof githubSync !== 'undefined' && githubSync.hasToken()) {
+        try {
+            const content = JSON.stringify({ cards: myCards }, null, 2);
+            await githubSync.commitFile('credit_card_data.json', content, 'Update credit cards');
 
-    switch (status) {
-        case 'syncing':
-            indicator.classList.add('syncing');
-            indicator.innerHTML = '<i class="fas fa-sync fa-spin"></i> Syncing...';
-            break;
-        case 'synced':
-            indicator.classList.add('synced');
-            const timestamp = new Date().toLocaleTimeString();
-            indicator.innerHTML = `<i class="fas fa-check-circle"></i> Synced at ${timestamp}`;
-            setTimeout(() => indicator.classList.remove('synced'), 3000);
-            break;
-        case 'failed':
-            indicator.classList.add('failed');
-            indicator.innerHTML = `<i class="fas fa-exclamation-circle"></i> Sync failed ${message}`;
-            break;
-        case 'offline':
-            indicator.classList.add('offline');
-            indicator.innerHTML = '<i class="fas fa-wifi-slash"></i> Offline';
-            break;
+            // Sync Icon Feedback
+            const syncIcon = document.getElementById('sync-status-icon');
+            if (syncIcon) {
+                syncIcon.classList.remove('fa-exclamation-triangle');
+                syncIcon.classList.add('fa-check');
+                setTimeout(() => syncIcon.classList.remove('fa-check'), 2000);
+            }
+        } catch (error) {
+            console.error('GitHub sync failed:', error);
+            if (typeof showToast === 'function') showToast('⚠️ Saved locally, but GitHub sync failed.');
+        }
     }
 }
 
-// Load data from GitHub
-async function loadFromGitHub() {
-    const config = getGitHubConfig();
 
-    if (!config) {
-        // No config, use default cards
-        console.log('No GitHub config found, using default cards');
-        myCards = defaultCards;
-        renderCarousel();
-        selectCard(0);
-        updateGlobalStats();
+// Start
+document.addEventListener('DOMContentLoaded', () => {
+    loadCards();
+});
+
+// ==========================================
+// UI Functions (Carousel, Stats, Rendering)
+// ==========================================
+
+function renderCarousel() {
+    carousel.innerHTML = '';
+    myCards.forEach((card, index) => {
+        const div = document.createElement('div');
+        div.className = `credit-card ${index === activeCardIndex ? 'active' : ''}`;
+        div.style.background = card.color;
+        div.style.color = card.textColor || '#fff';
+        div.onclick = () => selectCard(index);
+
+        div.innerHTML = `
+            <div class="card-bank">${card.bank}</div>
+            <div class="card-chip">
+                <div class="chip-metal"></div>
+                <i class="fas fa-wifi"></i>
+            </div>
+            <div class="card-number">•••• •••• •••• ${card.last4}</div>
+            <div class="card-footer">
+                <div class="card-holder">SUBASISH BHATTA</div>
+                <div class="card-logo">${card.type}</div>
+            </div>
+        `;
+        carousel.appendChild(div);
+    });
+}
+
+function selectCard(index) {
+    activeCardIndex = index;
+    // Update visual active state
+    document.querySelectorAll('.credit-card').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+    });
+
+    // Scroll to card
+    const cardEl = carousel.children[index];
+    if (cardEl) {
+        cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    renderDashboard();
+    renderTransactions();
+}
+
+function renderDashboard() {
+    const card = myCards[activeCardIndex];
+    if (!card) return;
+
+    // Calculate spendings
+    const totalSpent = card.transactions.reduce((acc, t) => acc + (t.type === 'dr' ? t.amount : 0), 0);
+    const totalLent = card.transactions.filter(t => t.tags && t.tags.includes('Lent')).reduce((acc, t) => acc + t.amount, 0);
+
+    cardDashboard.innerHTML = `
+        <div class="card-stats">
+            <div class="c-stat">
+                <span>Total Spent</span>
+                <strong>₹${totalSpent.toLocaleString()}</strong>
+            </div>
+            <div class="c-stat">
+                <span>Lent Amount</span>
+                <strong>₹${totalLent.toLocaleString()}</strong>
+            </div>
+             <div class="c-stat">
+                <span>Lounge Access</span>
+                <strong>${card.lounge ? (card.lounge.total - card.lounge.used) + '/' + card.lounge.total : 'N/A'}</strong>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+           <button class="action-btn" onclick="openAddTransactionModal('${card.id}')">
+                <i class="fas fa-plus"></i> Add Expense
+           </button>
+           <button class="action-btn secondary" onclick="openLoungeModal('${card.id}')" ${!card.lounge || !card.lounge.hasAccess ? 'disabled style="opacity:0.5"' : ''}>
+                <i class="fas fa-couch"></i> Lounge
+           </button>
+        </div>
+    `;
+}
+
+
+function renderTransactions() {
+    const card = myCards[activeCardIndex];
+    if (!card) return;
+
+    transactionsListEl.innerHTML = '';
+
+    const list = card.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Filter?
+    const filtered = currentFilter === 'lent'
+        ? list.filter(t => t.tags && t.tags.includes('Lent'))
+        : list;
+
+    if (filtered.length === 0) {
+        transactionsListEl.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-secondary)">No transactions found</div>`;
         return;
     }
 
-    updateSyncStatus('syncing');
-
-    const apiUrl = `https://api.github.com/repos/${config.username}/${config.repo}/contents/${config.path}`;
-
-    try {
-        const response = await fetch(apiUrl, {
-            headers: {
-                'Authorization': `token ${config.pat}`,
-                'Accept': 'application/vnd.github.v3+json'
-            }
-        });
-
-        if (response.ok) {
-            const fileData = await response.json();
-            const content = atob(fileData.content);
-
-            // Parse as pure JSON (no longer wrapped in window.creditCardDataRaw)
-            try {
-                myCards = JSON.parse(content);
-            } catch (parseError) {
-                // Fallback: try old format with window.creditCardDataRaw
-                const match = content.match(/window\.creditCardDataRaw\s*=\s*(\[[\s\S]*?\]);/);
-                if (match) {
-                    myCards = JSON.parse(match[1]);
-                } else {
-                    throw new Error('Invalid JSON format');
-                }
-            }
-
-            // Sync visual updates from defaultCards
-            myCards = myCards.map(savedCard => {
-                const freshDef = defaultCards.find(d => d.id === savedCard.id);
-                if (freshDef) {
-                    return {
-                        ...savedCard,
-                        name: freshDef.name,
-                        color: freshDef.color,
-                        textColor: freshDef.textColor,
-                        type: freshDef.type,
-                        bank: freshDef.bank,
-                        last4: freshDef.last4
-                    };
-                }
-                return savedCard;
-            });
-
-            updateSyncStatus('synced');
-        } else if (response.status === 404) {
-            // File doesn't exist yet, use defaults
-            console.log('GitHub file not found, using default cards');
-            myCards = defaultCards;
-            await saveToGitHub(); // Create initial file
-        } else {
-            // Load Cards (Smart Merge: Local + Remote + Legacy Migration)
-            async function loadCards() {
-                let localCards = [];
-                let remoteCards = [];
-                let legacyDataFound = false;
-
-                // 1. Get Local Data (New Key)
-                const stored = localStorage.getItem('creditCards');
-                if (stored) {
-                    try {
-                        localCards = JSON.parse(stored);
-                    } catch (e) {
-                        console.error('Error parsing local cards:', e);
-                    }
-                }
-
-                // 1b. Check Legacy Data (Recovery Mode)
-                // If new key is empty, check the old 'myCreditCards' key logic used previously
-                if (localCards.length === 0) {
-                    const legacyStored = localStorage.getItem('myCreditCards');
-                    if (legacyStored) {
-                        try {
-                            console.log('Found legacy credit card data, migrating...');
-                            localCards = JSON.parse(legacyStored);
-                            legacyDataFound = true;
-                        } catch (e) {
-                            console.error('Error parsing legacy cards:', e);
-                        }
-                    }
-                }
-
-                // 2. Get Remote Data (if connected)
-                if (typeof githubSync !== 'undefined' && githubSync.hasToken()) {
-                    try {
-                        const result = await githubSync.fetchFile('credit_card_data.json');
-                        if (result) {
-                            const data = JSON.parse(result.content);
-                            remoteCards = data.cards || [];
-                            console.log('Fetched remote cards:', remoteCards.length);
-                        }
-                    } catch (error) {
-                        console.error('GitHub fetch failed:', error);
-                    }
-                }
-
-                // 3. Merge (Union by ID)
-                const cardMap = new Map();
-                localCards.forEach(c => cardMap.set(c.id, c));
-                remoteCards.forEach(c => cardMap.set(c.id, c)); // Remote wins conflicts
-
-                myCards = Array.from(cardMap.values());
-
-                // Use default cards if absolutely no data found anywhere
-                if (myCards.length === 0) {
-                    myCards = defaultCards;
-                }
-
-                // 4. Save merged state locally (to new key)
-                localStorage.setItem('creditCards', JSON.stringify(myCards));
-
-                // 5. Initial Sync Push 
-                // If we recovered legacy data or have local data but remote is empty
-                if ((legacyDataFound || (localCards.length > 0 && remoteCards.length === 0)) && typeof githubSync !== 'undefined' && githubSync.hasToken()) {
-                    console.log('Pushing recovered/initial cards to cloud...');
-                    saveCards();
-                }
-
-                renderCarousel();
-                selectCard(0);
-                updateGlobalStats();
-            }
-        }
-
-        // Save data to GitHub
-        async function saveToGitHub() {
-            if (!autoSyncEnabled) {
-                console.log('Auto-sync disabled');
-                return;
-            }
-
-            const config = getGitHubConfig();
-            if (!config) {
-                alert('Please configure GitHub settings before saving data.');
-                openSettings();
-                return;
-            }
-
-            if (isSyncing) {
-                console.log('Sync already in progress');
-                return;
-            }
-
-            isSyncing = true;
-            updateSyncStatus('syncing');
-
-            const apiUrl = `https://api.github.com/repos/${config.username}/${config.repo}/contents/${config.path}`;
-            const content = `window.creditCardDataRaw = ${JSON.stringify(myCards, null, 4)};`;
-            const message = `Update credit card data - ${new Date().toLocaleString()}`;
-
-            try {
-                // Get current SHA
-                let sha = '';
-                const getRes = await fetch(apiUrl, {
-                    headers: {
-                        'Authorization': `token ${config.pat}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    sha = fileData.sha;
-                }
-
-                // Update file
-                const putRes = await fetch(apiUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${config.pat}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        content: btoa(unescape(encodeURIComponent(content))),
-                        sha: sha || undefined,
-                        branch: config.branch
-                    })
-                });
-
-                if (putRes.ok) {
-                    updateSyncStatus('synced');
-                    // Also save to localStorage as backup
-                    localStorage.setItem('myCreditCards', JSON.stringify(myCards));
-                } else {
-                    const err = await putRes.json();
-                    throw new Error(err.message || 'Sync failed');
-                }
-            } catch (error) {
-                console.error('Failed to save to GitHub:', error);
-                updateSyncStatus('failed', `- ${error.message}`);
-                // Save to localStorage as fallback
-                localStorage.setItem('myCreditCards', JSON.stringify(myCards));
-            } finally {
-                isSyncing = false;
-            }
-        }
-
-        // Init - Load from GitHub
-        async function init() {
-            await loadFromGitHub();
-            // Set default date
-            document.getElementById('cc-date').valueAsDate = new Date();
-        }
-
-        // Render Carousel
-        function renderCarousel() {
-            carousel.innerHTML = myCards.map((card, index) => {
-                const logo = card.type === 'Visa' ? '<i class="fab fa-cc-visa fa-2x"></i>'
-                    : card.type === 'MasterCard' ? '<i class="fab fa-cc-mastercard fa-2x"></i>'
-                        : '<i class="fas fa-qrcode fa-2x"></i>'; // Generic/UPI
-
-                const displayNum = card.last4 === 'UPI' ? 'LINKED TO UPI' : `•••• •••• •••• ${card.last4}`;
-
-                return `
-            <div class="credit-card ${index === activeCardIndex ? 'active' : ''}" 
-                 onclick="selectCard(${index})"
-                 style="background: ${card.color}; color: ${card.textColor};">
-                <div class="card-top">
-                    <span class="bank-name">${card.bank}</span>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <span class="card-type">${logo}</span>
-                        <div class="card-select-radio">
-                            <input type="radio" name="card-select" ${index === activeCardIndex ? 'checked' : ''}>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-mid">
-                    <div class="chip"></div>
-                    <span class="card-number">${displayNum}</span>
-                </div>
-                <div class="card-bottom">
-                    <div>
-                        <div style="font-size: 0.65rem; opacity: 0.8; letter-spacing: 1px;">SUBASISH BHATTA</div>
-                        <div class="card-name" style="font-size: 0.9rem; margin-top: 2px;">${card.name}</div>
-                    </div>
-                </div>
+    filtered.forEach(t => {
+        const div = document.createElement('div');
+        div.className = 'transaction-row';
+        div.innerHTML = `
+            <div class="t-icon" style="background: rgba(255,255,255,0.1)">
+                <i class="fas ${getCategoryIcon(t.category)}"></i>
+            </div>
+            <div class="t-details">
+                <div class="t-title">${t.desc}</div>
+                <div class="t-meta">${new Date(t.date).toLocaleDateString()} • ${t.category} ${t.tags && t.tags.includes('Lent') ? '• <span style="color:#fbbf24">Lent</span>' : ''}</div>
+            </div>
+            <div class="t-amount ${t.type === 'dr' ? 'expense' : 'income'}">
+                ₹${t.amount.toLocaleString()}
+            </div>
+            <div class="t-actions">
+                 <button onclick="deleteTransaction('${card.id}', '${t.id}')"><i class="fas fa-trash"></i></button>
             </div>
         `;
-            }).join('');
-        }
-
-        function selectCard(index) {
-            activeCardIndex = index;
-            renderCarousel(); // Refresh active state
-            renderDashboard();
-            cardDashboard.style.display = 'block';
-        }
-
-        // Bank Limits (Shared across cards of same bank)
-        const BANK_LIMITS = {
-            'HDFC Bank': 373000,
-            'ICICI Bank': 300000,
-            'Axis Bank': 100000
-        };
-
-        function renderDashboard() {
-            const card = myCards[activeCardIndex];
-
-            // 1. Calculate Card Outstanding
-            const totalOut = card.transactions.reduce((sum, t) => sum + (t.repaid ? 0 : t.amount), 0);
-            document.getElementById('card-outstanding').innerText = `₹${totalOut.toLocaleString('en-IN')}`;
-
-            // 2. Calculate Shared Limit & Available
-            const bankLimit = BANK_LIMITS[card.bank] || 0;
-
-            // Find all cards of this bank
-            const cardsOfBank = myCards.filter(c => c.bank === card.bank);
-
-            // Calculate total spend across ALL cards provided by this bank (Shared Limit)
-            const totalBankSpend = cardsOfBank
-                .reduce((acc, c) => {
-                    const cardSpend = c.transactions.reduce((s, t) => s + (t.repaid ? 0 : t.amount), 0);
-                    return acc + cardSpend;
-                }, 0);
-
-            const available = bankLimit - totalBankSpend;
-
-            // Update UI
-            const limitEl = document.getElementById('card-limit');
-            if (bankLimit > 0) {
-                const util = (totalBankSpend / bankLimit) * 100;
-                const limitStr = (bankLimit / 100000).toFixed(2) + 'L';
-                const labelText = cardsOfBank.length > 1 ? 'Shared' : 'Limit';
-
-                limitEl.innerHTML = `
-            ₹${available.toLocaleString('en-IN')}
-            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 400; margin-top: 4px;">
-                of ₹${limitStr} ${labelText}
-            </div>
-        `;
-
-                // Color code low availability (Use danger color if < 10% available or > 90% utilized)
-                limitEl.style.color = util > 90 ? 'var(--danger)' : 'var(--text-primary)';
-            } else {
-                limitEl.innerText = '₹-';
-            }
-
-            // Lounge
-            if (card.lounge && card.lounge.hasAccess) {
-                loungeCard.style.display = 'block';
-                document.getElementById('lounge-count').innerText = `${card.lounge.total - card.lounge.used}/${card.lounge.total}`;
-            } else {
-                loungeCard.style.display = 'none';
-            }
-
-            renderTransactions();
-            renderLendingOverview();
-        }
-
-        // Render Consolidated Lending Overview
-        function renderLendingOverview() {
-            const overviewSection = document.getElementById('lending-overview');
-            if (!overviewSection) return;
-
-            // Aggregate all lending across all cards
-            const friendsMap = {};
-            let totalLent = 0;
-            let totalRepaid = 0;
-
-            myCards.forEach(card => {
-                card.transactions.forEach(t => {
-                    if (t.isLent && t.lentTo) {
-                        const friendName = t.lentTo.trim();
-
-                        if (!friendsMap[friendName]) {
-                            friendsMap[friendName] = {
-                                name: friendName,
-                                totalLent: 0,
-                                totalRepaid: 0,
-                                transactions: []
-                            };
-                        }
-
-                        friendsMap[friendName].totalLent += t.amount;
-                        totalLent += t.amount;
-
-                        // Calculate repaid for this transaction
-                        const repaid = (t.repayments || []).reduce((sum, r) => sum + r.amount, 0);
-                        friendsMap[friendName].totalRepaid += repaid;
-                        totalRepaid += repaid;
-
-                        // Store transaction details
-                        friendsMap[friendName].transactions.push({
-                            cardName: card.name,
-                            cardBank: card.bank,
-                            amount: t.amount,
-                            repaid: repaid,
-                            date: t.date,
-                            desc: t.desc,
-                            isSettled: t.repaid
-                        });
-                    }
-                });
-            });
-
-            const totalOutstanding = totalLent - totalRepaid;
-
-            // Update summary stats
-            document.getElementById('overview-total-lent').innerText = `₹${totalLent.toLocaleString('en-IN')}`;
-            document.getElementById('overview-total-repaid').innerText = `₹${totalRepaid.toLocaleString('en-IN')}`;
-            document.getElementById('overview-outstanding').innerText = `₹${totalOutstanding.toLocaleString('en-IN')}`;
-
-            // Render friends breakdown
-            const friendsBreakdown = document.getElementById('friends-breakdown');
-            const friends = Object.values(friendsMap);
-
-            if (friends.length === 0) {
-                overviewSection.style.display = 'none';
-                return;
-            }
-
-            overviewSection.style.display = 'block';
-
-            friendsBreakdown.innerHTML = friends.map(friend => {
-                const outstanding = friend.totalLent - friend.totalRepaid;
-                const isSettled = outstanding === 0;
-
-                return `
-            <div style="background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 1.25rem;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                    <div>
-                        <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">
-                            <i class="fas fa-user-circle" style="color: var(--primary); margin-right: 0.5rem;"></i>
-                            ${friend.name}
-                            ${isSettled ? '<span style="color: var(--success); font-size: 0.85rem; margin-left: 0.5rem;"><i class="fas fa-check-circle"></i> Settled</span>' : ''}
-                        </div>
-                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                            ${friend.transactions.length} transaction${friend.transactions.length > 1 ? 's' : ''} across ${new Set(friend.transactions.map(t => t.cardName)).size} card${new Set(friend.transactions.map(t => t.cardName)).size > 1 ? 's' : ''}
-                        </div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: ${isSettled ? 'var(--success)' : 'var(--warning)'};">
-                            ₹${outstanding.toLocaleString('en-IN')}
-                        </div>
-                        <div style="font-size: 0.75rem; color: var(--text-tertiary);">Outstanding</div>
-                    </div>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: var(--radius-sm);">
-                    <div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Total Lent</div>
-                        <div style="font-size: 1rem; font-weight: 600; color: var(--danger);">₹${friend.totalLent.toLocaleString('en-IN')}</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Repaid</div>
-                        <div style="font-size: 1rem; font-weight: 600; color: var(--success);">₹${friend.totalRepaid.toLocaleString('en-IN')}</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Progress</div>
-                        <div style="font-size: 1rem; font-weight: 600; color: var(--info);">${friend.totalLent > 0 ? Math.round((friend.totalRepaid / friend.totalLent) * 100) : 0}%</div>
-                    </div>
-                </div>
-                
-                <details style="margin-top: 1rem;">
-                    <summary style="cursor: pointer; color: var(--primary); font-size: 0.9rem; user-select: none;">
-                        <i class="fas fa-chevron-down" style="margin-right: 0.5rem; font-size: 0.75rem;"></i>
-                        View Transaction Details
-                    </summary>
-                    <div style="margin-top: 1rem; display: grid; gap: 0.75rem;">
-                        ${friend.transactions.map(t => `
-                            <div style="padding: 0.75rem; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-sm); border-left: 3px solid ${t.isSettled ? 'var(--success)' : 'var(--warning)'};">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                    <div style="font-size: 0.9rem; color: var(--text-primary);">${t.desc || 'Lending'}</div>
-                                    <div style="font-size: 0.9rem; font-weight: 600; color: var(--danger);">₹${t.amount.toLocaleString('en-IN')}</div>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary);">
-                                    <div><i class="fas fa-credit-card"></i> ${t.cardBank} ${t.cardName}</div>
-                                    <div>${new Date(t.date).toLocaleDateString()}</div>
-                                </div>
-                                ${t.repaid > 0 ? `<div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--success);"><i class="fas fa-check"></i> Repaid: ₹${t.repaid.toLocaleString('en-IN')}</div>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                </details>
-            </div>
-        `;
-            }).join('');
-        }
-
-        // Inject Total Limit into Header
-        function updateGlobalStats() {
-            const totalLimit = Object.values(BANK_LIMITS).reduce((a, b) => a + b, 0);
-            const sub = document.querySelector('.subtitle');
-            if (sub && !sub.innerText.includes('Limit')) {
-                sub.innerHTML += ` <span style="opacity: 0.5; margin: 0 8px;">|</span> Limit: ₹${(totalLimit / 100000).toFixed(2)}L`;
-            }
-        }
-
-        function renderTransactions() {
-            const card = myCards[activeCardIndex];
-            const filtered = currentFilter === 'all'
-                ? card.transactions
-                : card.transactions.filter(t => t.isLent);
-
-            // Sort new to old
-            const sorted = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            if (sorted.length === 0) {
-                transactionsListEl.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-secondary);">No transactions found.</div>`;
-                return;
-            }
-
-            transactionsListEl.innerHTML = sorted.map(t => {
-                const isLent = t.isLent;
-                const icon = isLent ? 'fa-hand-holding-usd' : 'fa-shopping-bag';
-                const colorClass = isLent ? 'lent-item' : '';
-
-                // Repayment Logic
-                const repayments = t.repayments || (t.repaid ? [{ amount: t.amount, date: t.date }] : []);
-                const totalRepaid = repayments.reduce((sum, r) => sum + r.amount, 0);
-                const remaining = t.amount - totalRepaid;
-
-                // Data Integrity: If somehow fully repaid but flag not set (or vice versa due to old data)
-                const isFullyRepaid = totalRepaid >= t.amount;
-                if (isFullyRepaid && !t.repaid) { t.repaid = true; saveToGitHub(); }
-
-                const lentHtml = isLent
-                    ? `<div style="font-size:0.8rem; color: #f43f5e; margin-top:2px;">
-                 <i class="fas fa-user"></i> Lent to: ${t.lentTo} 
-                 ${t.repaid ? '(Settled)' : `<span style="color: var(--text-primary); margin-left:8px; font-weight:500;">Remaining: ₹${remaining.toLocaleString('en-IN')}</span>`}
-               </div>`
-                    : '';
-
-                const actionBtn = isLent && !t.repaid
-                    ? `<button class="btn-xs" onclick="openRepaymentModal('${t.id}')" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border-color: rgba(59, 130, 246, 0.3);">Track Repayment</button>`
-                    : '';
-
-                return `
-            <div class="cc-transaction ${colorClass} ${t.repaid ? 'repaid' : ''}">
-                <div class="t-icon ${isLent ? 'lent' : ''}"><i class="fas ${icon}"></i></div>
-                <div class="t-details">
-                    <div class="t-desc">${t.desc}</div>
-                    <div class="t-date">${new Date(t.date).toLocaleDateString()}</div>
-                    ${lentHtml}
-                </div>
-                <div class="t-right">
-                    <div class="t-amount">₹${t.amount.toLocaleString('en-IN')}</div>
-                    ${actionBtn}
-                </div>
-            </div>
-        `;
-            }).join('');
-        }
-
-        // Modal Logic
-        const modalOverlay = document.getElementById('cc-modal-overlay');
-        const ccForm = document.getElementById('cc-form');
-
-        function openTransactionModal(type) {
-            document.getElementById('cc-type').value = type;
-            document.getElementById('cc-modal-title').innerText = type === 'spend' ? 'Add Card Spend' : 'Lend Money from Card';
-
-            // Toggle Friend Input and Description
-            document.getElementById('friend-input-group').style.display = type === 'lend' ? 'block' : 'none';
-            document.getElementById('desc-input-group').style.display = type === 'lend' ? 'none' : 'block';
-
-            const descInput = document.getElementById('cc-desc');
-            if (type === 'lend') {
-                descInput.value = 'Lending'; // Auto-fill for lending
-                descInput.removeAttribute('required');
-            } else {
-                descInput.value = '';
-                descInput.setAttribute('required', 'required');
-                descInput.placeholder = 'e.g. Dinner, Flight';
-            }
-
-            if (type === 'lend') {
-                document.getElementById('cc-category').value = 'Lent';
-                document.getElementById('cc-friend').setAttribute('required', 'true');
-            } else {
-                document.getElementById('cc-category').value = 'General';
-                document.getElementById('cc-friend').removeAttribute('required');
-            }
-
-            modalOverlay.classList.add('active');
-        }
-
-        document.getElementById('close-cc-modal').addEventListener('click', () => {
-            modalOverlay.classList.remove('active');
-        });
-
-        ccForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const type = document.getElementById('cc-type').value;
-            const desc = document.getElementById('cc-desc').value;
-            const amount = parseFloat(document.getElementById('cc-amount').value);
-            const date = document.getElementById('cc-date').value;
-            const dueDate = document.getElementById('cc-due-date').value;
-            const category = document.getElementById('cc-category').value;
-            const friend = document.getElementById('cc-friend').value;
-
-            const newTransaction = {
-                id: Date.now().toString(),
-                desc,
-                amount,
-                date,
-                dueDate,
-                category,
-                isLent: type === 'lend',
-                lentTo: type === 'lend' ? friend : null,
-                repaid: false,
-                isPaid: false,
-                paidDate: null
-            };
-
-            myCards[activeCardIndex].transactions.push(newTransaction);
-            saveToGitHub();
-            modalOverlay.classList.remove('active');
-            renderDashboard();
-            ccForm.reset();
-        });
-
-        // Repayment Modal Logic
-        const repModal = document.getElementById('repayment-modal-overlay');
-        const repForm = document.getElementById('repayment-form');
-
-        function openRepaymentModal(tid) {
-            const t = myCards[activeCardIndex].transactions.find(x => x.id === tid);
-            if (!t) return;
-
-            document.getElementById('rep-id').value = tid;
-            document.getElementById('rep-lent-to').innerText = t.lentTo;
-            document.getElementById('rep-total').innerText = `₹${t.amount.toLocaleString('en-IN')}`;
-
-            // Calculate Stats
-            const repayments = t.repayments || [];
-            const totalRepaid = repayments.reduce((sum, r) => sum + r.amount, 0);
-            const remaining = t.amount - totalRepaid;
-
-            document.getElementById('rep-remaining').innerText = `₹${remaining.toLocaleString('en-IN')}`;
-            document.getElementById('rep-date').valueAsDate = new Date(); // Default today
-
-            // Render History
-            const historyContainer = document.getElementById('repayment-history');
-            if (repayments.length === 0) {
-                historyContainer.innerHTML = '<div style="color: var(--text-secondary); font-size: 0.85rem; font-style: italic;">No repayments yet.</div>';
-            } else {
-                // Sort history new to old
-                const sortedRep = [...repayments].sort((a, b) => new Date(b.date) - new Date(a.date));
-                historyContainer.innerHTML = sortedRep.map(r => `
-            <div style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid var(--glass-border);">
-                <div style="font-size: 0.9rem; color: var(--text-secondary);">${new Date(r.date).toLocaleDateString()}</div>
-                <div style="font-weight: 600; color: var(--success);">+₹${r.amount.toLocaleString('en-IN')}</div>
-            </div>
-        `).join('');
-            }
-
-            repModal.classList.add('active');
-        }
-
-        document.getElementById('close-repayment-modal').addEventListener('click', () => {
-            repModal.classList.remove('active');
-        });
-
-        repForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const tid = document.getElementById('rep-id').value;
-            const amount = parseFloat(document.getElementById('rep-amount').value);
-            const date = document.getElementById('rep-date').value;
-
-            const t = myCards[activeCardIndex].transactions.find(x => x.id === tid);
-            if (t) {
-                if (!t.repayments) t.repayments = [];
-
-                t.repayments.push({
-                    id: Date.now().toString(),
-                    amount,
-                    date
-                });
-
-                // Check for Settlement
-                const totalRepaid = t.repayments.reduce((sum, r) => sum + r.amount, 0);
-                if (totalRepaid >= t.amount) {
-                    t.repaid = true;
-                }
-
-                saveToGitHub();
-                renderDashboard();
-                repModal.classList.remove('active');
-                repForm.reset();
-            }
-        });
-
-        function markBillPaid() {
-            if (confirm('Clear all outstanding transactions for this card? This will archive them.')) {
-                // Simple logic: remove all non-lent transactions, or just reset. 
-                // For now, let's just clear non-lent transactions as "Paid off"
-                myCards[activeCardIndex].transactions = myCards[activeCardIndex].transactions.filter(t => t.isLent && !t.repaid);
-                saveToGitHub();
-                renderDashboard();
-            }
-        }
-
-        // Tab Logic
-        document.querySelectorAll('.tab').forEach(t => {
-            t.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-                t.classList.add('active');
-                currentFilter = t.dataset.tab;
-                renderTransactions();
-            });
-        });
-
-
-
-
-        // Settings Logic
-        function openSettings() {
-            const sModal = document.getElementById('settings-modal-overlay');
-            if (!sModal) {
-                console.error('Settings modal not found!');
-                return;
-            }
-
-            // Force visibility in case CSS class fails -> REMOVED to fix Close issue
-            // sModal.style.display = 'flex';
-            // sModal.style.opacity = '1';
-            // sModal.style.pointerEvents = 'all';
-
-            // Load saved settings
-            const config = JSON.parse(localStorage.getItem('ghConfig')) || {};
-            if (config.username) document.getElementById('gh-username').value = config.username;
-            if (config.repo) document.getElementById('gh-repo').value = config.repo;
-            if (config.pat) document.getElementById('gh-pat').value = config.pat;
-            if (config.branch) document.getElementById('gh-branch').value = config.branch;
-            if (config.path) document.getElementById('gh-path').value = config.path;
-
-            sModal.classList.add('active');
-        }
-
-        document.getElementById('close-settings-modal').addEventListener('click', () => {
-            const sModal = document.getElementById('settings-modal-overlay');
-            sModal.classList.remove('active');
-            // Clear any inline styles that might have been set previously
-            sModal.style.display = '';
-            sModal.style.opacity = '';
-            sModal.style.pointerEvents = '';
-        });
-
-        function saveSettings() {
-            const config = {
-                username: document.getElementById('gh-username').value,
-                repo: document.getElementById('gh-repo').value,
-                pat: document.getElementById('gh-pat').value,
-                branch: document.getElementById('gh-branch').value || 'main',
-                path: document.getElementById('gh-path').value || 'credit_card_data.js'
-            };
-
-            localStorage.setItem('ghConfig', JSON.stringify(config));
-            alert('Settings Saved! You can now Sync.');
-
-            // Close modal
-            document.getElementById('settings-modal-overlay').classList.remove('active');
-        }
-
-        async function syncToGitHub() {
-            // 1. Get Config
-            const config = JSON.parse(localStorage.getItem('ghConfig'));
-            if (!config || !config.username || !config.repo || !config.pat) {
-                alert('Please save your GitHub configuration first.');
-                return;
-            }
-
-            const apiUrl = `https://api.github.com/repos/${config.username}/${config.repo}/contents/${config.path}`;
-            const content = `window.creditCardDataRaw = ${JSON.stringify(myCards, null, 4)};`;
-            const message = `Update credit card data - ${new Date().toLocaleString()}`;
-
-            // 2. Fetch SHA (required for update)
-            let sha = '';
-            try {
-                const getRes = await fetch(apiUrl, {
-                    headers: {
-                        'Authorization': `token ${config.pat}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    sha = fileData.sha;
-                } else if (getRes.status !== 404) {
-                    throw new Error('Failed to fetch file info');
-                }
-            } catch (e) {
-                console.error(e);
-                alert('Error accessing repository. Check credentials.');
-                return;
-            }
-
-            // 3. PUT Update
-            try {
-                const putRes = await fetch(apiUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${config.pat}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        content: btoa(unescape(encodeURIComponent(content))), // Base64 encode with UTF-8 support
-                        sha: sha || undefined, // undefined if new file
-                        branch: config.branch
-                    })
-                });
-
-                if (putRes.ok) {
-                    alert('✅ Success! Data synced to GitHub.');
-                    document.getElementById('settings-modal-overlay').classList.remove('active');
-                } else {
-                    const err = await putRes.json();
-                    alert(`Sync Failed: ${err.message}`);
-                }
-            } catch (e) {
-                alert('Sync Error: ' + e.message);
-            }
-        }
-
-        init();
+        transactionsListEl.appendChild(div);
+    });
+}
+
+function getCategoryIcon(cat) {
+    const map = {
+        'Food': 'fa-utensils',
+        'Travel': 'fa-plane',
+        'Shopping': 'fa-shopping-bag',
+        'Bills': 'fa-file-invoice',
+        'Entertainment': 'fa-film',
+        'Fuel': 'fa-gas-pump',
+        'Grocery': 'fa-carrot'
+    };
+    return map[cat] || 'fa-receipt';
+}
+
+
+// Add Transaction
+function openAddTransactionModal(cardId) {
+    // Determine card
+    const card = myCards.find(c => c.id === cardId);
+    if (!card) return;
+
+    // Simple Prompt for now, or use a proper modal if available
+    // Reusing the main modal logic might be complex if not global.
+    // Let's create a dynamic modal or use prompt for quick fix to ensure data works first.
+
+    // Ideally we should have a modal in HTML. 
+    // Assuming 'transaction-modal' exists or we can reuse `addTransaction` from main script but custom logic.
+
+    // Let's fallback to a simple prompt based flow or inject a modal for stability
+    const desc = prompt("Enter Description:");
+    if (!desc) return;
+    const amount = parseFloat(prompt("Enter Amount:"));
+    if (isNaN(amount)) return;
+    const cat = prompt("Category (Food, Travel, Shopping, etc):", "Shopping");
+
+    const isLent = confirm("Is this money lent to someone?");
+
+    const newTx = {
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        desc: desc,
+        amount: amount,
+        type: 'dr',
+        category: cat || 'Other',
+        tags: isLent ? ['Lent'] : []
+    };
+
+    card.transactions.push(newTx);
+    saveCards();
+    renderTransactions(); // Refresh UI
+    renderDashboard();
+    updateGlobalStats();
+}
+
+
+function deleteTransaction(cardId, txId) {
+    if (!confirm("Delete this transaction?")) return;
+
+    const card = myCards.find(c => c.id === cardId);
+    if (card) {
+        card.transactions = card.transactions.filter(t => t.id !== txId);
+        saveCards();
+        renderTransactions();
+        renderDashboard();
+        updateGlobalStats();
+    }
+}
+
+function updateGlobalStats() {
+    const totalSpend = myCards.reduce((acc, c) => acc + c.transactions.reduce((sum, t) => sum + (t.type === 'dr' ? t.amount : 0), 0), 0);
+    const totalLent = myCards.reduce((acc, c) => acc + c.transactions.filter(t => t.tags && t.tags.includes('Lent')).reduce((sum, t) => sum + t.amount, 0), 0);
+
+    const tsEl = document.getElementById('cc-total-spend');
+    const tlEl = document.getElementById('cc-total-lent');
+
+    if (tsEl) tsEl.innerText = `₹${totalSpend.toLocaleString()}`;
+    if (tlEl) tlEl.innerText = `₹${totalLent.toLocaleString()}`;
+}
