@@ -357,9 +357,14 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
                         </p>
                     </div>
                 </div>
-                <button class="btn-icon" onclick="openEventDetail('${event.id}')" title="View Details">
-                    <i class="fas fa-arrow-right"></i>
-                </button>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn-icon" onclick="event.stopPropagation(); deleteEvent('${event.id}')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);" title="Delete Event">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="btn-icon" onclick="openEventDetail('${event.id}')" title="View Details">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
             </div>
             
             ${budget > 0 ? `
