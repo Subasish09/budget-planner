@@ -221,6 +221,28 @@ function determineEventStatus(eventDate, currentStatus) {
     }
 }
 
+// Delete event
+function deleteEvent(eventId) {
+    const event = events.find(e => e.id === eventId);
+    if (!event) return;
+
+    if (!confirm(`Are you sure you want to delete "${event.name}"? This action cannot be undone.`)) {
+        return;
+    }
+
+    // Remove from array
+    events = events.filter(e => e.id !== eventId);
+
+    // Save and sync
+    saveEventData();
+
+    // Show success message
+    showToast(`🗑️ Event "${event.name}" deleted successfully`);
+
+    // Refresh dashboard
+    renderDashboard();
+}
+
 // Render dashboard
 function renderDashboard() {
     updateQuickStats();
