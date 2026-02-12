@@ -25,34 +25,90 @@ const EXPENSE_CATEGORIES = {
     other: { icon: '📌', color: '#6b7280', label: 'Other' }
 };
 
-// Initialize event data
-let events = [];
-let currentEventId = null;
-let currentExpenseId = null;
+// Load event data from localStorage or GitHub (Smart Merge)
+async function loadEventData() {
+    let localEvents = [];
+    let remoteEvents = [];
 
-// Load data on page load
-document.addEventListener('DOMContentLoaded', () => {
-    loadEventData();
-    renderDashboard();
-});
-
-// Load event data from localStorage
-function loadEventData() {
+    // 1. Get Local Data
     const stored = localStorage.getItem('eventData');
     if (stored) {
         try {
             const data = JSON.parse(stored);
-            events = data.events || [];
+            localEvents = data.events || [];
         } catch (error) {
-            console.error('Error loading event data:', error);
-            events = [];
+            console.error('Error parsing local data:', error);
         }
     }
+
+    // 2. Get Remote Data (if connected)
+    if (typeof githubSync !== 'undefined' && githubSync.hasToken()) {
+        try {
+            const result = await githubSync.fetchFile('event_data.json');
+            if (result) {
+                const data = JSON.parse(result.content);
+                remoteEvents = data.events || [];
+                console.log('Fetched remote events:', remoteEvents.length);
+            }
+        } catch (error) {
+            console.error('GitHub fetch failed:', error);
+        }
+    }
+
+    // 3. SMART MERGE: Combine Local + Remote
+    const eventMap = new Map();
+
+    // Add Local first
+    localEvents.forEach(evt => eventMap.set(evt.id, evt));
+
+    // Add Remote (Union - allow remote to add missing ones)
+    // If conflict, default to Local for now to be safe, OR Remote if we trust it more?
+    // Let's use Remote to overwrite Local only if ID matches, effectively getting latest?
+    // Safety matching: If remote has it, assume it's the "truth", BUT don't delete local-only ones.
+    remoteEvents.forEach(evt => eventMap.set(evt.id, evt));
+
+    events = Array.from(eventMap.values());
+    console.log(`Merged: ${localEvents.length} Local + ${remoteEvents.length} Remote -> ${events.length} Total`);
+
+    // 4. Save merged state locally
+    saveLocalCopy();
+
+    // 5. Initial Push (If local has data but remote was empty)
+    if (localEvents.length > 0 && remoteEvents.length === 0 && typeof githubSync !== 'undefined' && githubSync.hasToken()) {
+        console.log('Pushing local events to cloud...');
+        saveEventData();
+    }
+
+    renderDashboard();
 }
 
-// Save event data to localStorage
-function saveEventData() {
+function saveLocalCopy() {
     localStorage.setItem('eventData', JSON.stringify({ events }));
+}
+
+// Save event data to localStorage and GitHub
+async function saveEventData() {
+    // 1. Save locally first (instant UI update)
+    saveLocalCopy();
+
+    // 2. Sync to GitHub if token exists
+    if (typeof githubSync !== 'undefined' && githubSync.hasToken()) {
+        try {
+            console.log('Syncing events to GitHub...');
+            const content = JSON.stringify({ events }, null, 2);
+            await githubSync.commitFile('event_data.json', content, 'Update event data via App');
+
+            // Show a subtle sync indicator if element exists
+            const syncIcon = document.getElementById('sync-status-icon');
+            if (syncIcon) {
+                syncIcon.className = 'fas fa-check';
+                setTimeout(() => syncIcon.className = '', 2000);
+            }
+        } catch (error) {
+            console.error('GitHub sync failed:', error);
+            if (typeof showToast === 'function') showToast('⚠️ Saved locally, but GitHub sync failed.');
+        }
+    }
 }
 
 // Generate unique ID
