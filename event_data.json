@@ -9,9 +9,19 @@
       "eventDate": "2026-02-25",
       "totalBudget": 0,
       "status": "upcoming",
-      "expenses": [],
+      "expenses": [
+        {
+          "id": "exp_1770986083088_u0ekmr3tm",
+          "name": "Invitation Card",
+          "category": "other",
+          "amount": 1750,
+          "date": "2026-01-10",
+          "notes": "",
+          "createdAt": "2026-02-13T12:34:43.088Z"
+        }
+      ],
       "createdAt": "2026-02-13T12:34:20.988Z",
-      "updatedAt": "2026-02-13T12:34:20.988Z"
+      "updatedAt": "2026-02-13T12:34:43.088Z"
     }
   ]
 }
