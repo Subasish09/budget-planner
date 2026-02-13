@@ -1,1 +1,27 @@
-{"events": []}
+{
+  "events": [
+    {
+      "id": "evt_1770898091399_xtj9h5cnx",
+      "name": "Ved's Birthday Party",
+      "type": "birthday",
+      "icon": "🎂",
+      "color": "#10B981",
+      "eventDate": "2026-02-25",
+      "totalBudget": 0,
+      "status": "upcoming",
+      "expenses": [
+        {
+          "id": "exp_1770898156600_e4blwo2ov",
+          "name": "Invitation Cards",
+          "category": "other",
+          "amount": 1750,
+          "date": "2026-01-10",
+          "notes": "",
+          "createdAt": "2026-02-12T12:09:16.600Z"
+        }
+      ],
+      "createdAt": "2026-02-12T12:08:11.399Z",
+      "updatedAt": "2026-02-12T12:09:16.600Z"
+    }
+  ]
+}
