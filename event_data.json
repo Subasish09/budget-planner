@@ -1,3 +1,17 @@
 {
-  "events": []
+  "events": [
+    {
+      "id": "evt_1770986060988_css5fq8j4",
+      "name": "Ved's Birthday Party",
+      "type": "birthday",
+      "icon": "🎂",
+      "color": "#10B981",
+      "eventDate": "2026-02-25",
+      "totalBudget": 0,
+      "status": "upcoming",
+      "expenses": [],
+      "createdAt": "2026-02-13T12:34:20.988Z",
+      "updatedAt": "2026-02-13T12:34:20.988Z"
+    }
+  ]
 }
