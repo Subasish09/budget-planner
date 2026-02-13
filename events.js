@@ -80,6 +80,33 @@ async function loadEventData() {
     events = Array.from(eventMap.values());
     console.log(`Merged: ${localEvents.length} Local + ${remoteEvents.length} Remote -> ${events.length} Total`);
 
+    // 🔧 MIGRATION: Fix missing icons and colors in old events
+    let migrationCount = 0;
+    events = events.map(event => {
+        let needsMigration = false;
+
+        // Check if icon or color is missing
+        if (!event.icon || !event.color) {
+            needsMigration = true;
+            migrationCount++;
+
+            // Get the type info from EVENT_TYPES
+            const typeInfo = EVENT_TYPES[event.type] || EVENT_TYPES.other;
+
+            return {
+                ...event,
+                icon: event.icon || typeInfo.icon,
+                color: event.color || typeInfo.color
+            };
+        }
+
+        return event;
+    });
+
+    if (migrationCount > 0) {
+        console.log(`✅ Migrated ${migrationCount} event(s) with missing icons/colors`);
+    }
+
     // 4. Save merged state locally
     saveLocalCopy();
 
