@@ -54,10 +54,19 @@
           "date": "2026-02-07",
           "notes": "",
           "createdAt": "2026-02-16T14:01:59.366Z"
+        },
+        {
+          "id": "exp_1771250560999_daidjghwj",
+          "name": "Sweet",
+          "category": "other",
+          "amount": 1210,
+          "date": "2026-02-25",
+          "notes": "",
+          "createdAt": "2026-02-16T14:02:40.999Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T14:01:59.366Z"
+      "updatedAt": "2026-02-16T14:02:40.999Z"
     }
   ]
 }
