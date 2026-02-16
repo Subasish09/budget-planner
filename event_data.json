@@ -99,10 +99,19 @@
           "date": "2026-01-28",
           "notes": "",
           "createdAt": "2026-02-16T19:15:24.696Z"
+        },
+        {
+          "id": "exp_1771269343196_y3l289s3f",
+          "name": "Dress Bhauja",
+          "category": "shopping",
+          "amount": 2600,
+          "date": "2026-01-01",
+          "notes": "",
+          "createdAt": "2026-02-16T19:15:43.196Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T19:15:24.696Z"
+      "updatedAt": "2026-02-16T19:15:43.196Z"
     }
   ]
 }
