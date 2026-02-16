@@ -90,10 +90,19 @@
           "date": "2026-01-31",
           "notes": "",
           "createdAt": "2026-02-16T19:14:41.814Z"
+        },
+        {
+          "id": "exp_1771269324696_q7kb2ni6v",
+          "name": "Dress Bandita",
+          "category": "shopping",
+          "amount": 24000,
+          "date": "2026-01-28",
+          "notes": "",
+          "createdAt": "2026-02-16T19:15:24.696Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T19:14:41.816Z"
+      "updatedAt": "2026-02-16T19:15:24.696Z"
     }
   ]
 }
