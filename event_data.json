@@ -45,10 +45,19 @@
           "date": "2026-02-07",
           "notes": "",
           "createdAt": "2026-02-16T14:01:27.832Z"
+        },
+        {
+          "id": "exp_1771250519366_z1bu2y0wc",
+          "name": "Dress Other Family members",
+          "category": "shopping",
+          "amount": 32300,
+          "date": "2026-02-07",
+          "notes": "",
+          "createdAt": "2026-02-16T14:01:59.366Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T14:01:27.832Z"
+      "updatedAt": "2026-02-16T14:01:59.366Z"
     }
   ]
 }
