@@ -18,10 +18,19 @@
           "date": "2026-01-10",
           "notes": "",
           "createdAt": "2026-02-16T13:58:53.600Z"
+        },
+        {
+          "id": "exp_1771250406166_d0dqikrp5",
+          "name": "Ved's first dress",
+          "category": "shopping",
+          "amount": 1740,
+          "date": "2026-02-05",
+          "notes": "",
+          "createdAt": "2026-02-16T14:00:06.166Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T13:58:53.600Z"
+      "updatedAt": "2026-02-16T14:00:06.166Z"
     }
   ]
 }
