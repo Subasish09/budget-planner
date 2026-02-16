@@ -27,10 +27,19 @@
           "date": "2026-02-05",
           "notes": "",
           "createdAt": "2026-02-16T14:00:06.166Z"
+        },
+        {
+          "id": "exp_1771250447099_8x3x11x3z",
+          "name": "Dress Baba",
+          "category": "shopping",
+          "amount": 4648,
+          "date": "2026-02-07",
+          "notes": "",
+          "createdAt": "2026-02-16T14:00:47.099Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T14:00:06.166Z"
+      "updatedAt": "2026-02-16T14:00:47.099Z"
     }
   ]
 }
