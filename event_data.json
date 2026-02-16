@@ -72,10 +72,19 @@
           "date": "2026-02-15",
           "notes": "",
           "createdAt": "2026-02-16T14:03:11.966Z"
+        },
+        {
+          "id": "exp_1771250627165_aqjiyngr8",
+          "name": "Travel to Phulbani",
+          "category": "travel",
+          "amount": 4500,
+          "date": "2026-01-20",
+          "notes": "",
+          "createdAt": "2026-02-16T14:03:47.165Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T14:03:11.966Z"
+      "updatedAt": "2026-02-16T14:03:47.165Z"
     }
   ]
 }
