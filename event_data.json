@@ -81,10 +81,19 @@
           "date": "2026-01-20",
           "notes": "",
           "createdAt": "2026-02-16T14:03:47.165Z"
+        },
+        {
+          "id": "exp_1771269281814_ofealcn75",
+          "name": "Dress Maa",
+          "category": "shopping",
+          "amount": 4500,
+          "date": "2026-01-31",
+          "notes": "",
+          "createdAt": "2026-02-16T19:14:41.814Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T14:03:47.165Z"
+      "updatedAt": "2026-02-16T19:14:41.816Z"
     }
   ]
 }
