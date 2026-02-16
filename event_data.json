@@ -4,14 +4,24 @@
       "id": "evt_1771249391851_ofqe0rjr3",
       "name": "Ved's Birthday Party",
       "type": "birthday",
-      "icon": "🎂",
+      "icon": "fa-birthday-cake",
       "color": "#10B981",
       "eventDate": "2026-02-25",
       "totalBudget": 0,
       "status": "upcoming",
-      "expenses": [],
+      "expenses": [
+        {
+          "id": "exp_1771250333600_vy9hpdab3",
+          "name": "Invitation Card",
+          "category": "other",
+          "amount": 1750,
+          "date": "2026-01-10",
+          "notes": "",
+          "createdAt": "2026-02-16T13:58:53.600Z"
+        }
+      ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T13:43:11.851Z"
+      "updatedAt": "2026-02-16T13:58:53.600Z"
     }
   ]
 }
