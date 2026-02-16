@@ -665,10 +665,17 @@ function renderExpensesList(eventId) {
 function renderExpenseItem(expense) {
     const category = EXPENSE_CATEGORIES[expense.category] || EXPENSE_CATEGORIES.other;
 
+    // Ensure icon is rendered correctly (Font Awesome vs Emoji)
+    // EXPENSE_CATEGORIES now has Font Awesome classes like 'fa-utensils'
+    const iconClass = category.icon;
+    const iconHtml = iconClass.startsWith('fa-')
+        ? `<i class="fas ${iconClass}"></i>`
+        : iconClass;
+
     return `
         <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                <div style="font-size: 1.5rem;">${category.icon}</div>
+                <div style="font-size: 1.5rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">${iconHtml}</div>
                 <div style="flex: 1;">
                     <div style="font-weight: 500; margin-bottom: 0.25rem;">${expense.name}</div>
                     <div style="font-size: 0.85rem; color: var(--text-secondary);">${category.label}</div>
