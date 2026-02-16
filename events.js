@@ -3,26 +3,27 @@
 // ========================================
 
 // Event type icons and colors
+// Event type icons and colors (Using Font Awesome for robust display)
 const EVENT_TYPES = {
-    wedding: { icon: '💍', color: '#8B5CF6', label: 'Wedding' },
-    party: { icon: '🎉', color: '#EC4899', label: 'Party' },
-    trip: { icon: '🏖️', color: '#3B82F6', label: 'Trip' },
-    renovation: { icon: '🏠', color: '#F59E0B', label: 'Renovation' },
-    festival: { icon: '🪔', color: '#EF4444', label: 'Festival' },
-    birthday: { icon: '🎂', color: '#10B981', label: 'Birthday' },
-    other: { icon: '📌', color: '#6B7280', label: 'Other' }
+    wedding: { icon: 'fa-ring', color: '#8B5CF6', label: 'Wedding' },
+    party: { icon: 'fa-glass-cheers', color: '#EC4899', label: 'Party' },
+    trip: { icon: 'fa-plane', color: '#3B82F6', label: 'Trip' },
+    renovation: { icon: 'fa-paint-roller', color: '#F59E0B', label: 'Renovation' },
+    festival: { icon: 'fa-om', color: '#EF4444', label: 'Festival' },
+    birthday: { icon: 'fa-birthday-cake', color: '#10B981', label: 'Birthday' },
+    other: { icon: 'fa-calendar-check', color: '#6B7280', label: 'Other' }
 };
 
 
 // Expense categories with icons and colors
 const EXPENSE_CATEGORIES = {
-    venue: { icon: '🏛️', color: '#8b5cf6', label: 'Venue' },
-    food: { icon: '🍽️', color: '#10b981', label: 'Food & Catering' },
-    decoration: { icon: '🎨', color: '#f59e0b', label: 'Decoration' },
-    travel: { icon: '✈️', color: '#3b82f6', label: 'Travel' },
-    shopping: { icon: '🛍️', color: '#ec4899', label: 'Shopping' },
-    entertainment: { icon: '🎭', color: '#a855f7', label: 'Entertainment' },
-    other: { icon: '📌', color: '#6b7280', label: 'Other' }
+    venue: { icon: 'fa-building', color: '#8b5cf6', label: 'Venue' },
+    food: { icon: 'fa-utensils', color: '#10b981', label: 'Food & Catering' },
+    decoration: { icon: 'fa-palette', color: '#f59e0b', label: 'Decoration' },
+    travel: { icon: 'fa-car', color: '#3b82f6', label: 'Travel' },
+    shopping: { icon: 'fa-shopping-bag', color: '#ec4899', label: 'Shopping' },
+    entertainment: { icon: 'fa-music', color: '#a855f7', label: 'Entertainment' },
+    other: { icon: 'fa-tag', color: '#6b7280', label: 'Other' }
 };
 
 // Initialize event data
@@ -85,8 +86,11 @@ async function loadEventData() {
     events = events.map(event => {
         let needsMigration = false;
 
-        // Check if icon or color is missing
-        if (!event.icon || !event.color) {
+        // Check if icon is missing OR if it's an old emoji (not starting with 'fa-')
+        const isOldIcon = event.icon && !event.icon.startsWith('fa-');
+        const isMissing = !event.icon || !event.color;
+
+        if (isMissing || isOldIcon) {
             needsMigration = true;
             migrationCount++;
 
@@ -95,7 +99,7 @@ async function loadEventData() {
 
             return {
                 ...event,
-                icon: event.icon || typeInfo.icon,
+                icon: typeInfo.icon, // Force update to new FA icon
                 color: event.color || typeInfo.color
             };
         }
@@ -104,7 +108,7 @@ async function loadEventData() {
     });
 
     if (migrationCount > 0) {
-        console.log(`✅ Migrated ${migrationCount} event(s) with missing icons/colors`);
+        console.log(`✅ Migrated ${migrationCount} event(s) to Font Awesome icons`);
     }
 
     // 4. Save merged state locally
@@ -361,11 +365,16 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
 
     // Completed Event Card (Flash Card Summary Style)
     if (isCompleted) {
+        // Ensure icon is Font Awesome class
+        const iconClass = event.icon.startsWith('fa-') ? event.icon : (EVENT_TYPES[event.type]?.icon || 'fa-calendar-check');
+
         return `
             <div class="event-card" onclick="openEventDetail('${event.id}')" style="cursor: pointer; background: linear-gradient(145deg, #1f2937, #111827); border: 1px solid var(--glass-border); opacity: 0.9;">
                 <div class="event-card-header" style="margin-bottom: 1rem;">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div class="event-icon" style="font-size: 1.5rem; filter: grayscale(0.5);">${event.icon}</div>
+                        <div class="event-icon" style="font-size: 1.5rem; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas ${iconClass}"></i>
+                        </div>
                         <div>
                             <h3 style="margin: 0; color: var(--text-secondary); font-size: 1.1rem; text-decoration: line-through;">${event.name}</h3>
                             <p style="margin: 0; color: var(--text-secondary); font-size: 0.8rem;">Ended on ${formatDate(event.eventDate)}</p>
@@ -394,11 +403,16 @@ function renderEventCard(event, isUpcoming = false, isCompleted = false) {
     }
 
     // Active/Upcoming Event Card (Original Style)
+    // Ensure icon is Font Awesome class
+    const iconClass = event.icon && event.icon.startsWith('fa-') ? event.icon : (EVENT_TYPES[event.type]?.icon || 'fa-calendar-check');
+
     return `
         <div class="event-card" onclick="openEventDetail('${event.id}')" style="cursor: pointer; background: linear-gradient(135deg, ${event.color}15, ${event.color}05); border-left: 4px solid ${event.color};">
             <div class="event-card-header">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <div class="event-icon" style="font-size: 2rem;">${event.icon}</div>
+                    <div class="event-icon" style="font-size: 2rem; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
                     <div>
                         <h3 style="margin: 0; color: var(--text-primary);">${event.name}</h3>
                         <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
