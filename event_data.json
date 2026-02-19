@@ -117,10 +117,19 @@
           "date": "2026-02-18",
           "notes": "",
           "createdAt": "2026-02-19T18:44:55.497Z"
+        },
+        {
+          "id": "exp_1771526737714_jaj1od50p",
+          "name": "Palasuni Sweet & Snacks",
+          "category": "food",
+          "amount": 500,
+          "date": "2026-02-18",
+          "notes": "",
+          "createdAt": "2026-02-19T18:45:37.714Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-19T18:44:55.498Z"
+      "updatedAt": "2026-02-19T18:45:37.714Z"
     }
   ]
 }
