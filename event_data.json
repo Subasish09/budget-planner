@@ -108,10 +108,19 @@
           "date": "2026-01-01",
           "notes": "",
           "createdAt": "2026-02-16T19:15:43.196Z"
+        },
+        {
+          "id": "exp_1771526695497_tgt76d0xt",
+          "name": "Ved's Second Dress",
+          "category": "shopping",
+          "amount": 2615,
+          "date": "2026-02-18",
+          "notes": "",
+          "createdAt": "2026-02-19T18:44:55.497Z"
         }
       ],
       "createdAt": "2026-02-16T13:43:11.851Z",
-      "updatedAt": "2026-02-16T19:15:43.196Z"
+      "updatedAt": "2026-02-19T18:44:55.498Z"
     }
   ]
 }
